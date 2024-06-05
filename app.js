@@ -1,9 +1,11 @@
 const express = require("express");
 const postController = require("./controllers/postController")
+const replyController = require("./controllers/replyController")
 const sql = require("mssql"); // Assuming you've installed mssql
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser");
 const validatePost = require("./middlewares/validatePost")
+const validateReply = require("./middlewares/validateReply")
 
 const app = express();
 const port = process.env.PORT || 3000; // Use environment variable or default port
@@ -18,6 +20,12 @@ app.get("/posts/:id", postController.getPostById);
 app.post("/posts", validatePost.validateCreatePost, postController.createPost);
 app.put("/posts/:id", validatePost.validateUpdatePost, postController.updatePost); // PUT for updating posts
 app.delete("/posts/:id", postController.deletePost); // DELETE for deleting posts
+
+app.get("/replies", replyController.getAllReplies);
+app.get("/replies/:id", replyController.getReplyById);
+app.post("/replies", validateReply.validateCreateReply, replyController.createReply);
+app.put("/replies/:id", validateReply.validateUpdateReply, replyController.updateReply); 
+app.delete("/replies/:id", replyController.deleteReply); 
 
 app.listen(port, async () => {
   try {
