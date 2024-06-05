@@ -97,6 +97,44 @@ class Reply {
 
         return result.rowsAffected > 0; // Indicate success based on affected rows
     }
+
+    static async searchRepliesByAuthor(searchTerm) {
+        const connection = await sql.connect(dbConfig);
+    
+        try {
+          const query = `
+            SELECT *
+            FROM Reply
+            WHERE replyAuthor LIKE '%${searchTerm}%'
+          `;
+    
+          const result = await connection.request().query(query);
+          return result.recordset;
+        } catch (error) {
+          throw new Error("Error searching replies"); // Or handle error differently
+        } finally {
+          await connection.close(); // Close connection even on errors
+        }
+    }
+
+    static async searchRepliesByText(searchTerm) {
+        const connection = await sql.connect(dbConfig);
+    
+        try {
+          const query = `
+            SELECT *
+            FROM Reply
+            WHERE replyText LIKE '%${searchTerm}%'
+          `;
+    
+          const result = await connection.request().query(query);
+          return result.recordset;
+        } catch (error) {
+          throw new Error("Error searching replies"); // Or handle error differently
+        } finally {
+          await connection.close(); // Close connection even on errors
+        }
+    }
 }
 
 module.exports = Reply;

@@ -21,6 +21,8 @@ app.post("/posts", validatePost.validateCreatePost, postController.createPost);
 app.put("/posts/:id", validatePost.validateUpdatePost, postController.updatePost); // PUT for updating posts
 app.delete("/posts/:id", postController.deletePost); // DELETE for deleting posts
 
+app.get("/replies/search/author", replyController.searchRepliesByAuthor);
+app.get("/replies/search/text", replyController.searchRepliesByText);
 app.get("/replies", replyController.getAllReplies);
 app.get("/replies/:id", replyController.getReplyById);
 app.post("/replies", validateReply.validateCreateReply, replyController.createReply);

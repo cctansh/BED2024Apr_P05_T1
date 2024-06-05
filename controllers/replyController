@@ -66,10 +66,38 @@ const deleteReply = async (req, res) => {
   }
 };
 
+const searchRepliesByAuthor = async(req, res) => {
+  const searchTerm = req.query.searchTerm; // Extract search term from query params
+
+  try {
+    const replies = await Reply.searchRepliesByAuthor(searchTerm);
+    res.json(replies);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error searching replies" });
+  }
+}
+
+
+const searchRepliesByText = async(req, res) => {
+  const searchTerm = req.query.searchTerm; // Extract search term from query params
+
+  try {
+    const replies = await Reply.searchRepliesByText(searchTerm);
+    res.json(replies);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error searching replies" });
+  }
+}
+
+
 module.exports = {
   getAllReplies,
   getReplyById,
   createReply,
   updateReply,
-  deleteReply
+  deleteReply,
+  searchRepliesByAuthor,
+  searchRepliesByText
 };
