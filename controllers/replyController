@@ -78,7 +78,6 @@ const searchRepliesByAuthor = async(req, res) => {
   }
 }
 
-
 const searchRepliesByText = async(req, res) => {
   const searchTerm = req.query.searchTerm; // Extract search term from query params
 
@@ -91,6 +90,19 @@ const searchRepliesByText = async(req, res) => {
   }
 }
 
+const getRepliedPost = async (req, res) => {
+  const replyId = parseInt(req.params.id);
+  try {
+    const reply = await Reply.getRepliedPost(replyId);
+    if (!reply) {
+      return res.status(404).send("Replied post not found");
+    }
+    res.json(reply);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving replied post");
+  }
+};
 
 module.exports = {
   getAllReplies,
@@ -99,5 +111,6 @@ module.exports = {
   updateReply,
   deleteReply,
   searchRepliesByAuthor,
-  searchRepliesByText
+  searchRepliesByText,
+  getRepliedPost
 };

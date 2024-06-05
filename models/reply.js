@@ -1,7 +1,7 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const Post = require("./post");
 
-// search by author, search by text
 // get reply
 
 class Reply {
@@ -133,6 +133,38 @@ class Reply {
           throw new Error("Error searching replies"); // Or handle error differently
         } finally {
           await connection.close(); // Close connection even on errors
+        }
+    }
+
+    static async getRepliedPost(id) {
+        const connection = await sql.connect(dbConfig);
+
+        try {
+            const sqlQuery = `
+            SELECT *
+            FROM Reply r
+            LEFT JOIN Post p ON r.replyTo = p.postId
+            WHERE r.replyId = @id;
+          `;
+  
+          const request = connection.request();
+          request.input("id", id);
+          const result = await request.query(sqlQuery);
+
+          return result.recordset[0]
+        ? new Post(
+            result.recordset[0].postId,
+            result.recordset[0].postAuthor,
+            result.recordset[0].postDateTime,
+            result.recordset[0].postText
+            )
+        : null; // Handle post not found
+        }
+         catch (error) {
+            throw new Error("Error fetching replied post");
+
+        } finally {
+            await connection.close();
         }
     }
 }
