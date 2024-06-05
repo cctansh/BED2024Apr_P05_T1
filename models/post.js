@@ -2,6 +2,7 @@ const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
 // to implement editedBy field
+// also need to add post title i forgot whoops
 
 class Post {
     constructor(postId, postAuthor, postDateTime, postText) {
@@ -96,3 +97,53 @@ class Post {
 }
 
 module.exports = Post;
+
+
+/*
+dynamic method for updating
+can update both text + author, or only text or author
+might be useful for another function in the future
+
+static async updatePost(id, newPostData) {
+    let connection;
+    try {
+        connection = await sql.connect(dbConfig);
+
+        let sqlQuery = 'UPDATE Post SET ';
+        const params = [];
+
+        if (newPostData.postAuthor) {
+            sqlQuery += 'postAuthor = @postAuthor, ';
+            params.push({ name: 'postAuthor', type: sql.VarChar, value: newPostData.postAuthor });
+        }
+
+        // Always update postDateTime to current datetime
+        sqlQuery += 'postDateTime = GETDATE(), ';
+
+        if (newPostData.postText) {
+            sqlQuery += 'postText = @postText, ';
+            params.push({ name: 'postText', type: sql.VarChar, value: newPostData.postText });
+        }
+
+        // Remove the last comma and add the WHERE clause
+        sqlQuery = sqlQuery.slice(0, -2) + ' WHERE postId = @id';
+        params.push({ name: 'id', type: sql.Int, value: id });
+
+        const request = connection.request();
+        params.forEach(param => {
+            request.input(param.name, param.type, param.value);
+        });
+
+        await request.query(sqlQuery);
+
+        return await this.getPostById(id); // Returning the updated post data
+    } catch (err) {
+        console.error("SQL error", err);
+        throw err;
+    } finally {
+        if (connection) {
+            await connection.close();
+        }
+    }
+}
+*/

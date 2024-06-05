@@ -2,8 +2,6 @@ const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 const Post = require("./post");
 
-// get reply
-
 class Reply {
     constructor(replyId, replyAuthor, replyDateTime, replyText, replyTo) {
         this.replyId = replyId;
