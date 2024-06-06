@@ -21,5 +21,5 @@ BED/
                   ...
               #js files go here
         #html files go here
-  #app.js, dbConfig.js, package.json, sql files go here
+    #app.js, dbConfig.js, package.json, sql files go here
 ```
