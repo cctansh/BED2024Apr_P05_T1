@@ -12,14 +12,14 @@ BED/
     node_modules/
         ...
     public/
-          css/
-              bootstrap/
-                  ...
-              #css files go here
-          js/
-              bootstrap/
-                  ...
-              #js files go here
+        css/
+            bootstrap/
+                ...
+            #css files go here
+        js/
+            bootstrap/
+                ...
+            #js files go here
         #html files go here
     #app.js, dbConfig.js, package.json, sql files go here
 ```
