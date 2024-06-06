@@ -10,7 +10,7 @@ h1 {
     list-style: none;
     padding: 0;
 }
-  
+
 .post {
     width: calc(33% - 1rem);
     margin-bottom: 1rem;
@@ -20,12 +20,15 @@ h1 {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     background-color: #e7e7e7;
     display: flex;
-    flex-direction: column; /* Change to column to stack children */
+    flex-direction: column;
+    /* Change to column to stack children */
 }
 
 .postheader {
-    display: flex; /* Flex container for author and datetime */
-    justify-content: space-between; /* Space between author and datetime */
+    display: flex;
+    /* Flex container for author and datetime */
+    justify-content: space-between;
+    /* Space between author and datetime */
     width: 100%;
 }
 
@@ -42,4 +45,29 @@ h1 {
 .text {
     margin-top: 1.5rem;
     text-align: left;
+}
+
+/* discussion post */
+#post-container {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#post-container .post {
+    margin: auto;
+    width: 90%;
+}
+
+.reply {
+    width: 90%;
+    margin: auto;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
 }
