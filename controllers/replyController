@@ -104,6 +104,20 @@ const getRepliedPost = async (req, res) => {
   }
 };
 
+const getRepliesByPost = async (req, res) => {
+  const replyId = parseInt(req.params.id);
+  try {
+    const replies = await Reply.getRepliesByPost(replyId);
+    if (!replies) {
+      return res.status(404).send("Replies not found");
+    }
+    res.json(replies);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving replies");
+  }
+};
+
 module.exports = {
   getAllReplies,
   getReplyById,
@@ -112,5 +126,6 @@ module.exports = {
   deleteReply,
   searchRepliesByAuthor,
   searchRepliesByText,
-  getRepliedPost
+  getRepliedPost,
+  getRepliesByPost
 };

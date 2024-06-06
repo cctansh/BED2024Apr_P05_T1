@@ -29,10 +29,11 @@ app.get("/replies/search/author", replyController.searchRepliesByAuthor);
 app.get("/replies/search/text", replyController.searchRepliesByText);
 app.get("/replies", replyController.getAllReplies);
 app.get("/replies/:id", replyController.getReplyById);
+app.get("/replies/by-post/:id", replyController.getRepliesByPost);
 app.get("/replies/post/:id", replyController.getRepliedPost);
 app.post("/replies", validateReply.validateCreateReply, replyController.createReply);
-app.put("/replies/:id", validateReply.validateUpdateReply, replyController.updateReply); 
-app.delete("/replies/:id", replyController.deleteReply); 
+app.put("/replies/:id", validateReply.validateUpdateReply, replyController.updateReply);
+app.delete("/replies/:id", replyController.deleteReply);
 
 app.listen(port, async () => {
   try {
