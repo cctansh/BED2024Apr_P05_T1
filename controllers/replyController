@@ -66,11 +66,11 @@ const deleteReply = async (req, res) => {
   }
 };
 
-const searchRepliesByAuthor = async(req, res) => {
-  const searchTerm = req.query.searchTerm; // Extract search term from query params
+const searchRepliesByAccount = async(req, res) => {
+  const searchTerm = req.query.searchTerm; 
 
   try {
-    const replies = await Reply.searchRepliesByAuthor(searchTerm);
+    const replies = await Reply.searchRepliesByAccount(searchTerm);
     res.json(replies);
   } catch (error) {
     console.error(error);
@@ -79,7 +79,7 @@ const searchRepliesByAuthor = async(req, res) => {
 }
 
 const searchRepliesByText = async(req, res) => {
-  const searchTerm = req.query.searchTerm; // Extract search term from query params
+  const searchTerm = req.query.searchTerm; 
 
   try {
     const replies = await Reply.searchRepliesByText(searchTerm);
@@ -124,7 +124,7 @@ module.exports = {
   createReply,
   updateReply,
   deleteReply,
-  searchRepliesByAuthor,
+  searchRepliesByAccount,
   searchRepliesByText,
   getRepliedPost,
   getRepliesByPost

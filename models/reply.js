@@ -3,18 +3,18 @@ const dbConfig = require("../dbConfig");
 const Post = require("./post");
 
 class Reply {
-  constructor(replyId, replyAuthor, replyDateTime, replyText, replyTo) {
+  constructor(replyId, replyDateTime, replyText, accId, replyTo) {
     this.replyId = replyId;
-    this.replyAuthor = replyAuthor;
     this.replyDateTime = replyDateTime;
     this.replyText = replyText;
+    this.accId = accId;
     this.replyTo = replyTo;
   }
 
   static async getAllReplies() {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `SELECT * FROM Reply`; // Replace with your actual table name
+    const sqlQuery = `SELECT * FROM Reply`;
 
     const request = connection.request();
     const result = await request.query(sqlQuery);
@@ -22,14 +22,14 @@ class Reply {
     connection.close();
 
     return result.recordset.map(
-      (row) => new Reply(row.replyId, row.replyAuthor, row.replyDateTime, row.replyText, row.replyTo)
-    ); // Convert rows to Reply objects
+      (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.accId, row.replyTo)
+    );
   }
 
   static async getReplyById(id) {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `SELECT * FROM Reply WHERE replyId = @id`; // Parameterized query
+    const sqlQuery = `SELECT * FROM Reply WHERE replyId = @id`;
 
     const request = connection.request();
     request.input("id", id);
@@ -40,36 +40,35 @@ class Reply {
     return result.recordset[0]
       ? new Reply(
         result.recordset[0].replyId,
-        result.recordset[0].replyAuthor,
         result.recordset[0].replyDateTime,
         result.recordset[0].replyText,
+        result.recordset[0].accId,
         result.recordset[0].replyTo
       )
-      : null; // Handle reply not found
+      : null;
   }
 
   static async createReply(newReplyData) {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `INSERT INTO Reply (replyAuthor, replyDateTime, replyText, replyTo) VALUES (@replyAuthor, GETDATE(), @replyText, @replyTo); SELECT SCOPE_IDENTITY() AS replyId;`; // Retrieve ID of inserted record
+    const sqlQuery = `INSERT INTO Reply (replyDateTime, replyText, accId, replyTo) VALUES (GETDATE(), @replyText, @accId, @replyTo); SELECT SCOPE_IDENTITY() AS replyId;`;
 
     const request = connection.request();
-    request.input("replyAuthor", newReplyData.replyAuthor);
     request.input("replyText", newReplyData.replyText);
     request.input("replyTo", newReplyData.replyTo);
+    request.input("accId", newReplyData.accId);
 
     const result = await request.query(sqlQuery);
 
     connection.close();
 
-    // Retrieve the newly created book using its ID
     return this.getReplyById(result.recordset[0].replyId);
   }
 
   static async updateReply(id, newReplyData) {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `UPDATE Reply SET replyDateTime = GETDATE(), replyText = @replyText WHERE replyId = @id`; // Parameterized query
+    const sqlQuery = `UPDATE Reply SET replyDateTime = GETDATE(), replyText = @replyText WHERE replyId = @id`;
 
     const request = connection.request();
     request.input("id", id);
@@ -79,13 +78,13 @@ class Reply {
 
     connection.close();
 
-    return this.getReplyById(id); // returning the updated reply data
+    return this.getReplyById(id);
   }
 
   static async deleteReply(id) {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `DELETE FROM Reply WHERE replyId = @id`; // Parameterized query
+    const sqlQuery = `DELETE FROM Reply WHERE replyId = @id`;
 
     const request = connection.request();
     request.input("id", id);
@@ -93,27 +92,28 @@ class Reply {
 
     connection.close();
 
-    return result.rowsAffected > 0; // Indicate success based on affected rows
+    return result.rowsAffected > 0;
   }
 
-  static async searchRepliesByAuthor(searchTerm) {
+  static async searchRepliesByAccount(searchTerm) {
     const connection = await sql.connect(dbConfig);
 
     try {
       const query = `
-            SELECT *
-            FROM Reply
-            WHERE replyAuthor LIKE '%${searchTerm}%'
+            SELECT r.replyId, r.replyDateTime, r.replyText, r.accId, r.replyTo
+            FROM Reply r
+            LEFT JOIN Account a ON r.accId = a.accId
+            WHERE a.accName LIKE '%${searchTerm}%'
           `;
 
       const result = await connection.request().query(query);
       return result.recordset.map(
-        (row) => new Reply(row.replyId, row.replyAuthor, row.replyDateTime, row.replyText, row.replyTo)
+        (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.accId, row.replyTo)
       );
     } catch (error) {
-      throw new Error("Error searching replies"); // Or handle error differently
+      throw new Error("Error searching replies");
     } finally {
-      await connection.close(); // Close connection even on errors
+      await connection.close();
     }
   }
 
@@ -129,12 +129,12 @@ class Reply {
 
       const result = await connection.request().query(query);
       return result.recordset.map(
-        (row) => new Reply(row.replyId, row.replyAuthor, row.replyDateTime, row.replyText, row.replyTo)
+        (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.accId, row.replyTo)
       );
     } catch (error) {
-      throw new Error("Error searching replies"); // Or handle error differently
+      throw new Error("Error searching replies");
     } finally {
-      await connection.close(); // Close connection even on errors
+      await connection.close();
     }
   }
 
@@ -143,7 +143,7 @@ class Reply {
 
     try {
       const sqlQuery = `
-            SELECT *
+            SELECT p.postId, p.postDateTime, p.postText, p.accId
             FROM Reply r
             LEFT JOIN Post p ON r.replyTo = p.postId
             WHERE r.replyId = @id;
@@ -156,11 +156,11 @@ class Reply {
       return result.recordset[0]
         ? new Post(
           result.recordset[0].postId,
-          result.recordset[0].postAuthor,
           result.recordset[0].postDateTime,
-          result.recordset[0].postText
+          result.recordset[0].postText,
+          result.recordset[0].accId,
         )
-        : null; // Handle post not found
+        : null;
     }
     catch (error) {
       throw new Error("Error fetching replied post");
@@ -174,7 +174,7 @@ class Reply {
     const connection = await sql.connect(dbConfig);
 
     try {
-      const sqlQuery = `SELECT * FROM Reply WHERE replyTo = @id`; // Replace with your actual table name
+      const sqlQuery = `SELECT * FROM Reply WHERE replyTo = @id`;
 
       const request = connection.request();
       request.input("id", id);
@@ -183,7 +183,7 @@ class Reply {
       connection.close();
 
       return result.recordset.map(
-        (row) => new Reply(row.replyId, row.replyAuthor, row.replyDateTime, row.replyText, row.replyTo)
+        (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.accId, row.replyTo)
       );
     } catch (error) {
       throw new Error("Error fetching replied post");

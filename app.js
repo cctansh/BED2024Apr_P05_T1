@@ -1,9 +1,11 @@
 const express = require("express");
-const postController = require("./controllers/postController")
-const replyController = require("./controllers/replyController")
-const sql = require("mssql"); // Assuming you've installed mssql
+const accountController = require("./controllers/accountController");
+const postController = require("./controllers/postController");
+const replyController = require("./controllers/replyController");
+const sql = require("mssql"); 
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser");
+const validateAccount = require("./middlewares/validateAccount")
 const validatePost = require("./middlewares/validatePost")
 const validateReply = require("./middlewares/validateReply")
 
@@ -18,14 +20,22 @@ app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 
 app.use(staticMiddleware);
 
-// Routes for GET requests (replace with appropriate routes for update and delete later)
+// account routes
+app.get("/accounts", accountController.getAllAccounts);
+app.get("/accounts/:id", accountController.getAccountById);
+app.post("/accounts", validateAccount.validateCreateAccount, accountController.createAccount);
+app.put("/accounts/:id", validateAccount.validateUpdateAccount, accountController.updateAccount); 
+app.delete("/accounts/:id", accountController.deleteAccount); 
+
+// post routes
 app.get("/posts", postController.getAllPosts);
 app.get("/posts/:id", postController.getPostById);
 app.post("/posts", validatePost.validateCreatePost, postController.createPost);
-app.put("/posts/:id", validatePost.validateUpdatePost, postController.updatePost); // PUT for updating posts
-app.delete("/posts/:id", postController.deletePost); // DELETE for deleting posts
+app.put("/posts/:id", validatePost.validateUpdatePost, postController.updatePost); 
+app.delete("/posts/:id", postController.deletePost); 
 
-app.get("/replies/search/author", replyController.searchRepliesByAuthor);
+// reply routes
+app.get("/replies/search/account", replyController.searchRepliesByAccount);
 app.get("/replies/search/text", replyController.searchRepliesByText);
 app.get("/replies", replyController.getAllReplies);
 app.get("/replies/:id", replyController.getReplyById);

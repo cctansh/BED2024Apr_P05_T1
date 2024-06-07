@@ -4,31 +4,40 @@ const Joi = require("joi");
 
 const validateCreateReply = async (req, res, next) => {
     const schema = Joi.object({
-        replyAuthor: Joi.string().min(1).max(100).required(),
         replyText: Joi.string().min(1).max(8000).required(),
+        accId: Joi.number().integer().required(),
         replyTo: Joi.number().integer().required()
     });
 
-    const validation = schema.validate(req.body, { abortEarly: false }); // Validate request body
+    const validation = schema.validate(req.body, { abortEarly: false });
 
     if (validation.error) {
         const errors = validation.error.details.map((error) => error.message);
         res.status(400).json({ message: "Validation error", errors });
-        return; // Terminate middleware execution on validation error
+        return;
     }
 
-    const { replyTo } = req.body;
+    const { accId, replyTo } = req.body;
 
     try {
         const connection = await sql.connect(dbConfig);
         const request = connection.request();
+
+        // check account exists
+        request.input("accId", accId);
+        const accResult = await request.query(`SELECT COUNT(*) AS count FROM Account WHERE accId = @accId`);
+        if (accResult.recordset[0].count === 0) {
+            return res.status(400).json({ message: "Validation error", errors: ["This account does not exist."] });
+        }
+
+        // check if post exists
         request.input("postId", replyTo);
+        const postResult = await request.query(`SELECT COUNT(*) AS count FROM Post WHERE postId = @postId`);
 
-        const result = await request.query(`SELECT COUNT(*) AS count FROM Post WHERE postId = @postId`);
-        connection.close();
+        connection.close(); // close connection
 
-        if (result.recordset[0].count === 0) {
-        return res.status(400).json({ message: "Validation error", errors: ["The post you are replying to does not exist."] });
+        if (postResult.recordset[0].count === 0) { // checking post
+            return res.status(400).json({ message: "Validation error", errors: ["The post you are replying to does not exist."] });
         }
 
         next();
@@ -39,18 +48,18 @@ const validateCreateReply = async (req, res, next) => {
 
 const validateUpdateReply = (req, res, next) => {
     const schema = Joi.object({
-      replyText: Joi.string().min(1).max(8000).required(),
+        replyText: Joi.string().min(1).max(8000).required(),
     });
-  
-    const validation = schema.validate(req.body, { abortEarly: false }); // Validate request body
-  
+
+    const validation = schema.validate(req.body, { abortEarly: false });
+
     if (validation.error) {
-      const errors = validation.error.details.map((error) => error.message);
-      res.status(400).json({ message: "Validation error", errors });
-      return; // Terminate middleware execution on validation error
+        const errors = validation.error.details.map((error) => error.message);
+        res.status(400).json({ message: "Validation error", errors });
+        return;
     }
-  
-    next(); // If validation passes, proceed to the next route handler
+
+    next();
 };
 
 module.exports = {
