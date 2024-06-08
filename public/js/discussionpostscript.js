@@ -13,7 +13,7 @@ async function fetchPost(postId) {
         const postHtml = `
             <div class="post">
                 <div class="postheader">
-                    <div class="author">${post.postAuthor}</div>
+                    <div class="account">${await fetchAccountName(post.accId)}</div>
                     <div class="datetime">${new Date(post.postDateTime).toLocaleDateString('en-CA')} ${new Date(post.postDateTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
                 </div>
                 <div class="text">${post.postText}</div>
@@ -29,16 +29,16 @@ async function fetchReplies(postId) {
     const response = await fetch(`/replies/by-post/${postId}`);
     const data = await response.json();
 
-    const postContainer = document.getElementById('post-container');
+    const replyContainer = document.getElementById('reply-container');
 
-    data.forEach((reply) => {
+    for (const reply of data) {
         const replyItem = document.createElement("div");
         replyItem.classList.add("reply"); // Add a CSS class for styling
 
-        // Create elements for title, author, etc. and populate with book data
-        const authorElement = document.createElement("div");
-        authorElement.classList.add("author");
-        authorElement.textContent = reply.replyAuthor;
+        // Create elements for title, account, etc. and populate with book data
+        const accountElement = document.createElement("div");
+        accountElement.classList.add("account");
+        accountElement.textContent = await fetchAccountName(reply.accId);
 
         const dateTimeElement = document.createElement("div");
         dateTimeElement.classList.add("datetime");
@@ -53,22 +53,28 @@ async function fetchReplies(postId) {
         textElement.classList.add("text");
         textElement.textContent = reply.replyText;
 
-        // header to hold author and datetime
+        // header to hold account and datetime
         const headerElement = document.createElement("div");
         headerElement.classList.add("postheader");
 
 
         // ... add more elements for other book data (optional)
 
-        headerElement.appendChild(authorElement);
+        headerElement.appendChild(accountElement);
         headerElement.appendChild(dateTimeElement);
 
         replyItem.appendChild(headerElement);
         replyItem.appendChild(textElement);
         // ... append other elements
 
-        postContainer.appendChild(replyItem);
-    });
+        replyContainer.appendChild(replyItem);
+    };
+}
+
+async function fetchAccountName(accId) {
+    const response = await fetch(`/accounts/${accId}`);
+    const account = await response.json();
+    return account.accName;
 }
 
 const postId = getUrlParams();

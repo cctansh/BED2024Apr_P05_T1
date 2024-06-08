@@ -31,7 +31,8 @@ CREATE TABLE Account
 accId smallint IDENTITY(1,1),
 accName varchar(50) NOT NULL,
 accEmail varchar(120) NOT NULL,
-accPassword varchar(50) NOT NULL
+accPassword varchar(50) NOT NULL,
+CONSTRAINT PK_Account PRIMARY KEY (accId)
 );
 
 /* for switching to accId, remember to:
@@ -56,7 +57,7 @@ replyText varchar(5000) NOT NULL,
 accId smallint NOT NULL,
 replyTo smallint NOT NULL,
 CONSTRAINT PK_Reply PRIMARY KEY (replyId),
-CONSTRAINT FK_Post_accId
+CONSTRAINT FK_Reply_accId
 FOREIGN KEY (accId) REFERENCES Account(accId),
 CONSTRAINT FK_Reply_replyTo
 FOREIGN KEY (replyTo) REFERENCES Post(postId)
@@ -72,8 +73,8 @@ VALUES ( '2024-05-25 16:56:00' , 'Welcome to Post 1', 1),
 ('2024-05-27 12:03:46' , 'Welcome to Post 2', 2);
 
 INSERT INTO Reply(replyDateTime, replyText, accId, replyTo)
-VALUES ( 'account2' , '2024-05-25 17:43:00' , 'This is Reply 1', 1, 2),  
-('account3' , '2024-05-26 13:12:19' , 'This is Reply 2', 1, 1);
+VALUES ('2024-05-25 17:43:00' , 'This is Reply 1', 2, 1),  
+('2024-05-26 13:12:19' , 'This is Reply 2', 1, 1);
 
 -- select statements for testing
 SELECT * FROM Account;

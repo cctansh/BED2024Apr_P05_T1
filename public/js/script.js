@@ -1,21 +1,21 @@
 async function fetchPosts() {
-    const response = await fetch("/posts"); // Replace with your API endpoint
+    const response = await fetch("/posts");
     const data = await response.json();
 
     const list = document.getElementById("list");
 
-    data.forEach((post) => {
+    for (const post of data) {
         const postItem = document.createElement("div");
-        postItem.classList.add("post"); // Add a CSS class for styling
+        postItem.classList.add("post");
 
         postItem.onclick = () => {
-            window.location.href = `/discussionpost.html?id=${post.postId}`;
+            window.location.href = `/discussionpost.html?id=${post.accId}`;
         };
 
-        // Create elements for title, author, etc. and populate with book data
-        const authorElement = document.createElement("div");
-        authorElement.classList.add("author");
-        authorElement.textContent = post.postAuthor;
+        // Create elements for title, account, etc. and populate with book data
+        const accountElement = document.createElement("div");
+        accountElement.classList.add("account");
+        accountElement.textContent = await fetchAccountName(post.postId);
 
         const dateTimeElement = document.createElement("div");
         dateTimeElement.classList.add("datetime");
@@ -30,14 +30,14 @@ async function fetchPosts() {
         textElement.classList.add("text");
         textElement.textContent = post.postText;
 
-        // header to hold author and datetime
+        // header to hold account and datetime
         const headerElement = document.createElement("div");
         headerElement.classList.add("postheader");
 
 
         // ... add more elements for other book data (optional)
 
-        headerElement.appendChild(authorElement);
+        headerElement.appendChild(accountElement);
         headerElement.appendChild(dateTimeElement);
 
         postItem.appendChild(headerElement);
@@ -45,7 +45,13 @@ async function fetchPosts() {
         // ... append other elements
 
         list.appendChild(postItem);
-    });
+    };
+}
+
+async function fetchAccountName(accId) {
+    const response = await fetch(`/accounts/${accId}`);
+    const account = await response.json();
+    return account.accName;
 }
 
 fetchPosts(); // Call the function to fetch and display book data
