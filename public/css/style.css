@@ -150,10 +150,11 @@ footer div {
 
 /* discussion forum and post */
 .reply-header {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 .post,

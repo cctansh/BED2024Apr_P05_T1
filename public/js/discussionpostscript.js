@@ -37,6 +37,11 @@ async function fetchReplies(postId) {
     const replyContainer = document.getElementById('reply-container');
     replyContainer.innerHTML = "";
 
+    if (data.length === 0) {
+        replyContainer.innerHTML = "Leave a reply!";
+        return;
+    }
+
     for (const reply of data) {
         const replyItem = document.createElement("div");
         replyItem.classList.add("reply"); // Add a CSS class for styling
