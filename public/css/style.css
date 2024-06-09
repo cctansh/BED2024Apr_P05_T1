@@ -56,7 +56,7 @@ footer div {
 /* nav bar */
 
 .navbar {
-    border-bottom: 8px solid red;
+    border-bottom: 8px solid #dc3545;
     /* Red border underneath the navbar */
 }
 
@@ -153,11 +153,15 @@ footer div {
 
 
 /* new */
-h1 {
-    text-align: left;
+.reply-header {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.post {
+.post,
+.reply {
     width: 100%;
     margin: auto;
     margin-bottom: 1rem;
@@ -168,33 +172,13 @@ h1 {
     background-color: #e7e7e7;
     display: flex;
     flex-direction: column;
-    /* Change to column to stack children */
 }
 
-.postheader {
-    display: flex;
-    /* Flex container for account and datetime */
-    justify-content: space-between;
-    /* Space between account and datetime */
-    width: 100%;
+.reply {
+    /* over write post */
+    background-color: #ffffff;
 }
 
-.account {
-    color: #686868;
-    text-align: left;
-}
-
-.datetime {
-    color: #686868;
-    text-align: right;
-}
-
-.text {
-    margin-top: 1.5rem;
-    text-align: left;
-}
-
-/* discussion post */
 #post-container,
 #reply-container {
     margin: auto;
@@ -202,15 +186,51 @@ h1 {
     flex-direction: column;
 }
 
-.reply {
-    width: 100%;
-    margin: auto;
-    margin-bottom: 1rem;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    background-color: #ffffff;
+.boxheader,
+#post-header {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    color: #686868;
+}
+
+.boxheader {
+    margin-bottom: 0.5rem;
+}
+
+.account {
+    text-align: left;
+}
+
+.datetime {
+    text-align: right;
+}
+
+#post-header .account,
+#post-header .datetime {
+    font-size: 18px;
+}
+
+.text {
+    text-align: left;
+    font-size: 17px;
+}
+
+.edit-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 1rem;
+    color: #dc3545;
+}
+
+.edit-bar .btn {
+    background-color: transparent;
+    border: none;
+    padding: 0px;
+    cursor: pointer;
+}
+
+.edit-bar .btn:active {
+    color: darkred;
 }

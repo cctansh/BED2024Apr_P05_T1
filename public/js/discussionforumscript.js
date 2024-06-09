@@ -32,7 +32,7 @@ async function fetchPosts() {
 
         // header to hold account and datetime
         const headerElement = document.createElement("div");
-        headerElement.classList.add("postheader");
+        headerElement.classList.add("boxheader");
 
 
         // ... add more elements for other book data (optional)

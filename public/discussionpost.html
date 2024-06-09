@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Post</title>
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
@@ -37,9 +38,14 @@
     </nav>
 
     <div class="pad-nav">
-        <h1>Post</h1>
+        <div id="post-header"></div>
+        <h1>Post Title Goes here</h1>
         <div id="post-container"></div>
-        <h1>Replies</h1>
+        <div class="reply-header">
+            <h2>Replies</h2>
+            <button type="button" class="btn btn-danger add-reply">Add Reply&ensp;<i class="bi bi-send-fill"></i></button>
+        </div>
+
         <div id="reply-container"></div>
     </div>
 
