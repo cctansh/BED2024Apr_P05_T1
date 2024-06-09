@@ -2,7 +2,7 @@ async function fetchPosts() {
     const response = await fetch("/posts");
     const data = await response.json();
 
-    const list = document.getElementById("list");
+    const postContainer = document.getElementById("post-container");
 
     for (const post of data) {
         const postItem = document.createElement("div");
@@ -44,7 +44,7 @@ async function fetchPosts() {
         postItem.appendChild(textElement);
         // ... append other elements
 
-        list.appendChild(postItem);
+        postContainer.appendChild(postItem);
     };
 }
 

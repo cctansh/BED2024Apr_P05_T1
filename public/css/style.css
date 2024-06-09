@@ -9,6 +9,14 @@ a {
     cursor: pointer;
 }
 
+.pad-nav {
+    /* ensures content is shown below the nav bar */
+    padding-top: 80px;
+    min-height: 100vh;
+    width: 90%;
+    margin: auto;
+}
+
 /* footer */
 footer {
     padding: 32px;
@@ -141,20 +149,12 @@ footer div {
 
 /* new */
 h1 {
-    text-align: center;
-}
-
-#list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    margin-top: 2rem;
-    list-style: none;
-    padding: 0;
+    text-align: left;
 }
 
 .post {
-    width: calc(33% - 1rem);
+    width: 100%;
+    margin: auto;
     margin-bottom: 1rem;
     padding: 1rem;
     border: 1px solid #ddd;
@@ -197,22 +197,10 @@ h1 {
     flex-direction: column;
 }
 
-#post-container .post {
-    margin: auto;
-    width: 90%;
-}
-
-#createreply {
-    display: block;
-    width: 90%;
-    margin: auto;
-    margin-top: 1rem;
-}
-
 .reply {
-    width: 90%;
+    width: 100%;
     margin: auto;
-    margin-top: 1rem;
+    margin-bottom: 1rem;
     padding: 1rem;
     border: 1px solid #ddd;
     border-radius: 4px;
