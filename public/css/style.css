@@ -17,6 +17,11 @@ a {
     margin: auto;
 }
 
+.form-control:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(222, 39, 39, 0.25);
+}
+
 /* footer (NEEDS FIXING) */
 footer {
     padding: 32px;
