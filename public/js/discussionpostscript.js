@@ -11,11 +11,20 @@ async function fetchPost(postId) {
     const postContainer = document.getElementById('post-container');
 
     if (post) {
+        //formatting date
+        const postDate = new Date(post.postDateTime);
+        const year = postDate.getUTCFullYear();
+        const month = String(postDate.getUTCMonth() + 1).padStart(2, '0'); 
+        const day = String(postDate.getUTCDate()).padStart(2, '0');
+        const hours = String(postDate.getUTCHours()).padStart(2, '0');
+        const minutes = String(postDate.getUTCMinutes()).padStart(2, '0');
+        const formattedDate = `${day}/${month}/${year}`;
+        const formattedTime = `${hours}:${minutes}`;
+
         postHeader.innerHTML = `
             <div class="account">${await fetchAccountName(post.accId)}</div>
-            <div class="datetime">${new Date(post.postDateTime).toLocaleDateString('en-CA')} ${new Date(post.postDateTime).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}</div>
+            <div class="datetime">${formattedDate}, ${formattedTime}</div>
         `
-
         postContainer.innerHTML = `
             <div class="post">
                 <div class="text">${post.postText}</div>
@@ -53,10 +62,16 @@ async function fetchReplies(postId) {
 
         const dateTimeElement = document.createElement("div");
         dateTimeElement.classList.add("datetime");
-        // Format the date and time
+        // Format the date and time\
         const replyDate = new Date(reply.replyDateTime);
-        const formattedDate = replyDate.toLocaleDateString('en-CA'); // Format date as YYYY-MM-DD
-        const formattedTime = replyDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); // Format time as HH:MM
+
+        const year = replyDate.getUTCFullYear();
+        const month = String(replyDate.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(replyDate.getUTCDate()).padStart(2, '0');
+        const hours = String(replyDate.getUTCHours()).padStart(2, '0');
+        const minutes = String(replyDate.getUTCMinutes()).padStart(2, '0');
+        const formattedDate = `${day}/${month}/${year}`;
+        const formattedTime = `${hours}:${minutes}`;
 
         dateTimeElement.textContent = `${formattedDate}, ${formattedTime}`;
 

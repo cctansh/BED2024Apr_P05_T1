@@ -21,8 +21,13 @@ async function fetchPosts() {
         dateTimeElement.classList.add("datetime");
         // Format the date and time
         const postDate = new Date(post.postDateTime);
-        const formattedDate = postDate.toLocaleDateString('en-CA'); // Format date as YYYY-MM-DD
-        const formattedTime = postDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); // Format time as HH:MM
+        const year = postDate.getUTCFullYear();
+        const month = String(postDate.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(postDate.getUTCDate()).padStart(2, '0');
+        const hours = String(postDate.getUTCHours()).padStart(2, '0');
+        const minutes = String(postDate.getUTCMinutes()).padStart(2, '0');
+        const formattedDate = `${day}/${month}/${year}`;
+        const formattedTime = `${hours}:${minutes}`;
 
         dateTimeElement.textContent = `${formattedDate}, ${formattedTime}`;
 
