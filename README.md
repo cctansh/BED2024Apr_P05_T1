@@ -1,5 +1,7 @@
 DO NOT COMMIT NODE AND BOOTSTRAP FILES
 
+check the dbConfig file, and set up the same user/password in ur sql server app, referring to wk4 tutorial. alternatively, change the dbConfig to match ur user and password, but DO NOT EVER COMMIT IT
+
 footer and quiz pages have been taken directly from previous assignment, please remember to update them to fit
 
 everyone does their functions/pages as indicated in checkpoint 1
