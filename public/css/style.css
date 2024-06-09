@@ -1,3 +1,145 @@
+/* all */
+html,
+body {
+    height: 100%;
+}
+
+a {
+    /* all links should have pointer cursor */
+    cursor: pointer;
+}
+
+/* footer */
+footer {
+    padding: 32px;
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    /* horizontally aligned */
+    justify-content: space-between;
+    /* puts company-info and socmed divs on opposite ends */
+}
+
+footer div {
+    /* styles both company-info and socmed */
+    display: flex;
+    flex-direction: row;
+    /* horizontally aligned */
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    /* spacing between inside div elements */
+}
+
+.socmed img {
+    /* socmed icons */
+    width: auto;
+    /* auto aspect ratio according to height */
+    height: 30px;
+}
+
+.brand {
+    /* logo image dimensions */
+    width: 24px;
+    height: 24px;
+}
+
+/* nav bar */
+
+.navbar {
+    border-bottom: 8px solid red;
+    /* Red border underneath the navbar */
+}
+
+.navbar-nav {
+    flex-grow: 1;
+    /* Allows nav items to use up remaining space */
+    justify-content: space-between;
+    /* Spacing between nav items */
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.nav-link {
+    /* styles the page link text */
+    font-size: 18px;
+    font-weight: 600;
+    color: #686868;
+}
+
+.nav-item .active {
+    /* styles current page link (eg on home page, styles HOME link text) */
+    cursor: default;
+    /* indicates non clickable */
+}
+
+/* index.html */
+
+.carousel,
+.carousel-item,
+.carousel-inner,
+.active {
+    /* ensures fills page */
+    height: 100%;
+}
+
+.carousel-caption {
+    display: block !important;
+    /* shows no matter the screen size */
+}
+
+.carousel-item {
+    background-size: cover;
+    /* so image will always be full screen while maintaining aspect ratio */
+}
+
+.carousel-item-bg {
+    /* carousel caption bg */
+    background-color: rgba(83, 85, 90, 0.7);
+    /* translucent grey bg */
+    width: auto;
+    padding: 12px;
+    /* pads bg around text */
+}
+
+.carousel-item-bg h4 {
+    /* styles caption header */
+    font-size: 28px;
+    font-weight: 500;
+}
+
+.carousel-item-bg p {
+    /* styles caption details */
+    font-size: 18px;
+}
+
+.go-btn {
+    /* products page button */
+    min-width: 124px;
+    border-radius: 0;
+}
+
+.bg1 {
+    /* home product page img bg */
+    background: url(../img/bg.png) no-repeat center center fixed;
+}
+
+.carousel .carousel-indicators button {
+    /* styles bottom buttons indicating which page user is on */
+    background-color: rgba(70, 70, 70, 0.65);
+}
+
+.carousel .carousel-indicators .active {
+    /* current page user is on has darker button colour */
+    background-color: #333;
+}
+
+
+
+
+
+/* new */
 h1 {
     text-align: center;
 }
@@ -48,7 +190,7 @@ h1 {
 }
 
 /* discussion post */
-#post-container, 
+#post-container,
 #reply-container {
     margin: auto;
     display: flex;
