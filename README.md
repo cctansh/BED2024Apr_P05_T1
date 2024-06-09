@@ -23,6 +23,7 @@ BED/
     public/
         css/
             bootstrap/
+            bootstrap-icons/
                 ...
             #css files go here
         js/
