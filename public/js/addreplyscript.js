@@ -31,3 +31,8 @@ const postId = getUrlParams();
 console.log(postId)
 
 fetchPost(postId);
+
+const cancelReply = document.getElementById("cancel-reply");
+cancelReply.onclick = () => {
+    window.location.href = `/discussionpost.html?id=${postId}`;
+};
