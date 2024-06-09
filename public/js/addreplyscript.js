@@ -20,22 +20,16 @@ async function fetchPost(postId) {
     }
 }
 
-async function fetchAccountName(accId) {
-    const response = await fetch(`/accounts/${accId}`);
-    const account = await response.json();
-    return account.accName;
-}
-
 const postId = getUrlParams();
 console.log(postId)
 
 fetchPost(postId);
 
+// cancel reply
 const cancelReply = document.getElementById("cancel-reply");
 cancelReply.onclick = () => {
     window.location.href = `/discussionpost.html?id=${postId}`;
 };
-
 
 // confirm reply
 const confirmReply = document.getElementById("confirm-reply");

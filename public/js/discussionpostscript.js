@@ -13,17 +13,10 @@ async function fetchPost(postId) {
     if (post) {
         //formatting date
         const postDate = new Date(post.postDateTime);
-        const year = postDate.getUTCFullYear();
-        const month = String(postDate.getUTCMonth() + 1).padStart(2, '0'); 
-        const day = String(postDate.getUTCDate()).padStart(2, '0');
-        const hours = String(postDate.getUTCHours()).padStart(2, '0');
-        const minutes = String(postDate.getUTCMinutes()).padStart(2, '0');
-        const formattedDate = `${day}/${month}/${year}`;
-        const formattedTime = `${hours}:${minutes}`;
 
         postHeader.innerHTML = `
             <div class="account">${await fetchAccountName(post.accId)}</div>
-            <div class="datetime">${formattedDate}, ${formattedTime}</div>
+            <div class="datetime">${formatDate(postDate)}</div>
         `
         postContainer.innerHTML = `
             <div class="post">
@@ -65,15 +58,11 @@ async function fetchReplies(postId) {
         // Format the date and time\
         const replyDate = new Date(reply.replyDateTime);
 
-        const year = replyDate.getUTCFullYear();
-        const month = String(replyDate.getUTCMonth() + 1).padStart(2, '0');
-        const day = String(replyDate.getUTCDate()).padStart(2, '0');
-        const hours = String(replyDate.getUTCHours()).padStart(2, '0');
-        const minutes = String(replyDate.getUTCMinutes()).padStart(2, '0');
-        const formattedDate = `${day}/${month}/${year}`;
-        const formattedTime = `${hours}:${minutes}`;
-
-        dateTimeElement.textContent = `${formattedDate}, ${formattedTime}`;
+        if (reply.replyEdited == 0) {
+            dateTimeElement.textContent = formatDate(replyDate);
+        } else {
+            dateTimeElement.textContent = `Edited at ${formatDate(replyDate)}`;
+        }
 
         const textElement = document.createElement("div");
         textElement.classList.add("text");
@@ -97,14 +86,23 @@ async function fetchReplies(postId) {
 
         replyContainer.appendChild(replyItem);
 
-        const deleteButton = replyItem.querySelector('.delete-reply');
-        deleteButton.addEventListener('click', async () => {
+        const deleteReplyButton = replyItem.querySelector('.delete-reply');
+        deleteReplyButton.addEventListener('click', async () => {
             const confirmed = confirm("Are you sure you want to delete this reply?");
             if (confirmed) {
-                await deleteReply(reply.replyId);
-
-                fetchReplies(postId); // Refresh the replies after deletion
+                try {
+                    await deleteReply(reply.replyId);
+                    fetchReplies(postId); // Refresh the replies after deletion
+                } catch (error) {
+                    console.error("Failed to delete reply:", error);
+                    alert('Failed to delete reply.');
+                }
             }
+        });
+
+        const editReply = replyItem.querySelector('.edit-reply');
+        editReply.addEventListener('click', async () => {
+            window.location.href = `/editreply.html?id=${reply.replyId}`;
         });
     };
 }
@@ -113,6 +111,17 @@ async function fetchAccountName(accId) {
     const response = await fetch(`/accounts/${accId}`);
     const account = await response.json();
     return account.accName;
+}
+
+function formatDate(ogDate) {
+    const year = ogDate.getUTCFullYear();
+    const month = String(ogDate.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(ogDate.getUTCDate()).padStart(2, '0');
+    const hours = String(ogDate.getUTCHours()).padStart(2, '0');
+    const minutes = String(ogDate.getUTCMinutes()).padStart(2, '0');
+    const formattedDate = `${day}/${month}/${year}`;
+    const formattedTime = `${hours}:${minutes}`;
+    return `${formattedDate}, ${formattedTime}`;
 }
 
 async function deleteReply(replyId) {
