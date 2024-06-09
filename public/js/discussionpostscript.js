@@ -108,3 +108,8 @@ const postId = getUrlParams();
 
 fetchPost(postId);
 fetchReplies(postId);
+
+const addReply = document.getElementById("add-reply");
+addReply.onclick = () => {
+    window.location.href = `/addreply.html?id=${postId}`;
+};

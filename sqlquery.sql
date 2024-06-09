@@ -70,7 +70,8 @@ VALUES ( 'account1' , 'hi@gmail.com' , 'abcd1234'),
 
 INSERT INTO Post(postDateTime, postText, accId)
 VALUES ( '2024-05-25 16:56:00' , 'Welcome to Post 1', 1),  
-('2024-05-27 12:03:46' , 'Welcome to Post 2', 2);
+('2024-05-27 12:03:46' , 'Welcome to Post 2', 2),
+('2024-05-27 12:03:46' , 'Welcome to Post 3', 1);
 
 INSERT INTO Reply(replyDateTime, replyText, accId, replyTo)
 VALUES ('2024-05-25 17:43:00' , 'This is Reply 1', 2, 1),  

@@ -38,20 +38,20 @@
     </nav>
 
     <div class="pad-nav">
-        <div id="post-header"></div>
         <h1>Post Title Goes here</h1>
         <div id="post-container"></div>
-        <div class="reply-header">
-            <h2>Replies</h2>
-            <button id="add-reply" type="button" class="btn btn-danger add-reply">Add Reply&ensp;<i class="bi bi-send-fill"></i></button>
+        <h2>Add Reply</h2>
+        <textarea id="newreply" class="form-control" placeholder="Start typing..." rows="5"></textarea>
+        <div class="confirm-bar">
+            <button type="button" class="btn btn-secondary">Cancel</button>
+            <button type="button" class="btn btn-danger add-reply">Add Reply&ensp;<i
+                    class="bi bi-send-fill"></i></button>
         </div>
-
-        <div id="reply-container"></div>
     </div>
 
 
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
-    <script src="js/discussionpostscript.js"></script>
+    <script src="js/addreplyscript.js"></script>
 </body>
 
 </html>

@@ -9,13 +9,13 @@ async function fetchPosts() {
         postItem.classList.add("post");
 
         postItem.onclick = () => {
-            window.location.href = `/discussionpost.html?id=${post.accId}`;
+            window.location.href = `/discussionpost.html?id=${post.postId}`;
         };
 
         // Create elements for title, account, etc. and populate with book data
         const accountElement = document.createElement("div");
         accountElement.classList.add("account");
-        accountElement.textContent = await fetchAccountName(post.postId);
+        accountElement.textContent = await fetchAccountName(post.accId);
 
         const dateTimeElement = document.createElement("div");
         dateTimeElement.classList.add("datetime");
