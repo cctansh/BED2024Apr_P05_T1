@@ -7,7 +7,7 @@ everyone does their functions/pages as indicated in checkpoint 1
 bootstrap downloads:
 - https://getbootstrap.com/docs/5.3/getting-started/download/
 - https://github.com/twbs/icons/releases/tag/v1.11.3 (!! RENAME FOLDER TO 'bootstrap-icons' !!)
-place inside css & js folders respectively
+- place inside css & js folders respectively
 
 tree should look like:
 ```
