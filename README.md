@@ -1,8 +1,6 @@
 DO NOT COMMIT NODE AND BOOTSTRAP FILES
 
-footer and quiz pages have been taken directly from previous assignment
-
-please remember to UPDATE them
+footer and quiz pages have been taken directly from previous assignment, please remember to update them to fit
 
 everyone does their functions/pages as indicated in checkpoint 1
 
