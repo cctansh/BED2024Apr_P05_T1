@@ -87,6 +87,18 @@ footer div {
     /* indicates non clickable */
 }
 
+.nav-item i {
+    color: #dc3545;
+}
+
+.nav-item:hover i {
+    color: #a72f3b;
+}
+
+.nav-item:active i {
+    color: darkred
+}
+
 /* index.html */
 
 .carousel,
