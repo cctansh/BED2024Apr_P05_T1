@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+    <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+        <div class="container-fluid">
+            <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="discussionforum.html">Discussion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="quiz.html">Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Login&ensp;<i class="bi bi-person-fill"></i></a>
+                    </li>
+            </div>
+        </div>
+    </nav>
+    <div class="pad-nav vertical">
+        <form id="register">
+            <div class="inputs">
+                <div class="form-group">
+                    <label for="registerName" class="form-label">Display Name</label>
+                    <input type="text" id="registerName" class="form-control" placeholder="Enter display name...">
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail" class="form-label">E-mail Address</label>
+                    <input type="email" id="registerEmail" class="form-control" placeholder="Enter e-mail address...">
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword" class="form-label">Password</label>
+                    <input type="password" id="registerPassword" class="form-control" placeholder="Enter password..."
+                        aria-describedby="passwordHelpBlock">
+                    <div id="passwordHelpBlock" class="form-text">
+                        Your password must be at least 6 characters long, contain letters and numbers, and must not contain
+                        spaces or special characters.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="registerPasswordConfirm" class="form-label">Re-enter Password</label>
+                    <input type="password" id="registerPasswordConfirm" class="form-control"
+                        placeholder="Re-enter password...">
+                </div>
+            </div>
+            <button id="register-button" type="button" class="btn btn-danger">Register</button>
+        </form>
+    </div>
+
+    <footer>
+        <div class="company-info">
+            <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
+            <span>&copy; 2024, Star Jewelry Inc.</span>
+        </div>
+        <div class="socmed">
+            <a href="index.html">fb</a>
+            <a href="index.html">fb</a>
+            <a href="index.html">fb</a>
+        </div>
+    </footer>
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
+</body>
+
+</html>

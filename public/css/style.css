@@ -268,3 +268,28 @@ footer div {
     gap: 1rem;
     justify-content: end;
 }
+
+
+/* login register */
+.vertical {
+    display: flex;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 70%;
+    margin: auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+form .btn {
+    width: fit-content;
+    font-size: 18px;
+}
