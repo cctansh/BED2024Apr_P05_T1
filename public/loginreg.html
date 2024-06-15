@@ -125,12 +125,10 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const token = localStorage.getItem('token');
-            const loginProfileLink = document.getElementById('login-profile-link');
 
             if (token) {
-                loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
-            } else {
-                loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
+                // window.location.href = 'profile.html';
+                console.log("Logged in")
             }
 
             const logoutButton = document.getElementById('logout-button');
@@ -162,11 +160,14 @@
 
                     const token = result.token;
                     const decodedToken = parseJwt(token);
+                    const loginAccId = decodedToken.accId;
 
                     localStorage.setItem('token', token);
-                    localStorage.setItem('loginAccId', decodedToken.accId);
+                    localStorage.setItem('loginAccId', loginAccId);
                     console.log(token);
-                    console.log(decodedToken.accId);
+                    console.log(loginAccId);
+
+                    window.location.href = 'index.html';
                 } catch (err) {
                     // Display error messages
                     const errorField = document.getElementById('loginError');

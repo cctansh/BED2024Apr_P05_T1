@@ -45,7 +45,7 @@ cancelReply.onclick = () => {
 const confirmReply = document.getElementById("confirm-reply");
 const newReplyTextarea = document.getElementById("newreply");
 
-const accId = 1; // replace later with dynamic accId
+const accId = parseInt(localStorage.getItem('loginAccId'));
 
 confirmReply.addEventListener('click', async () => {
     const confirmed = confirm("Are you sure you want to add this reply?");

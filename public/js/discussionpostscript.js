@@ -8,6 +8,8 @@ if (token) {
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
 }
 
+const loginAccId = localStorage.getItem('loginAccId');
+
 function getUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');
@@ -87,33 +89,38 @@ async function fetchReplies(postId) {
 
         replyItem.appendChild(headerElement);
         replyItem.appendChild(textElement);
-        replyItem.innerHTML += `
+
+        if (token && loginAccId && loginAccId == reply.accId) {
+            replyItem.innerHTML += `
             <div class="edit-bar">
                 <button class="btn edit-reply"><i class="bi bi-pencil-fill"></i></button>
                 <button class="btn delete-reply"><i class="bi bi-trash3-fill"></i></button>
             </div>
-        `
+            `
+        }
 
         replyContainer.appendChild(replyItem);
 
-        const deleteReplyButton = replyItem.querySelector('.delete-reply');
-        deleteReplyButton.addEventListener('click', async () => {
-            const confirmed = confirm("Are you sure you want to delete this reply?");
-            if (confirmed) {
-                try {
-                    await deleteReply(reply.replyId);
-                    fetchReplies(postId); // Refresh the replies after deletion
-                } catch (error) {
-                    console.error("Failed to delete reply:", error);
-                    alert('Failed to delete reply.');
+        if (loginAccId && loginAccId == reply.accId) {
+            const deleteReplyButton = replyItem.querySelector('.delete-reply');
+            deleteReplyButton.addEventListener('click', async () => {
+                const confirmed = confirm("Are you sure you want to delete this reply?");
+                if (confirmed) {
+                    try {
+                        await deleteReply(reply.replyId);
+                        fetchReplies(postId); // Refresh the replies after deletion
+                    } catch (error) {
+                        console.error("Failed to delete reply:", error);
+                        alert('Failed to delete reply.');
+                    }
                 }
-            }
-        });
+            });
 
-        const editReply = replyItem.querySelector('.edit-reply');
-        editReply.addEventListener('click', async () => {
-            window.location.href = `/editreply.html?id=${reply.replyId}`;
-        });
+            const editReply = replyItem.querySelector('.edit-reply');
+            editReply.addEventListener('click', async () => {
+                window.location.href = `/editreply.html?id=${reply.replyId}`;
+            });
+        }
     };
 }
 
@@ -150,5 +157,10 @@ fetchReplies(postId);
 
 const addReply = document.getElementById("add-reply");
 addReply.onclick = () => {
-    window.location.href = `/addreply.html?id=${postId}`;
+    if (token) {
+        window.location.href = `/addreply.html?id=${postId}`;
+    } else {
+        alert("You must be logged in to add a reply.")
+    }
+
 };
