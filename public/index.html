@@ -104,12 +104,17 @@
   <script src="js/bootstrap/bootstrap.bundle.js"></script>
   <script>
     const token = localStorage.getItem('token');
+    const loginAccId = localStorage.getItem('loginAccId');
     const loginProfileLink = document.getElementById('login-profile-link');
 
     if (token) {
         loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+        console.log(token);
     } else {
         loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
+    }
+    if (loginAccId) {
+      console.log(loginAccId);
     }
   </script>
 </body>

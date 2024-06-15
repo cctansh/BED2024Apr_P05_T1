@@ -22,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+                        <a class="nav-link" aria-current="page" href="index.html">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="discussionforum.html">Discussion</a>
@@ -31,7 +31,7 @@
                         <a class="nav-link" href="quiz.html">Quiz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="login-profile-link" href="loginreg.html">Login&ensp;<i
+                        <a class="nav-link active" id="login-profile-link" href="loginreg.html">Login&ensp;<i
                                 class="bi bi-person-fill"></i></a>
                     </li>
             </div>
@@ -132,7 +132,7 @@
             } else {
                 loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
             }
-            
+
             const logoutButton = document.getElementById('logout-button');
             logoutButton.addEventListener('click', () => {
                 localStorage.removeItem('token');
@@ -156,19 +156,40 @@
                     if (!response.ok) {
                         throw new Error(await response.text());
                     }
+
                     const result = await response.json();
                     alert('Login successful');
-                    localStorage.setItem('token', result.token);
-                    window.location.href = 'index.html';
+
+                    const token = result.token;
+                    const decodedToken = parseJwt(token);
+
+                    localStorage.setItem('token', token);
+                    localStorage.setItem('loginAccId', decodedToken.accId);
+                    console.log(token);
+                    console.log(decodedToken.accId);
                 } catch (err) {
                     // Display error messages
                     const errorField = document.getElementById('loginError');
                     errorField.textContent = ''; // Clear previous error messages
 
                     errorField.textContent = 'Login failed: Invalid e-mail or password';
-                    }
+                }
             });
         });
+        function parseJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                return JSON.parse(jsonPayload);
+            } catch (error) {
+                console.error('Error parsing JWT token:', error);
+                return null;
+            }
+        }
     </script>
 </body>
 

@@ -145,8 +145,8 @@ class Account {
                 result.recordset[0].accEmail,
                 result.recordset[0].accPassword
             );
-            const token = jwt.sign({ accId: account.accId }, secretKey, { expiresIn: '8h' });
-            return { account, token };
+            const token = jwt.sign({ accId: account.accId.toString() }, secretKey, { expiresIn: '8h' });
+            return token;
         } else {
             return null;
         }
