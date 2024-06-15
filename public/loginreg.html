@@ -31,7 +31,8 @@
                         <a class="nav-link" href="quiz.html">Quiz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Login&ensp;<i class="bi bi-person-fill"></i></a>
+                        <a class="nav-link" id="login-profile-link" href="loginreg.html">Login&ensp;<i
+                                class="bi bi-person-fill"></i></a>
                     </li>
             </div>
         </div>
@@ -52,7 +53,7 @@
             <!-- login -->
             <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="pills-login-tab"
                 tabindex="0">
-                <form id="login">
+                <form id="login" novalidate>
                     <div class="inputs">
                         <div class="form-group">
                             <label for="loginEmail" class="form-label">E-mail Address</label>
@@ -66,6 +67,7 @@
                         </div>
                     </div>
                     <button id="login-button" type="submit" class="btn btn-danger">Login</button>
+                    <div id="loginError"></div>
                 </form>
             </div>
             <!-- register -->
@@ -104,6 +106,10 @@
         </div>
     </div>
 
+    <div class="container">
+        <button id="logout-button" class="btn btn-danger mt-3">Logout</button>
+    </div>
+
     <footer>
         <div class="company-info">
             <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
@@ -116,6 +122,54 @@
         </div>
     </footer>
     <script src="js/bootstrap/bootstrap.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const token = localStorage.getItem('token');
+            const loginProfileLink = document.getElementById('login-profile-link');
+
+            if (token) {
+                loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+            } else {
+                loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
+            }
+            
+            const logoutButton = document.getElementById('logout-button');
+            logoutButton.addEventListener('click', () => {
+                localStorage.removeItem('token');
+                window.location.href = 'loginreg.html'; // Redirect to login page after logout
+            });
+
+            document.getElementById('login').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const loginData = {
+                    accEmail: document.getElementById('loginEmail').value,
+                    accPassword: document.getElementById('loginPassword').value
+                };
+                try {
+                    const response = await fetch('/accounts/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(loginData)
+                    });
+                    if (!response.ok) {
+                        throw new Error(await response.text());
+                    }
+                    const result = await response.json();
+                    alert('Login successful');
+                    localStorage.setItem('token', result.token);
+                    window.location.href = 'index.html';
+                } catch (err) {
+                    // Display error messages
+                    const errorField = document.getElementById('loginError');
+                    errorField.textContent = ''; // Clear previous error messages
+
+                    errorField.textContent = 'Login failed: Invalid e-mail or password';
+                    }
+            });
+        });
+    </script>
 </body>
 
 </html>

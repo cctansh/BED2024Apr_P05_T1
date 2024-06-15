@@ -1,3 +1,13 @@
+// token
+const token = localStorage.getItem('token');
+const loginProfileLink = document.getElementById('login-profile-link');
+
+if (token) {
+    loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+} else {
+    loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
+}
+
 function getUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');

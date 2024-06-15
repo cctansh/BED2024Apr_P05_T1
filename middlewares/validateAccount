@@ -52,7 +52,7 @@ const validateUpdateAccount = (req, res, next) => {
 
 const validateLoginAccount = async (req, res, next) => {
     const schema = Joi.object({
-        accEmail: Joi.string().email().required(),
+        accEmail: Joi.string().required(),
         accPassword: Joi.string().required()
     });
 

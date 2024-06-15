@@ -1,5 +1,8 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const jwt = require("jsonwebtoken");
+
+const secretKey = "jwt_secret"; 
 
 class Account {
     constructor(accId, accName, accEmail, accPassword) {
@@ -135,14 +138,18 @@ class Account {
 
         connection.close();
 
-        return result.recordset[0]
-        ? new Account(
-            result.recordset[0].accId,
-            result.recordset[0].accName,
-            result.recordset[0].accEmail,
-            result.recordset[0].accPassword
-            )
-        : null; 
+        if (result.recordset[0]) {
+            const account = new Account(
+                result.recordset[0].accId,
+                result.recordset[0].accName,
+                result.recordset[0].accEmail,
+                result.recordset[0].accPassword
+            );
+            const token = jwt.sign({ accId: account.accId }, secretKey, { expiresIn: '8h' });
+            return { account, token };
+        } else {
+            return null;
+        }
     }
 }
 
