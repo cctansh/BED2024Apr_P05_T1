@@ -4,8 +4,10 @@ const loginProfileLink = document.getElementById('login-profile-link');
 
 if (token) {
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.setAttribute("href", 'profile.html')
 } else {
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.setAttribute("href", 'loginreg.html')
 }
 
 async function fetchPosts() {

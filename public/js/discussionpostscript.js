@@ -4,8 +4,10 @@ const loginProfileLink = document.getElementById('login-profile-link');
 
 if (token) {
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.setAttribute("href", 'profile.html')
 } else {
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.setAttribute("href", 'loginreg.html')
 }
 
 const loginAccId = localStorage.getItem('loginAccId');
@@ -101,7 +103,7 @@ async function fetchReplies(postId) {
 
         replyContainer.appendChild(replyItem);
 
-        if (loginAccId && loginAccId == reply.accId) {
+        if (token && loginAccId && loginAccId == reply.accId) {
             const deleteReplyButton = replyItem.querySelector('.delete-reply');
             deleteReplyButton.addEventListener('click', async () => {
                 const confirmed = confirm("Are you sure you want to delete this reply?");

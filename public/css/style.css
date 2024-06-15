@@ -322,3 +322,21 @@ form input {
 #loginError {
     margin-top: 1.5rem;
 }
+
+/* profile */
+.profile-info {
+    border: 2px solid #686868;
+    border-radius: 10px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.profile-info .btn {
+    width: fit-content;
+}
+
+#logout {
+    margin-left: auto;
+}

@@ -106,10 +106,6 @@
         </div>
     </div>
 
-    <div class="container">
-        <button id="logout-button" class="btn btn-danger mt-3">Logout</button>
-    </div>
-
     <footer>
         <div class="company-info">
             <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
@@ -130,12 +126,6 @@
                 // window.location.href = 'profile.html';
                 console.log("Logged in")
             }
-
-            const logoutButton = document.getElementById('logout-button');
-            logoutButton.addEventListener('click', () => {
-                localStorage.removeItem('token');
-                window.location.href = 'loginreg.html'; // Redirect to login page after logout
-            });
 
             document.getElementById('login').addEventListener('submit', async function (e) {
                 e.preventDefault();
