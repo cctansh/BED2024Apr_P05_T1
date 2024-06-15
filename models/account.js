@@ -121,6 +121,29 @@ class Account {
 
         return result.rowsAffected > 0; 
     }
+
+    static async loginAccount(loginAccountData) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Account WHERE accEmail = @accEmail AND accPassword = @accPassword`; 
+
+        const request = connection.request();
+        request.input("accEmail", loginAccountData.accEmail);
+        request.input("accPassword", loginAccountData.accPassword);
+
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+        ? new Account(
+            result.recordset[0].accId,
+            result.recordset[0].accName,
+            result.recordset[0].accEmail,
+            result.recordset[0].accPassword
+            )
+        : null; 
+    }
 }
 
 module.exports = Account;

@@ -66,10 +66,25 @@ const deleteAccount = async (req, res) => {
   }
 };
 
+const loginAccount = async (req, res) => {
+  const logAccount = req.body;
+  try {
+    const account = await Account.loginAccount(logAccount);
+    if (!account) {
+      return res.status(404).send("Account not found");
+    }
+    res.json(account);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving account");
+  }
+};
+
 module.exports = {
   getAllAccounts,
   getAccountById,
   createAccount,
   updateAccount,
-  deleteAccount
+  deleteAccount,
+  loginAccount
 };
