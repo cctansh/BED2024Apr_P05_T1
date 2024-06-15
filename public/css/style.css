@@ -74,28 +74,28 @@ footer div {
     padding-right: 10px;
 }
 
-.nav-link {
+.navbar .nav-link {
     /* styles the page link text */
     font-size: 18px;
     font-weight: 600;
     color: #686868;
 }
 
-.nav-item .active {
+.navbar .nav-item .active {
     /* styles current page link (eg on home page, styles HOME link text) */
     cursor: default;
     /* indicates non clickable */
 }
 
-.nav-item i {
+.navbar .nav-item i {
     color: #dc3545;
 }
 
-.nav-item:hover i {
+.navbar .nav-item:hover i {
     color: #a72f3b;
 }
 
-.nav-item:active i {
+.navbar .nav-item:active i {
     color: darkred
 }
 
@@ -273,6 +273,7 @@ footer div {
 /* login register */
 .vertical {
     display: flex;
+    flex-direction: column;
     align-items: center;
 }
 
@@ -281,8 +282,8 @@ form {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width: 70%;
     margin: auto;
+    width: 70%;
 }
 
 .form-group {
@@ -292,4 +293,28 @@ form {
 form .btn {
     width: fit-content;
     font-size: 18px;
+}
+
+.tab-content,
+.tab-pane,
+.form-group,
+.inputs,
+form input {
+    width: 100%;
+}
+
+/* Change the default color of the nav-pills */
+.nav-pills .nav-link.active {
+    background-color: #dc3545;
+}
+.nav-pills .nav-link.active:hover {
+    color: white;
+}
+
+.nav-pills .nav-link {
+    color: #dc3545;
+}
+
+.nav-pills .nav-link:hover {
+    color: darkred;
 }
