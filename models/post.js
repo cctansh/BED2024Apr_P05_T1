@@ -1,14 +1,15 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
-// to implement editedBy field
-// also need to add post title i forgot whoops
-
+// added postTitle, postEdited, repliesCount field
 class Post {
-    constructor(postId, postDateTime, postText, accId) {
+    constructor(postId, postDateTime, postTitle, postText, postEdited, repliesCount, accId) {
         this.postId = postId;
         this.postDateTime = postDateTime;
+        this.postTitle = postTitle;
         this.postText = postText;
+        this.postEdited = postEdited;
+        this.repliesCount = repliesCount;
         this.accId = accId;
     }
 
@@ -23,7 +24,7 @@ class Post {
         connection.close();
 
         return result.recordset.map(
-        (row) => new Post(row.postId, row.postDateTime, row.postText, row.accId)
+        (row) => new Post(row.postId, row.postDateTime, row.postTitle, row.postText, row.postEdited, row.repliesCount, row.accId)
         ); 
     }
 
@@ -42,7 +43,10 @@ class Post {
         ? new Post(
             result.recordset[0].postId,
             result.recordset[0].postDateTime,
+            result.recordset[0].postTitle,
             result.recordset[0].postText,
+            result.recordset[0].postEdited,
+            result.recordset[0].repliesCount,
             result.recordset[0].accId
             )
         : null; 
@@ -51,9 +55,10 @@ class Post {
     static async createPost(newPostData) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `INSERT INTO Post (postDateTime, postText, accId) VALUES (GETDATE(), @postText, @accId); SELECT SCOPE_IDENTITY() AS postId;`; 
+        const sqlQuery = `INSERT INTO Post (postDateTime, postTitle, postText, postEdited, repliesCount, accId) VALUES (GETDATE(), @postTitle, @postText, 0, 0, @accId); SELECT SCOPE_IDENTITY() AS postId;`; 
 
         const request = connection.request();
+        request.input("postTitle", newPostData.postTitle);
         request.input("postText", newPostData.postText);
         request.input("accId", newPostData.accId);
 
@@ -67,10 +72,11 @@ class Post {
     static async updatePost(id, newPostData) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `UPDATE Post SET postDateTime = GETDATE(), postText = @postText WHERE postId = @id`; 
+        const sqlQuery = `UPDATE Post SET postDateTime = GETDATE(), postTitle = @postTitle, postText = @postText, postEdited = 1 WHERE postId = @id`; 
 
         const request = connection.request();
         request.input("id", id);
+        request.input("postTitle", newPostData.postTitle || null);
         request.input("postText", newPostData.postText || null);
 
         await request.query(sqlQuery);
@@ -82,16 +88,34 @@ class Post {
 
     static async deletePost(id) {
         const connection = await sql.connect(dbConfig);
-
-        const sqlQuery = `DELETE FROM Post WHERE postId = @id`; 
-
-        const request = connection.request();
-        request.input("id", id);
-        const result = await request.query(sqlQuery);
-
-        connection.close();
-
-        return result.rowsAffected > 0; 
+    
+        try {
+            const transaction = new sql.Transaction(connection);
+            await transaction.begin();
+    
+            // Delete replies first
+            const deleteRepliesQuery = `
+                DELETE FROM Reply
+                WHERE replyTo = @id;
+            `;
+            await transaction.request().input("id", id).query(deleteRepliesQuery);
+    
+            // Then delete the post
+            const deletePostQuery = `
+                DELETE FROM Post
+                WHERE postId = @id;
+            `;
+            const result = await transaction.request().input("id", id).query(deletePostQuery);
+    
+            await transaction.commit();
+            connection.close();
+    
+            return result.rowsAffected[0] > 0; // Return true if at least one row was affected
+        } catch (err) {
+            console.error("Error deleting post:", err);
+            connection.close();
+            return false;
+        }
     }
 }
 
