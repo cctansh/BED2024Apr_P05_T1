@@ -73,7 +73,10 @@ const loginAccount = async (req, res) => {
     if (!account) {
       return res.status(404).send("Account not found");
     }
-    res.json(account);
+    res.status(200).json({
+      message: "Login successful",
+      account
+    })
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving account");
