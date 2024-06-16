@@ -1,6 +1,10 @@
 DO NOT COMMIT NODE AND BOOTSTRAP FILES
 
-remember to run the sqlquery file in your sql server app. check the dbConfig file, and set up the same user/password permissions, referring to wk4 tutorial. alternatively, change the dbConfig to match ur user and password, but DO NOT EVER COMMIT IT
+node packages to install (please add on if you add anything): body-parser, express, joi, jsonwebtoken, mssql
+
+remember to run the sqlquery file in your sql server app. if you want to add/edit sql database code, do it in the sqlquery file. do NOT make your own sql file.
+
+check the dbConfig file, and set up the same user/password permissions, referring to wk4 tutorial. alternatively, change the dbConfig to match ur user and password, but DO NOT EVER COMMIT IT
 
 footer and quiz pages have been taken directly from previous assignment, please remember to update them to fit
 

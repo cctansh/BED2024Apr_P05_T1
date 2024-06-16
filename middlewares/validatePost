@@ -4,6 +4,7 @@ const Joi = require("joi");
 
 const validateCreatePost = async (req, res, next) => {
   const schema = Joi.object({
+    postTitle: Joi.string().min(1).max(8000).required(),
     postText: Joi.string().min(1).max(8000).required(),
     accId: Joi.number().integer().required()
   });
@@ -39,6 +40,7 @@ const validateCreatePost = async (req, res, next) => {
 
 const validateUpdatePost = (req, res, next) => {
   const schema = Joi.object({
+    postTitle: Joi.string().min(1).max(8000).required(),
     postText: Joi.string().min(1).max(8000).required(),
   });
 

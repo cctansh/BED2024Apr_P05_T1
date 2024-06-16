@@ -35,11 +35,17 @@ accPassword varchar(50) NOT NULL,
 CONSTRAINT PK_Account PRIMARY KEY (accId)
 );
 
+-- Added postTitle, postEdited, repliesCount
+-- postTitle: title of the post
+-- postEdited: 0 for default, 1 for edited
+-- repliesCount: total number of replies for the post
 CREATE TABLE Post
 ( 
-postId smallint IDENTITY(1,1), 
+postId smallint IDENTITY(1,1),
 postDateTime smalldatetime NOT NULL, 
+postTitle varchar(255) NOT NULL,
 postText varchar(8000) NOT NULL,
+postEdited bit NOT NULL,
 accId smallint NOT NULL,
 CONSTRAINT PK_Post PRIMARY KEY (postId),
 CONSTRAINT FK_Post_accId
@@ -64,12 +70,14 @@ FOREIGN KEY (replyTo) REFERENCES Post(postId)
 -- insert temp data for testing
 INSERT INTO Account(accName, accEmail, accPassword)
 VALUES ( 'account1' , 'hi@gmail.com' , 'abcd1234'),  
-('account2' , 'hello@yahoo.com.sg' , 'abcd1234');
+('account2' , 'hello@yahoo.com.sg' , 'abcd1234'),
+('account3' , 'haha@yahoo.com.sg' , 'abcd1234');
 
-INSERT INTO Post(postDateTime, postText, accId)
-VALUES ( '2024-05-25 16:56:00' , 'Welcome to Post 1', 1),  
-('2024-05-27 12:03:46' , 'Welcome to Post 2', 2),
-('2024-05-27 12:03:46' , 'Welcome to Post 3', 1);
+INSERT INTO Post(postDateTime, postTitle, postText, postEdited, accId)
+VALUES ( '2024-05-25 16:56:00' , 'Welcome to Post 1', 'Post 1 contents', 0, 1),  
+('2024-05-27 12:03:46' , 'Welcome to Post 2', 'Post 2 contents', 0, 2),
+('2024-05-27 12:03:46' , 'Welcome to Post 3', 'Post 3 contents', 0, 1),
+('2024-05-28 20:00:00' , 'Welcome to Post 4', 'Post 4 contents', 0, 3);
 
 INSERT INTO Reply(replyDateTime, replyText, replyEdited, accId, replyTo)
 VALUES ('2024-05-25 17:43:00' , 'This is Reply 1', 0, 2, 1),  
