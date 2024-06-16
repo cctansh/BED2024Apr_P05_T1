@@ -46,7 +46,6 @@ postDateTime smalldatetime NOT NULL,
 postTitle varchar(255) NOT NULL,
 postText varchar(8000) NOT NULL,
 postEdited bit NOT NULL,
-repliesCount int NOT NULL DEFAULT 0,
 accId smallint NOT NULL,
 CONSTRAINT PK_Post PRIMARY KEY (postId),
 CONSTRAINT FK_Post_accId
@@ -74,11 +73,11 @@ VALUES ( 'account1' , 'hi@gmail.com' , 'abcd1234'),
 ('account2' , 'hello@yahoo.com.sg' , 'abcd1234'),
 ('account3' , 'haha@yahoo.com.sg' , 'abcd1234');
 
-INSERT INTO Post(postDateTime, postTitle, postText, postEdited, repliesCount, accId)
-VALUES ( '2024-05-25 16:56:00' , 'Welcome to Post 1', 'Post 1 contents', 0, 2, 1),  
-('2024-05-27 12:03:46' , 'Welcome to Post 2', 'Post 2 contents', 0, 0, 2),
-('2024-05-27 12:03:46' , 'Welcome to Post 3', 'Post 3 contents', 0, 0, 1),
-('2024-05-28 20:00:00' , 'Welcome to Post 4', 'Post 4 contents', 0, 0, 3);
+INSERT INTO Post(postDateTime, postTitle, postText, postEdited, accId)
+VALUES ( '2024-05-25 16:56:00' , 'Welcome to Post 1', 'Post 1 contents', 0, 1),  
+('2024-05-27 12:03:46' , 'Welcome to Post 2', 'Post 2 contents', 0, 2),
+('2024-05-27 12:03:46' , 'Welcome to Post 3', 'Post 3 contents', 0, 1),
+('2024-05-28 20:00:00' , 'Welcome to Post 4', 'Post 4 contents', 0, 3);
 
 INSERT INTO Reply(replyDateTime, replyText, replyEdited, accId, replyTo)
 VALUES ('2024-05-25 17:43:00' , 'This is Reply 1', 0, 2, 1),  
