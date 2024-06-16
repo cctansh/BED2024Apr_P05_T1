@@ -73,7 +73,7 @@
             <!-- register -->
             <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="pills-register-tab"
                 tabindex="0">
-                <form id="register">
+                <form id="register" novalidate>
                     <div class="inputs">
                         <div class="form-group">
                             <label for="registerName" class="form-label">Display Name</label>
@@ -101,6 +101,7 @@
                         </div>
                     </div>
                     <button id="register-button" type="submit" class="btn btn-danger">Register</button>
+                    <div id="registerError"></div>
                 </form>
             </div>
         </div>
@@ -118,70 +119,7 @@
         </div>
     </footer>
     <script src="js/bootstrap/bootstrap.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const token = localStorage.getItem('token');
-
-            if (token) {
-                // window.location.href = 'profile.html';
-                console.log("Logged in")
-            }
-
-            document.getElementById('login').addEventListener('submit', async function (e) {
-                e.preventDefault();
-                const loginData = {
-                    accEmail: document.getElementById('loginEmail').value,
-                    accPassword: document.getElementById('loginPassword').value
-                };
-                try {
-                    const response = await fetch('/accounts/login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(loginData)
-                    });
-                    if (!response.ok) {
-                        throw new Error(await response.text());
-                    }
-
-                    const result = await response.json();
-                    alert('Login successful');
-
-                    const token = result.token;
-                    const decodedToken = parseJwt(token);
-                    const loginAccId = decodedToken.accId;
-
-                    localStorage.setItem('token', token);
-                    localStorage.setItem('loginAccId', loginAccId);
-                    console.log(token);
-                    console.log(loginAccId);
-
-                    window.location.href = 'index.html';
-                } catch (err) {
-                    // Display error messages
-                    const errorField = document.getElementById('loginError');
-                    errorField.textContent = ''; // Clear previous error messages
-
-                    errorField.textContent = 'Login failed: Invalid e-mail or password';
-                }
-            });
-        });
-        function parseJwt(token) {
-            try {
-                const base64Url = token.split('.')[1];
-                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                }).join(''));
-
-                return JSON.parse(jsonPayload);
-            } catch (error) {
-                console.error('Error parsing JWT token:', error);
-                return null;
-            }
-        }
-    </script>
+    <script src="js/loginregscript.js"></script>
 </body>
 
 </html>
