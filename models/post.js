@@ -1,7 +1,7 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
-// added postTitle, postEdited, repliesCount field
+// added postTitle, postEdited field
 class Post {
     constructor(postId, postDateTime, postTitle, postText, postEdited, repliesCount, accId) {
         this.postId = postId;
@@ -9,7 +9,6 @@ class Post {
         this.postTitle = postTitle;
         this.postText = postText;
         this.postEdited = postEdited;
-        this.repliesCount = repliesCount;
         this.accId = accId;
     }
 
@@ -24,7 +23,7 @@ class Post {
         connection.close();
 
         return result.recordset.map(
-        (row) => new Post(row.postId, row.postDateTime, row.postTitle, row.postText, row.postEdited, row.repliesCount, row.accId)
+        (row) => new Post(row.postId, row.postDateTime, row.postTitle, row.postText, row.postEdited, row.accId)
         ); 
     }
 
@@ -46,7 +45,6 @@ class Post {
             result.recordset[0].postTitle,
             result.recordset[0].postText,
             result.recordset[0].postEdited,
-            result.recordset[0].repliesCount,
             result.recordset[0].accId
             )
         : null; 
@@ -55,7 +53,7 @@ class Post {
     static async createPost(newPostData) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `INSERT INTO Post (postDateTime, postTitle, postText, postEdited, repliesCount, accId) VALUES (GETDATE(), @postTitle, @postText, 0, 0, @accId); SELECT SCOPE_IDENTITY() AS postId;`; 
+        const sqlQuery = `INSERT INTO Post (postDateTime, postTitle, postText, postEdited, accId) VALUES (GETDATE(), @postTitle, @postText, 0, @accId); SELECT SCOPE_IDENTITY() AS postId;`; 
 
         const request = connection.request();
         request.input("postTitle", newPostData.postTitle);
