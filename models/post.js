@@ -3,7 +3,7 @@ const dbConfig = require("../dbConfig");
 
 // added postTitle, postEdited field
 class Post {
-    constructor(postId, postDateTime, postTitle, postText, postEdited, repliesCount, accId) {
+    constructor(postId, postDateTime, postTitle, postText, postEdited, accId) {
         this.postId = postId;
         this.postDateTime = postDateTime;
         this.postTitle = postTitle;
