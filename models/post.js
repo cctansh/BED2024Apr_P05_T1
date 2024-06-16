@@ -115,6 +115,34 @@ class Post {
             return false;
         }
     }
+
+    static async getReplyCount(id) {
+        try {
+            const connection = await sql.connect(dbConfig);
+
+            const sqlQuery = `
+                            SELECT COUNT(r.replyId) AS replyCount
+                            FROM Post p
+                            LEFT JOIN Reply r ON p.postId = r.replyTo
+                            WHERE p.postId = @id;
+                            `
+
+            const request = connection.request();
+            request.input("id", id);
+            const result = await request.query(sqlQuery);
+
+            connection.close();
+
+            // Extract the reply count from the result
+            const replyCount = result.recordset[0].replyCount;
+
+            return replyCount;
+        } catch (error) {
+            // Handle errors gracefully
+            console.error("Error fetching reply count:", error);
+            throw error; // Throw the error to be handled
+        }
+    }
 }
 
 module.exports = Post;
