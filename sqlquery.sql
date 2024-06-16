@@ -35,10 +35,9 @@ accPassword varchar(50) NOT NULL,
 CONSTRAINT PK_Account PRIMARY KEY (accId)
 );
 
--- Added postTitle, postEdited, repliesCount
+-- Added postTitle, postEdited
 -- postTitle: title of the post
 -- postEdited: 0 for default, 1 for edited
--- repliesCount: total number of replies for the post
 CREATE TABLE Post
 ( 
 postId smallint IDENTITY(1,1),
