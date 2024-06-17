@@ -66,10 +66,22 @@ const deletePost = async (req, res) => {
   }
 };
 
+const getReplyCount = async (req, res) => {
+  const postId = parseInt(req.params.id);
+  try {
+    const replyCount = await Post.getReplyCount(postId);
+    res.json({ replyCount });
+  } catch (error) {
+    console.error(`Error fetching reply count for post ${postId}:`, error);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
 module.exports = {
   getAllPosts,
   getPostById,
   createPost,
   updatePost,
-  deletePost
+  deletePost,
+  getReplyCount
 };
