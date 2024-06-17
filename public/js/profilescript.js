@@ -1,17 +1,20 @@
 const token = localStorage.getItem('token');
+const loginProfileLink = document.getElementById('login-profile-link');
 const loginAccId = localStorage.getItem('loginAccId');
+
+if (token) {
+    loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
+} else {
+    loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.setAttribute("href", 'loginreg.html')
+    loginProfileLink.classList.remove('active');
+}
 
 function getUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');
 }
-
-const logoutButton = document.getElementById('logout');
-logoutButton.addEventListener('click', () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('loginAccId');
-    window.location.href = 'loginreg.html'; // Redirect to login page after logout
-});
 
 async function fetchPostsAndReplies(profileId) {
     const response = await fetch(`/accounts/postreply/${profileId}`);
@@ -34,7 +37,8 @@ async function fetchPost(obj) {
     const postItem = document.createElement("div");
     postItem.classList.add('post');
 
-    postItem.onclick = () => {
+    postItem.onclick = (e) => {
+        e.stopPropagation();
         window.location.href = `/discussionpost.html?id=${obj.id}`;
     };
 
@@ -85,6 +89,12 @@ async function fetchPost(obj) {
     }
 
     container.appendChild(postItem);
+
+    const accountButton = postItem.querySelector('.account');
+    accountButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        window.location.href = `/profile.html?id=${obj.accId}`;
+    });
 }
 
 async function fetchReply(obj) {
@@ -102,7 +112,8 @@ async function fetchReply(obj) {
     const replyItem = document.createElement("div");
     replyItem.classList.add("reply");
 
-    replyItem.onclick = () => {
+    replyItem.onclick = (e) => {
+        e.stopPropagation();
         window.location.href = `/discussionpost.html?id=${obj.replyto}`;
     };
 
@@ -153,6 +164,35 @@ async function fetchReply(obj) {
     replyBox.appendChild(replyItem);
 
     container.appendChild(replyBox);
+
+    const accountButton = replyItem.querySelector('.account');
+    accountButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        window.location.href = `/profile.html?id=${obj.accId}`;
+    });
+
+    if (token && loginAccId && loginAccId == obj.accId) {
+        const deleteReplyButton = replyItem.querySelector('.delete-reply');
+        deleteReplyButton.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const confirmed = confirm("Are you sure you want to delete this reply?");
+            if (confirmed) {
+                try {
+                    await deleteReply(obj.id);
+                    window.location.href = `/profile.html?id=${obj.accId}`;
+                } catch (error) {
+                    console.error("Failed to delete reply:", error);
+                    alert('Failed to delete reply.');
+                }
+            }
+        });
+
+        const editReply = replyItem.querySelector('.edit-reply');
+        editReply.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            window.location.href = `/editreply.html?id=${obj.id}`;
+        });
+    }
 }
 
 async function fetchAccountName(accId) {
@@ -168,6 +208,15 @@ async function fetchReplyCount(postId) {
     return replyCount.replyCount;
 }
 
+async function deleteReply(replyId) {
+    const response = await fetch(`/replies/${replyId}`, {
+        method: 'DELETE'
+    });
+    if (!response.ok) {
+        alert('Failed to delete reply.');
+    }
+}
+
 async function fetchRepliedPost(replyId) {
     const response = await fetch(`/replies/post/${replyId}`);
     const post = await response.json();
@@ -177,7 +226,8 @@ async function fetchRepliedPost(replyId) {
     const postItem = document.createElement("div");
     postItem.classList.add('post-addreply');
 
-    postItem.onclick = () => {
+    postItem.onclick = (e) => {
+        e.stopPropagation();
         window.location.href = `/discussionpost.html?id=${post.postId}`;
     };
 
@@ -228,8 +278,44 @@ async function fetchRepliedPost(replyId) {
     }
 
     container.appendChild(postItem);
+    
+    const accountButton = postItem.querySelector('.account');
+    accountButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        window.location.href = `/profile.html?id=${post.accId}`;
+    });
 }
 
+async function setProfileName(profileId) {
+    const profileName = await fetchAccountName(profileId);
+    document.getElementById("profile-name").textContent = `${profileName}'s Profile`;
+}
+
+async function setAccountDetails(profileId) {
+    const response = await fetch(`/accounts/${profileId}`);
+    const account = await response.json();
+    document.getElementById('email-info').textContent = `E-mail: ${account.accEmail}`;
+    // add change password
+}
+
+const logoutButton = document.getElementById('logout');
+logoutButton.addEventListener('click', () => {
+    const confirmed = confirm("Are you sure you want to log out?");
+    if (confirmed) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('loginAccId');
+        window.location.href = 'loginreg.html'; // Redirect to login page after logout
+    }
+});
+
 const profileId = getUrlParams();
+
+setProfileName(profileId);
+
+if (loginAccId != profileId) {
+    document.getElementById("profile").classList.add('hide');
+} else {
+    setAccountDetails(profileId);
+}
 
 fetchPostsAndReplies(profileId);
