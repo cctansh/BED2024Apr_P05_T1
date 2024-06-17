@@ -1,7 +1,6 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 const jwt = require("jsonwebtoken");
-
 const secretKey = "jwt_secret"; 
 
 class Account {
@@ -150,6 +149,61 @@ class Account {
         } else {
             return null;
         }
+    }
+
+    static async getPostsAndRepliesByAccount(id) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `
+            SELECT 
+                'Post' AS Type,
+                postId AS Id,
+                postDateTime AS DateTime,
+                postTitle AS Title,
+                postText AS Text,
+                postEdited AS Edited,
+                NULL AS ReplyTo,
+                accId
+            FROM 
+                Post
+            WHERE 
+                accId = @id
+
+            UNION
+
+            SELECT 
+                'Reply' AS Type,
+                replyId AS Id,
+                replyDateTime AS DateTime,
+                NULL AS Title,
+                replyText AS Text,
+                replyEdited AS Edited,
+                replyTo AS ReplyTo,
+                accId
+            FROM 
+                Reply
+            WHERE 
+                accId = @id
+            ORDER BY 
+                DateTime;
+        `;
+
+        const request = connection.request();
+        request.input("id", id);
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset.map(row => ({
+            type: row.Type,
+            id: row.Id,
+            dateTime: row.DateTime,
+            title: row.Title,
+            text: row.Text,
+            edited: row.Edited,
+            replyto: row.ReplyTo,
+            accId: row.accId
+        }));
     }
 }
 

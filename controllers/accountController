@@ -85,11 +85,24 @@ const loginAccount = async (req, res) => {
   }
 };
 
+const getPostsAndRepliesByAccount = async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    const objList = await Account.getPostsAndRepliesByAccount(id);
+    res.json(objList);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving posts and replies");
+  }
+};
+
+
 module.exports = {
   getAllAccounts,
   getAccountById,
   createAccount,
   updateAccount,
   deleteAccount,
-  loginAccount
+  loginAccount,
+  getPostsAndRepliesByAccount
 };

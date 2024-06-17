@@ -23,6 +23,7 @@ app.use(staticMiddleware);
 // account routes
 app.get("/accounts", accountController.getAllAccounts);
 app.get("/accounts/:id", accountController.getAccountById);
+app.get("/accounts/postreply/:id", accountController.getPostsAndRepliesByAccount);
 app.post("/accounts/login", validateAccount.validateLoginAccount, accountController.loginAccount);
 app.post("/accounts", validateAccount.validateCreateAccount, accountController.createAccount);
 app.put("/accounts/:id", validateAccount.validateUpdateAccount, accountController.updateAccount); 
