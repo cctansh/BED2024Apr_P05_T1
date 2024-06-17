@@ -93,3 +93,11 @@ body {
     margin: 20px auto; /* centers the image and adds some space around it */
 
 }
+
+.explanation {
+    margin-top: 10px;
+    padding: 10px;
+    background: #e1f5c4;
+    border-left: 4px solid #8bc34a;
+    font-size: 16px;
+}
