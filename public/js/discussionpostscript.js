@@ -1,16 +1,15 @@
 // token
 const token = localStorage.getItem('token');
 const loginProfileLink = document.getElementById('login-profile-link');
+const loginAccId = localStorage.getItem('loginAccId');
 
 if (token) {
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
-    loginProfileLink.setAttribute("href", 'profile.html')
+    loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else {
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
     loginProfileLink.setAttribute("href", 'loginreg.html')
 }
-
-const loginAccId = localStorage.getItem('loginAccId');
 
 function getUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -105,6 +104,11 @@ async function fetchReplies(postId) {
         }
 
         replyContainer.appendChild(replyItem);
+
+        const accountButton = replyItem.querySelector('.account');
+        accountButton.addEventListener('click', () => {
+            window.location.href = `/profile.html?id=${reply.accId}`;
+        });
 
         if (token && loginAccId && loginAccId == reply.accId) {
             const deleteReplyButton = replyItem.querySelector('.delete-reply');

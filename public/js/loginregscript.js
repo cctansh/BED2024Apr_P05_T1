@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     const token = localStorage.getItem('token');
+    const loginAccId = localStorage.getItem('loginAccId');
 
     if (token) {
-        // window.location.href = 'profile.html';
+        window.location.href = `profile.html?id=${loginAccId}`;
         console.log("Logged in")
     }
 

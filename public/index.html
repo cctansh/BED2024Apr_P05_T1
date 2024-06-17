@@ -105,10 +105,11 @@
   <script>
     const token = localStorage.getItem('token');
     const loginProfileLink = document.getElementById('login-profile-link');
+    const loginAccId = localStorage.getItem('loginAccId');
 
     if (token) {
         loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
-        loginProfileLink.setAttribute("href", 'profile.html')
+        loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
     } else {
         loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
         loginProfileLink.setAttribute("href", 'loginreg.html')
