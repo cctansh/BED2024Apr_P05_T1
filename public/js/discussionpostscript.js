@@ -28,9 +28,12 @@ async function fetchPost(postId) {
         //formatting date
         const postDate = new Date(post.postDateTime);
 
+        // fetch reply count
+        const replyCount = await fetchReplyCount(post.postId);
+
         postHeader.innerHTML = `
             <div class="account">${await fetchAccountName(post.accId)}</div>
-            <div class="datetime">${formatDate(postDate)}</div>
+            <div class="datetime"><i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}</div>
         `
         postContainer.innerHTML = `
             <div class="post">
@@ -166,3 +169,10 @@ addReply.onclick = () => {
     }
 
 };
+
+// function to fetch reply count for a post
+async function fetchReplyCount(postId) {
+    const response = await fetch(`/posts/${postId}/replyCount`);
+    const replyCount = await response.json();
+    return replyCount.replyCount;
+}
