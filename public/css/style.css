@@ -83,6 +83,7 @@ footer div {
     font-size: 18px;
     font-weight: 600;
     color: #686868;
+    margin-bottom: -10px;
 }
 
 .navbar .nav-item .active {
@@ -178,6 +179,17 @@ footer div {
     align-items: center;
 }
 
+/* for post and add post button at discussionforum.html */
+.post-header {
+    margin-bottom: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* added .rule */
+.rule,
 .post,
 .reply,
 .post-addreply {
@@ -200,13 +212,20 @@ footer div {
     filter: brightness(95%);
 }
 
-.reply {
+.reply, .rule{
     /* over write post */
     background-color: #ffffff;
 }
 
 #post-container,
 #reply-container {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* added #rule-container */
+#rule-container {
     margin: auto;
     display: flex;
     flex-direction: column;
@@ -283,7 +302,6 @@ footer div {
     gap: 1rem;
     justify-content: end;
 }
-
 
 /* login register */
 .vertical {
@@ -392,4 +410,19 @@ form input {
     min-width: 100%;
     max-height: 100%;
     margin-top: -0.8rem;
+}
+
+/* community rules styling */
+ol {
+    margin-top: 10px;
+}
+
+li {
+    margin-bottom: 5px;
+    font-size: medium;
+}
+
+/* forum title styling */
+#forum-title {
+    padding-top: -5px;
 }
