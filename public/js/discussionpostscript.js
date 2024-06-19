@@ -39,15 +39,44 @@ async function fetchPost(postId) {
         const h1Title = document.querySelector('h1');
         h1Title.textContent = post.postTitle; // Replace with the actual title from post data
 
-        postContainer.innerHTML = `
+        // if user is owner of post, show different view
+        if (token && loginAccId && loginAccId == post.accId) {
+            postContainer.innerHTML = `
             <div class="post">
                 <div class="text">${post.postText}</div>
                 <div class="edit-bar">
                     <button class="btn edit-post"><i class="bi bi-pencil-fill"></i></button>
-                    <button class="btn delete-reply"><i class="bi bi-trash3-fill"></i></button>
+                    <button class="btn delete-post"><i class="bi bi-trash3-fill"></i></button>
                 </div>
             </div>
-        `;
+            `;
+            
+            // delete post and edit post
+            const deletePostButton = document.querySelector('.delete-post');
+            deletePostButton.addEventListener('click', async () => {
+                const confirmed = confirm("Are you sure you want to delete this post?");
+                if (confirmed) {
+                    try {
+                        await deletePost(post.postId);
+                    } catch (error) {
+                        console.error("Failed to delete post:", error);
+                        alert('Failed to delete post.');
+                    }
+                }
+            });
+
+            const editPost = document.querySelector('.edit-post');
+            editPost.addEventListener('click', async () => {
+                window.location.href = `/editpost.html?id=${post.postId}`;
+            });
+
+        } else {
+            postContainer.innerHTML = `
+            <div class="post">
+                <div class="text">${post.postText}</div>
+            </div>
+            `;
+        }
     } else {
         postContainer.textContent = 'Post not found';
     }
@@ -153,6 +182,18 @@ function formatDate(ogDate) {
     const formattedDate = `${day}/${month}/${year}`;
     const formattedTime = `${hours}:${minutes}`;
     return `${formattedDate}, ${formattedTime}`;
+}
+
+// function for deleting post and redirect to main forum page
+async function deletePost(postId) {
+    const response = await fetch(`/posts/${postId}`, {
+        method: 'DELETE'
+    });
+    if (!response.ok) {
+        alert('Failed to delete post.');
+    } else {
+        window.location.href = '/discussionforum.html';
+    }
 }
 
 async function deleteReply(replyId) {
