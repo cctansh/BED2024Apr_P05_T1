@@ -34,6 +34,11 @@ async function fetchPost(postId) {
             <div class="account">${await fetchAccountName(post.accId)}</div>
             <div class="datetime"><i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}</div>
         `
+
+        // Set the content of the existing <h1> tag
+        const h1Title = document.querySelector('h1');
+        h1Title.textContent = post.postTitle; // Replace with the actual title from post data
+
         postContainer.innerHTML = `
             <div class="post">
                 <div class="text">${post.postText}</div>
