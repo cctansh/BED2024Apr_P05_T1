@@ -83,3 +83,13 @@ async function fetchReplyCount(postId) {
 }
 
 fetchPosts(); // Call the function to fetch and display book data
+
+// adding new post
+const createPost = document.getElementById("create-post");
+createPost.onclick = () => {
+    if (token) {
+        window.location.href = `/createpost.html`;
+    } else {
+        alert("You must be logged in to create a post.")
+    }
+};
