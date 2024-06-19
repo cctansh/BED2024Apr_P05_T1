@@ -50,7 +50,7 @@ async function fetchPosts() {
 
         const textElement = document.createElement("div");
         textElement.classList.add("text");
-        textElement.textContent = post.postText;
+        textElement.textContent = post.postTitle;
 
         // header to hold account and datetime
         const headerElement = document.createElement("div");
