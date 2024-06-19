@@ -217,14 +217,9 @@ footer div {
     background-color: #ffffff;
 }
 
-#post-container,
-#reply-container {
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-}
-
 /* added #rule-container */
+#post-container,
+#reply-container, 
 #rule-container {
     margin: auto;
     display: flex;
@@ -290,7 +285,7 @@ footer div {
     background-color: #ffffff;
 }
 
-#newreply {
+#newreply, #newpost {
     width: 100%;
     background-color: #e7e7e7;
 }
