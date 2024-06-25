@@ -2,19 +2,20 @@ const jwt = require("jsonwebtoken");
 const secretKey = "lol"; 
 
 function verifyJWT(req, res, next) {
+  // get token
   const token =
     req.headers.authorization && req.headers.authorization.split(" ")[1];
 
-  if (!token) {
+  if (!token) { // if no token, deny
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  jwt.verify(token, secretKey, (err, decoded) => {
+  jwt.verify(token, secretKey, (err, decoded) => { // verify if token is valid
     if (err) {
       return res.status(403).json({ message: "Forbidden" });
     }
 
-    // Check user role for authorization (replace with your logic)
+    // Check user role for authorization 
     const authorizedRoles = {
       "/books": ["member", "librarian"], // Anyone can view books
       "/books/[0-9]+/availability": ["librarian"], // Only librarians can update availability
@@ -30,7 +31,7 @@ function verifyJWT(req, res, next) {
       }
     );
 
-    if (!authorizedRole) {
+    if (!authorizedRole) { // if role is unauthorised
       return res.status(403).json({ message: "Forbidden" });
     }
 

@@ -9,21 +9,22 @@ const validateUser = require("./middlewares/validateUser")
 const validateBook = require("./middlewares/validateBook")
 
 const app = express();
-const port = 3000; // Use environment variable or default port
-
+const port = 3000; 
 
 // Include body-parser middleware to handle JSON data
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 
-// Routes for GET requests (replace with appropriate routes for update and delete later)
+// book routes
 app.get("/books", authenticate.verifyJWT, bookController.getAllBooks);
 app.put("/books/:bookId/availability", validateBook.validateUpdateBook, authenticate.verifyJWT, bookController.updateBookAvailability); // PUT for updating books
 
+// user routes
 app.get("/users", userController.getAllUsers);
 app.post("/register", validateUser.validateRegister, userController.registerUser);
 app.post("/login", validateUser.validateLogin, userController.login);
 
+// database
 app.listen(port, async () => {
   try {
     // Connect to the database

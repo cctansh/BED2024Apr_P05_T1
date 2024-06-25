@@ -31,6 +31,7 @@ CREATE TABLE Books (
     availability CHAR(1) CHECK (availability IN ('Y', 'N')) NOT NULL
 );
 
+-- Books Data
 INSERT INTO Books(title, author, availability)
 VALUES ( 'title1', 'author1', 'Y'),
 ( 'title2', 'author2', 'N'),
