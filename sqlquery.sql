@@ -66,6 +66,17 @@ CONSTRAINT FK_Reply_replyTo
 FOREIGN KEY (replyTo) REFERENCES Post(postId)
 ); 
 
+CREATE TABLE Questions 
+(
+  questionId smallint IDENTITY(1,1),
+  questionText varchar(255) NOT NULL,
+  option1 varchar(255) NOT NULL,
+  option2 varchar(255) NOT NULL,
+  option3 varchar(255) NOT NULL,
+  option4 varchar(255) NOT NULL,
+  correctOption varchar(255) NOT NULL
+)
+
 -- insert temp data for testing
 INSERT INTO Account(accName, accEmail, accPassword)
 VALUES ( 'account1' , 'hi@gmail.com' , 'abcd1234'),  
