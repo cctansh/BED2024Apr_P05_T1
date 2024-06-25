@@ -3,7 +3,10 @@ const userController = require("./controllers/userController");
 const bookController = require("./controllers/bookController");
 const sql = require("mssql");
 const dbConfig = require("./dbConfig");
-const bodyParser = require("body-parser"); // Import body-parser
+const bodyParser = require("body-parser"); 
+const authenticate = require("./middlewares/authenticate");
+const validateUser = require("./middlewares/validateUser")
+const validateBook = require("./middlewares/validateBook")
 
 const app = express();
 const port = 3000; // Use environment variable or default port
@@ -14,8 +17,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 
 // Routes for GET requests (replace with appropriate routes for update and delete later)
-app.get("/books", bookController.getAllBooks);
-app.put("/books/:bookId/availability", bookController.updateBookAvailability); // PUT for updating books
+app.get("/books", authenticate.verifyJWT, bookController.getAllBooks);
+app.put("/books/:bookId/availability", validateBook.validateUpdateBook, authenticate.verifyJWT, bookController.updateBookAvailability); // PUT for updating books
+
+app.get("/users", userController.getAllUsers);
+app.post("/register", validateUser.validateRegister, userController.registerUser);
+app.post("/login", validateUser.validateLogin, userController.login);
 
 app.listen(port, async () => {
   try {

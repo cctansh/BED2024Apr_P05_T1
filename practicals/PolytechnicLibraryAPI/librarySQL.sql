@@ -31,13 +31,7 @@ CREATE TABLE Books (
     availability CHAR(1) CHECK (availability IN ('Y', 'N')) NOT NULL
 );
 
--- insert temp data for testing
-INSERT INTO Users(username, passwordHash, role)
-VALUES ( 'librarian1' , 'password' , 'librarian'),  
-('member1' , 'password' , 'member'),
-('member2' , 'password' , 'member');
-
-INSERT INTO Book(title, author, availability)
+INSERT INTO Books(title, author, availability)
 VALUES ( 'title1', 'author1', 'Y'),
 ( 'title2', 'author2', 'N'),
 ( 'title3', 'author3', 'Y');
