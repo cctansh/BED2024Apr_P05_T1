@@ -113,15 +113,48 @@ class Account {
     static async deleteAccount(id) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `DELETE FROM Account WHERE accId = @id`; 
+        try {
+            const transaction = new sql.Transaction(connection);
+            await transaction.begin();
+    
+            // Delete replies
+            const deleteRepliesQuery = `
+                DELETE FROM Reply
+                WHERE accId = @id;
+            `;
+            await transaction.request().input("id", id).query(deleteRepliesQuery);
 
-        const request = connection.request();
-        request.input("id", id);
-        const result = await request.query(sqlQuery);
+            // Delete replies referencing posts
+            const deleteRepliesToPostsQuery = `
+                DELETE FROM Reply
+                WHERE replyTo IN (
+                    SELECT postId FROM Post WHERE accId = @id
+                );
+            `;
+            await transaction.request().input("id", sql.Int, id).query(deleteRepliesToPostsQuery);
+    
+            // Delete posts
+            const deletePostQuery = `
+                DELETE FROM Post
+                WHERE accId = @id;
+            `;
+            await transaction.request().input("id", id).query(deletePostQuery);
 
-        connection.close();
-
-        return result.rowsAffected > 0; 
+            const deleteAccQuery = `
+            DELETE FROM Account
+            WHERE accId = @id;
+            `;
+            const result = await transaction.request().input("id", id).query(deleteAccQuery);
+    
+            await transaction.commit();
+            connection.close();
+    
+            return result.rowsAffected[0] > 0; // Return true if at least one row was affected
+        } catch (err) {
+            console.error("Error deleting accout:", err);
+            connection.close();
+            return false;
+        }
     }
 
     static async loginAccount(loginAccountData) {
