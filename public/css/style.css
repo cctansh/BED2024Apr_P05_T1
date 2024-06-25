@@ -260,6 +260,10 @@ footer div {
     font-size: 17px;
 }
 
+.title {
+    font-weight: 600;
+}
+
 .edit-bar {
     display: flex;
     flex-direction: row;

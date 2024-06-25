@@ -67,7 +67,8 @@ async function fetchPost(obj) {
 
     const textElement = document.createElement("div");
     textElement.classList.add("text");
-    textElement.textContent = obj.text;
+    textElement.classList.add("title");
+    textElement.textContent = obj.title;
 
     // header to hold account and datetime
     const headerElement = document.createElement("div");
@@ -256,7 +257,8 @@ async function fetchRepliedPost(replyId) {
 
     const textElement = document.createElement("div");
     textElement.classList.add("text");
-    textElement.textContent = post.postText;
+    textElement.classList.add("title");
+    textElement.textContent = post.postTitle;
 
     // header to hold account and datetime
     const headerElement = document.createElement("div");

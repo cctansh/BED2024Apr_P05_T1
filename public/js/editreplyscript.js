@@ -21,8 +21,10 @@ async function fetchPost(replyId) {
     const post = await response.json();
 
     const postContainer = document.getElementById('post-container');
+    const postTitle = document.getElementById('post-title');
 
     if (post) {
+        postTitle.textContent = `${post.postTitle}`;
         postContainer.innerHTML = `
             <div class="post-addreply">
                 <div class="text">${post.postText}</div>
