@@ -66,6 +66,24 @@ CONSTRAINT FK_Reply_replyTo
 FOREIGN KEY (replyTo) REFERENCES Post(postId)
 ); 
 
+CREATE TABLE QuizQuestions (
+    id INT IDENTITY PRIMARY KEY,
+    question TEXT NOT NULL,
+    image_path TEXT,
+    explanation TEXT
+);
+
+
+CREATE TABLE AnswerChoices (
+    id INT IDENTITY PRIMARY KEY,
+    question_id INT NOT NULL,
+    answer_text TEXT,
+    is_correct BIT,
+    FOREIGN KEY (question_id) REFERENCES QuizQuestions(id)
+);
+
+
+
 -- insert temp data for testing
 INSERT INTO Account(accName, accEmail, accPassword)
 VALUES ( 'account1' , 'hi@gmail.com' , 'abcd1234'),  
@@ -82,7 +100,61 @@ INSERT INTO Reply(replyDateTime, replyText, replyEdited, accId, replyTo)
 VALUES ('2024-05-25 17:43:00' , 'This is Reply 1', 0, 2, 1),  
 ('2024-05-26 13:12:19' , 'This is Reply 2', 0, 1, 1);
 
+-- Inserting data into QuizQuestions table
+INSERT INTO QuizQuestions (question, image_path, explanation)
+VALUES 
+    ('What is the Singaporean government''s ''30 by 30'' goal for food security?', 'img/30by30.png', 'The ''30 by 30'' goal aims for Singapore to produce 30% of its nutritional needs locally by 2030 to enhance food security.'),
+    ('How is Singapore addressing the challenge of limited land space for agriculture?', 'img/urbanfarmrooftop.png', 'Singapore is investing in vertical farming and rooftop gardens to maximize the use of limited land space for agriculture.'),
+    ('Which of the following is a key component of Singapore''s food security strategy?', 'img/diversefood.png', 'Diversifying food sources and suppliers is a key component of Singapore''s food security strategy to mitigate risks.'),
+    ('What role does the Singapore Food Agency (SFA) play in ensuring food security?', NULL, 'The Singapore Food Agency (SFA) plays a comprehensive role including regulating imports/exports, supporting local production, and ensuring food safety and quality.'),
+    ('What is one way that Singapore can reduce its reliance on food imports?', NULL, 'Increasing public awareness about food waste reduction can help Singapore reduce its reliance on food imports.');
+
+
+-- Inserting data into AnswerChoices table
+-- For Question 1
+INSERT INTO AnswerChoices (question_id, answer_text, is_correct)
+VALUES 
+    (1, 'To produce 30% of Singapore''s nutritional needs locally by 2030', 1),
+    (1, 'To reduce food imports by 30% by 2030', 0),
+    (1, 'To increase food exports by 30% by 2030', 0),
+    (1, 'To invest 30% of the national budget in agriculture by 2030', 0);
+
+-- For Question 2
+INSERT INTO AnswerChoices (question_id, answer_text, is_correct)
+VALUES 
+    (2, 'By reclaiming land from the sea for farming', 0),
+    (2, 'By importing all its food needs', 0),
+    (2, 'By investing in vertical farming and rooftop gardens', 1),
+    (2, 'By reducing the population to lower food demand', 0);
+
+-- For Question 3
+INSERT INTO AnswerChoices (question_id, answer_text, is_correct)
+VALUES 
+    (3, 'Relying heavily on neighboring countries for food', 0),
+    (3, 'Encouraging a monoculture farming approach', 0),
+    (3, 'Limiting technological advancements in agriculture', 0),
+    (3, 'Diversifying its food sources and suppliers', 1);
+
+-- For Question 4
+INSERT INTO AnswerChoices (question_id, answer_text, is_correct)
+VALUES 
+    (4, 'Regulating food imports and exports', 0),
+    (4, 'Supporting local food production', 0),
+    (4, 'Ensuring food safety and quality', 0),
+    (4, 'All of the above', 1);
+
+-- For Question 5
+INSERT INTO AnswerChoices (question_id, answer_text, is_correct)
+VALUES 
+    (5, 'Banning all imported food products', 0),
+    (5, 'Increasing public awareness about food waste reduction', 1),
+    (5, 'Closing all restaurants that serve foreign cuisine', 0),
+    (5, 'Restricting the use of fertilizers', 0);
+
+
 -- select statements for testing
 SELECT * FROM Account;
 SELECT * FROM Post;
 SELECT * FROM Reply;
+SELECT * FROM QuizQuestions;
+SELECT * FROM AnswerChoices;
