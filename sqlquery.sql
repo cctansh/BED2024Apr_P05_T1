@@ -68,14 +68,17 @@ FOREIGN KEY (replyTo) REFERENCES Post(postId)
 
 CREATE TABLE Questions 
 (
-  questionId smallint IDENTITY(1,1),
-  questionText varchar(255) NOT NULL,
-  option1 varchar(255) NOT NULL,
-  option2 varchar(255) NOT NULL,
-  option3 varchar(255) NOT NULL,
-  option4 varchar(255) NOT NULL,
-  correctOption varchar(255) NOT NULL
-)
+questionId smallint IDENTITY(1,1),
+questionText varchar(255) NOT NULL,
+option1 varchar(255) NOT NULL,
+option2 varchar(255) NOT NULL,
+option3 varchar(255) NOT NULL,
+option4 varchar(255) NOT NULL,
+correctOption varchar(255) NOT NULL,
+CONSTRAINT PK_Questions PRIMARY KEY (questionId),
+CONSTRAINT FK_Question_accId,
+FOREIGN KEY (accId) REFERENCES Account(accId)
+);
 
 -- insert temp data for testing
 INSERT INTO Account(accName, accEmail, accPassword)
