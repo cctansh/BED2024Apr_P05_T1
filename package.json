@@ -1,7 +1,7 @@
 {
   "name": "bedassignment",
   "version": "1.0.0",
-  "description": "",
+  "description": "DO NOT COMMIT NODE AND BOOTSTRAP FILES",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,9 +13,9 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "express": "^4.19.2",
-    "joi": "^17.13.1",
+    "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "mssql": "^10.0.2",
+    "mssql": "^10.0.4",
     "nodemon": "^3.1.3"
   }
 }

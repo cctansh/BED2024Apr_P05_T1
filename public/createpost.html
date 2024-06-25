@@ -38,20 +38,19 @@
     </nav>
 
     <div class="pad-nav">
-        <h1>Post Title Goes here</h1>
+        <h1>Forum Title</h1><br>
         <div id="post-container"></div>
-        <h2>Edit Reply</h2>
-        <textarea id="newreply" class="form-control" placeholder="Start typing..." rows="5"></textarea>
+        <h2>Create Post</h2>
+        <textarea id="newposttitle" class="form-control" placeholder="Enter a title for your post..." rows="1"></textarea><br>
+        <textarea id="newpostcontent" class="form-control" placeholder="Enter the content for your post..." rows="5"></textarea>
         <div class="confirm-bar">
-            <button id="cancel-reply" type="button" class="btn btn-secondary">Cancel</button>
-            <button id="confirm-reply" type="button" class="btn btn-danger add-reply">Edit Reply&ensp;<i
-                    class="bi bi-pencil-fill"></i></button>
+            <button id="cancel-post" type="button" class="btn btn-secondary">Cancel</button>
+            <button id="confirm-post" type="button" class="btn btn-danger create-post">Create Post&ensp;<i class="bi bi-plus-circle-fill"></i></button>
         </div>
     </div>
 
-
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
-    <script src="js/editreplyscript.js"></script>
+    <script src="js/createpostscript.js"></script>
 </body>
 
 </html>

@@ -2,6 +2,8 @@ const express = require("express");
 const accountController = require("./controllers/accountController");
 const postController = require("./controllers/postController");
 const replyController = require("./controllers/replyController");
+const quizController = require('./controllers/quizController');
+const answerController = require('./controllers/answerController');
 const sql = require("mssql"); 
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser");
@@ -47,6 +49,20 @@ app.get("/replies/post/:id", replyController.getRepliedPost);
 app.post("/replies", validateReply.validateCreateReply, replyController.createReply);
 app.put("/replies/:id", validateReply.validateUpdateReply, replyController.updateReply);
 app.delete("/replies/:id", replyController.deleteReply);
+
+//question routes
+app.get("/quiz/questions", quizController.getAllQuizQuestions);
+app.get("/quiz/questions/:id", quizController.getQuizQuestionById);
+
+//answer routes
+
+app.get("/quiz/answers/:id", answerController.getAnswersByQuestion);
+app.get("/quiz/answer/:id", answerController.getAnswerById);
+app.post("/quiz/answers", answerController.createAnswer);
+app.put("/quiz/answers/:id", answerController.updateAnswer);
+app.delete("/quiz/answers/:id", answerController.deleteAnswer);
+
+
 
 app.listen(port, async () => {
   try {
