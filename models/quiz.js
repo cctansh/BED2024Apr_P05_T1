@@ -2,11 +2,10 @@ const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
 class QuizQuestion {
-  constructor(id, question, image_path, explanation) {
+  constructor(id, question, image_path) {
     this.id = id;
     this.question = question;
     this.image_path = image_path;
-    this.explanation = explanation;
   }
 
   static async getAllQuizQuestions() {
@@ -21,7 +20,7 @@ class QuizQuestion {
       connection.close();
 
       return result.recordset.map(
-        (row) => new QuizQuestion(row.id, row.question, row.image_path, row.explanation)
+        (row) => new QuizQuestion(row.id, row.question, row.image_path)
         ); 
     } catch (error) {
       console.error("Error fetching quiz questions:", error);

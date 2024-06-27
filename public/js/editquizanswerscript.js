@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     editQuestionButton.addEventListener('click', () => {
         // Save changes and redirect to the Confirm Edit Answers page
-        fetch(`/api/quiz/${currentQuestion.id}`, {
+        fetch(`/quiz/${currentQuestion.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
