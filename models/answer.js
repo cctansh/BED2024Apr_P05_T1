@@ -33,31 +33,29 @@ class AnswerChoice {
   }
 
   static async getAnswerById(answerId) {
+    const connection = await sql.connect(dbConfig);
+
     try {
-      const connection = await sql.connect(dbConfig);
       const sqlQuery = `
-        SELECT id, question_id, answer_text, is_correct, explanation
+        SELECT *
         FROM AnswerChoices
         WHERE id = @answerId
       `;
-      const result = await connection
-        .request()
-        .input("answerId", answerId)
-        .query(sqlQuery);
-      connection.close();
+      const request = connection.request();
+      request.input("answerId", answerId);
+      const result = await request.query(sqlQuery);
 
       if (!result.recordset.length) return null;
 
       const answerData = result.recordset[0];
-      const answer = new AnswerChoice(
+      return new AnswerChoice(
         answerData.id,
         answerData.question_id,
         answerData.answer_text,
         answerData.is_correct,
         answerData.explanation
       );
-
-      return answer;
+      
     } catch (error) {
       console.error(`Error fetching answer with ID ${answerId}:`, error);
       throw error;
