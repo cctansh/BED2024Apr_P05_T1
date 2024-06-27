@@ -51,7 +51,7 @@ const updateQuiz = async (req, res) => {
   }
 };
 
-const deleteQuiz = async (req, res) => {
+const deleteQuizQuestionById = async (req, res) => {
   const quizId = parseInt(req.params.id);
 
   try {
@@ -71,5 +71,5 @@ module.exports = {
   getQuizQuestionById,
   createQuiz,
   updateQuiz,
-  deleteQuiz
+  deleteQuizQuestionById
 };

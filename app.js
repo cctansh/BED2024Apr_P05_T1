@@ -53,6 +53,9 @@ app.delete("/replies/:id", replyController.deleteReply);
 //question routes
 app.get("/quiz/questions", quizController.getAllQuizQuestions);
 app.get("/quiz/questions/:id", quizController.getQuizQuestionById);
+app.post()
+app.put();
+app.delete("/quiz/questions/:id", quizController.deleteQuizQuestionById);
 
 //answer routes
 

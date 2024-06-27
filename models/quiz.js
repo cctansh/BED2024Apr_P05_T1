@@ -29,24 +29,38 @@ class QuizQuestion {
     }
   }
 
+  static async deleteQuizQuestionById(id) {
+    const connection = await sql.connect(dbConfig);
+
+    const sqlQuery = `DELETE FROM QuizQuestions WHERE id = @id`;
+
+    const request = connection.request();
+    request.input("id", sql.Int, id); // Ensure the id is an integer
+    const result = await request.query(sqlQuery);
+
+    connection.close();
+
+    return result.rowsAffected[0] > 0; // Return true if a row was deleted, otherwise false
+}
+
   static async getQuizQuestionById(id) {
     const connection = await sql.connect(dbConfig);
 
     const sqlQuery = `SELECT * FROM QuizQuestions WHERE id = @id`;
 
     const request = connection.request();
-    request.input("id", id);
+    request.input("id", sql.Int, id); // Ensure the id is an integer
     const result = await request.query(sqlQuery);
 
     connection.close();
 
     return result.recordset[0]
       ? new QuizQuestion(
-        result.recordset[0].id,
-        result.recordset[0].question,
-        result.recordset[0].image_path,
-        result.recordset[0].explanation
-      )
+          result.recordset[0].id,
+          result.recordset[0].question,
+          result.recordset[0].image_path,
+          result.recordset[0].explanation
+        )
       : null;
   }
 }
