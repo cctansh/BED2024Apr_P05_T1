@@ -50,11 +50,11 @@ app.post("/replies", validateReply.validateCreateReply, replyController.createRe
 app.put("/replies/:id", validateReply.validateUpdateReply, replyController.updateReply);
 app.delete("/replies/:id", replyController.deleteReply);
 
-//question routes
+// Question routes
 app.get("/quiz/questions", quizController.getAllQuizQuestions);
 app.get("/quiz/questions/:id", quizController.getQuizQuestionById);
-app.post()
-app.put();
+app.post("/quiz/questions", quizController.createQuizQuestion);
+app.put("/quiz/questions/:id", quizController.updateQuizQuestion); // Note the ":id"
 app.delete("/quiz/questions/:id", quizController.deleteQuizQuestionById);
 
 //answer routes

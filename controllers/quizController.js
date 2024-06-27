@@ -5,7 +5,7 @@ const getAllQuizQuestions = async (req, res) => {
     const questions = await QuizQuestion.getAllQuizQuestions();
     res.json(questions);
   } catch (error) {
-    console.error(error);
+    console.error("Error retrieving quiz questions:", error);
     res.status(500).send("Error retrieving quiz questions");
   }
 };
@@ -19,35 +19,35 @@ const getQuizQuestionById = async (req, res) => {
     }
     res.json(question);
   } catch (error) {
-    console.error(error);
+    console.error("Error retrieving quiz question:", error);
     res.status(500).send("Error retrieving quiz question");
   }
 };
 
-const createQuiz = async (req, res) => {
-  const newQuiz = req.body;
+const createQuizQuestion = async (req, res) => {
+  const { question, image_path } = req.body;
   try {
-    const createdQuiz = await QuizQuestion.createQuiz(newQuiz);
-    res.status(201).json(createdQuiz);
+    const createdQuizId = await QuizQuestion.createQuizQuestion(question, image_path);
+    res.status(201).json({ id: createdQuizId });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Error creating quiz");
+    console.error("Error creating quiz question:", error);
+    res.status(500).send("Error creating quiz question");
   }
 };
 
-const updateQuiz = async (req, res) => {
+const updateQuizQuestion = async (req, res) => {
   const quizId = parseInt(req.params.id);
-  const newQuizData = req.body;
+  const { question, image_path } = req.body;
 
   try {
-    const updatedQuiz = await QuizQuestion.updateQuiz(quizId, newQuizData);
+    const updatedQuiz = await QuizQuestion.updateQuizQuestion(quizId, question, image_path);
     if (!updatedQuiz) {
-      return res.status(404).send("Quiz not found");
+      return res.status(404).send("Quiz question not found");
     }
-    res.json(updatedQuiz);
+    res.json({ message: "Quiz question updated successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Error updating quiz");
+    console.error("Error updating quiz question:", error);
+    res.status(500).send("Error updating quiz question");
   }
 };
 
@@ -55,21 +55,21 @@ const deleteQuizQuestionById = async (req, res) => {
   const quizId = parseInt(req.params.id);
 
   try {
-    const success = await QuizQuestion.deleteQuiz(quizId);
+    const success = await QuizQuestion.deleteQuizQuestion(quizId);
     if (!success) {
-      return res.status(404).send("Quiz not found");
+      return res.status(404).send("Quiz question not found");
     }
     res.status(204).send();
   } catch (error) {
-    console.error(error);
-    res.status(500).send("Error deleting quiz");
+    console.error("Error deleting quiz question:", error);
+    res.status(500).send("Error deleting quiz question");
   }
 };
 
 module.exports = {
   getAllQuizQuestions,
   getQuizQuestionById,
-  createQuiz,
-  updateQuiz,
+  createQuizQuestion,
+  updateQuizQuestion,
   deleteQuizQuestionById
 };
