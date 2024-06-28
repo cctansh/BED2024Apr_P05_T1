@@ -67,27 +67,21 @@ class AnswerChoice {
   static async createAnswer(newAnswerData) {
     const connection = await sql.connect(dbConfig);
 
-    try {
-      const sqlQuery = `
-        INSERT INTO AnswerChoices (question_id, answer_text, is_correct, explanation)
-        VALUES (@question_id, @answer_text, @is_correct, @explanation);
-        SELECT SCOPE_IDENTITY() AS id;
-      `;
-      const request = connection.request();
-      request.input("question_id", newAnswerData.question_id);
-      request.input("answer_text", newAnswerData.answer_text);
-      request.input("is_correct", newAnswerData.is_correct);
-      request.input("explanation", newAnswerData.explanation);
+    const sqlQuery = `
+      INSERT INTO AnswerChoices (question_id, answer_text, is_correct, explanation)
+      VALUES (@question_id, @answer_text, @is_correct, @explanation);
+      SELECT SCOPE_IDENTITY() AS id;
+    `;
+    const request = connection.request();
+    request.input("question_id", newAnswerData.question_id);
+    request.input("answer_text", newAnswerData.answer_text);
+    request.input("is_correct", newAnswerData.is_correct);
+    request.input("explanation", newAnswerData.explanation);
 
-      const result = await request.query(sqlQuery);
+    const result = await request.query(sqlQuery);
+    connection.close();
 
-      return this.getAnswerById(result.recordset[0].id);
-    } catch (error) {
-      console.error("Error creating answer:", error);
-      throw error;
-    } finally {
-      connection.close();
-    }
+    return this.getAnswerById(result.recordset[0].id);
   }
   
 
