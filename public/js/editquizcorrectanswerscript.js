@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentAnswer = {};
 
     // Fetch answer data
-    fetch(`/api/answer/${answerId}`)
+    fetch(`/quiz/answer/${answerId}`)
         .then(response => response.json())
         .then(data => {
             currentAnswer = data;
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
     editAnswerButton.addEventListener('click', () => {
         currentAnswer.answer_text = answerTextElement.value;
 
-        fetch(`/api/answer/${currentAnswer.id}`, {
+        fetch(`/quiz/answer/${currentAnswer.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

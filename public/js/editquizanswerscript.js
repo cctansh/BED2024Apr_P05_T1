@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let answers = [];
 
     // Fetch quiz data (replace '1' with the actual question ID)
-    fetch('/api/quiz/1')
+    fetch('/quiz/answers')
         .then(response => response.json())
         .then(data => {
             currentQuestion = data.question;
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     editQuestionButton.addEventListener('click', () => {
         // Save changes and redirect to the Confirm Edit Answers page
-        fetch(`/api/quiz/${currentQuestion.id}`, {
+        fetch(`/quiz/${currentQuestion.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
