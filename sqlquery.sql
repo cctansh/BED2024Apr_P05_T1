@@ -25,6 +25,16 @@ if exists (SELECT * FROM sysobjects
   DROP TABLE dbo.Reply;
 GO
 
+if exists (SELECT * FROM sysobjects 
+  WHERE id = object_id('dbo.QuizQuestions') and sysstat & 0xf = 3)
+  DROP TABLE dbo.QuizQuestions;
+GO
+
+if exists (SELECT * FROM sysobjects 
+  WHERE id = object_id('dbo.AnswerChoices') and sysstat & 0xf = 3)
+  DROP TABLE dbo.AnswerChoices;
+GO
+
 -- TABLE CREATION
 CREATE TABLE Account 
 (
