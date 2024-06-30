@@ -345,6 +345,12 @@ deleteAccButton.addEventListener('click', async () => {
     }
 });
 
+const changePasswordButton = document.getElementById('change-password');
+changePasswordButton.addEventListener('click', () => {
+    window.location.href = `/changepassword.html?id=${profileId}`;
+});
+
+
 if (loginAccId != profileId) {
     document.getElementById("profile").classList.add('hide');
 } else {
