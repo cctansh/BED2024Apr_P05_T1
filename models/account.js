@@ -183,9 +183,10 @@ class Account {
                 result.recordset[0].accId,
                 result.recordset[0].accName,
                 result.recordset[0].accEmail,
-                result.recordset[0].accPassword
+                result.recordset[0].accPassword,
+                result.recordset[0].accRole
             );
-            const token = jwt.sign({ accId: account.accId.toString() }, secretKey, { expiresIn: '8h' });
+            const token = jwt.sign({ accId: account.accId.toString(), accRole: account.accRole }, secretKey, { expiresIn: '8h' });
             return token;
         } else {
             return null;

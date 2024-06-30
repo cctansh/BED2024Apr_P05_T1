@@ -1,6 +1,7 @@
 const token = localStorage.getItem('token');
 const loginProfileLink = document.getElementById('login-profile-link');
 const loginAccId = localStorage.getItem('loginAccId');
+const loginAccRole = localStorage.getItem('loginAccRole');
 
 if (token) {
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
@@ -326,6 +327,7 @@ logoutButton.addEventListener('click', () => {
     if (confirmed) {
         localStorage.removeItem('token');
         localStorage.removeItem('loginAccId');
+        localStorage.removeItem('loginAccRole');
         window.location.href = 'loginreg.html'; // Redirect to login page after logout
     }
 });
@@ -337,6 +339,7 @@ deleteAccButton.addEventListener('click', async () => {
         await deleteAccount(profileId);
         localStorage.removeItem('token');
         localStorage.removeItem('loginAccId');
+        localStorage.removeItem('loginAccRole');
 
         window.location.href = 'loginreg.html'; // Redirect to login page after logout
     }

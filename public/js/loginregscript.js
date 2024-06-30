@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
     const token = localStorage.getItem('token');
     const loginAccId = localStorage.getItem('loginAccId');
+    const loginAccRole = localStorage.getItem('loginAccRole');
 
     if (token) {
         window.location.href = `profile.html?id=${loginAccId}`;
@@ -31,11 +32,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const token = result.token;
             const decodedToken = parseJwt(token);
             const loginAccId = decodedToken.accId;
+            const loginAccRole = decodedToken.accRole;
 
             localStorage.setItem('token', token);
             localStorage.setItem('loginAccId', loginAccId);
+            localStorage.setItem('loginAccRole', loginAccRole);
             console.log(token);
             console.log(loginAccId);
+            console.log(loginAccRole);
 
             window.location.href = 'index.html';
         } catch (err) {

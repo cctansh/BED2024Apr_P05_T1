@@ -106,6 +106,7 @@
     const token = localStorage.getItem('token');
     const loginProfileLink = document.getElementById('login-profile-link');
     const loginAccId = localStorage.getItem('loginAccId');
+    const loginAccRole = localStorage.getItem('loginAccRole');
 
     if (token) {
         loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
