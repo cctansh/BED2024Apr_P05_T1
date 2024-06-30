@@ -38,7 +38,7 @@ const validateUpdateAccount = (req, res, next) => {
             .messages({
                 'string.pattern.base': 'Password must contain at least one letter and one number.'
             }),
-        accRole: Joi.string().valid('admin','member').required()
+        accRole: Joi.string().valid('admin','member').optional()
     }).or('accName', 'accEmail', 'accPassword', 'accRole');
 
     const validation = schema.validate(req.body, { abortEarly: false }); // Validate request body
