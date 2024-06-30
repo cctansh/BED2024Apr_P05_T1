@@ -30,19 +30,23 @@
             <a class="nav-link" href="quizquestion.html">Quiz</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" id="login-profile-link" href="profile.html">Profile&ensp;<i class="bi bi-person-fill"></i></a>
+            <a class="nav-link active" id="login-profile-link" href="profile.html">Profile&ensp;<i
+                class="bi bi-person-fill"></i></a>
           </li>
       </div>
     </div>
   </nav>
 
   <div class="pad-nav">
-    <h1 id="profile-name"></h1>
+    <div id="profile-head">
+      <h1 id="profile-name"></h1>
+      <div id="admin" class="hide">Admin</div>
+    </div>
     <div id="profile" class="profile-info">
-        <div id="email-info"></div>
-        <button id="change-password" type="button" class="btn btn-danger">Change Password</button>
-        <button id="logout" type="button" class="btn btn-danger">Logout</button>
-        <button id="delete-acc" type="button" class="btn btn-danger">Delete Account</button>
+      <div id="email-info"></div>
+      <button id="change-password" type="button" class="btn btn-danger">Change Password</button>
+      <button id="logout" type="button" class="btn btn-danger">Logout</button>
+      <button id="delete-acc" type="button" class="btn btn-danger">Delete Account</button>
     </div>
     <h2 class="postreplyhead">Posts / Replies:</h2>
     <div id="postreply">
@@ -50,8 +54,8 @@
     </div>
   </div>
 
-    <script src="js/bootstrap/bootstrap.bundle.js"></script>
-    <script src="js/profilescript.js"></script>
+  <script src="js/bootstrap/bootstrap.bundle.js"></script>
+  <script src="js/profilescript.js"></script>
 </body>
 
 </html>

@@ -203,6 +203,12 @@ async function fetchAccountName(accId) {
     return account.accName;
 }
 
+async function fetchAccountRole(accId) {
+    const response = await fetch(`/accounts/${accId}`);
+    const account = await response.json();
+    return account.accRole;
+}
+
 // function to fetch reply count for a post
 async function fetchReplyCount(postId) {
     const response = await fetch(`/posts/${postId}/replyCount`);
@@ -294,11 +300,18 @@ async function setProfileName(profileId) {
     document.getElementById("profile-name").textContent = `${profileName}'s Profile`;
 }
 
+async function setAdminIndicator(profileId) {
+    const adminIndicator = document.getElementById('admin');
+    const profileRole = await fetchAccountRole(profileId);
+    if (profileRole == 'admin') {
+        adminIndicator.classList.remove('hide');
+    }
+}
+
 async function setAccountDetails(profileId) {
     const response = await fetch(`/accounts/${profileId}`);
     const account = await response.json();
     document.getElementById('email-info').textContent = `E-mail: ${account.accEmail}`;
-    // add change password
 }
 
 async function deleteAccount(profileId) {
@@ -320,6 +333,7 @@ async function deleteAccount(profileId) {
 const profileId = getUrlParams();
 
 setProfileName(profileId);
+setAdminIndicator(profileId);
 
 const logoutButton = document.getElementById('logout');
 logoutButton.addEventListener('click', () => {
@@ -356,5 +370,7 @@ if (loginAccId != profileId) {
 } else {
     setAccountDetails(profileId);
 }
+
+// if (loginAccRole == "admin")
 
 fetchPostsAndReplies(profileId);

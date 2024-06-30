@@ -370,6 +370,21 @@ form input {
     width: fit-content;
 }
 
+#profile-head {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    height: fit-content;
+}
+
+#admin {
+    background-color: #dc3545;
+    padding: 0.25rem 1rem;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
 #logout,
 #delete-acc {
     margin-left: auto;
