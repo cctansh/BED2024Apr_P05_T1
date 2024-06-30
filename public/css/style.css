@@ -370,7 +370,8 @@ form input {
     width: fit-content;
 }
 
-#logout {
+#logout,
+#delete-acc {
     margin-left: auto;
 }
 

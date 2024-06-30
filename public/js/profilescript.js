@@ -300,6 +300,26 @@ async function setAccountDetails(profileId) {
     // add change password
 }
 
+async function deleteAccount(profileId) {
+    try {
+        fetch('/accounts/' + profileId, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        alert('Account deleted. Returning to login page.');
+        window.location.href = 'loginreg.html';
+    } catch (err) {
+        console.log('Deleteion failed: ' + err.message);
+    }
+}
+
+const profileId = getUrlParams();
+
+setProfileName(profileId);
+
 const logoutButton = document.getElementById('logout');
 logoutButton.addEventListener('click', () => {
     const confirmed = confirm("Are you sure you want to log out?");
@@ -310,9 +330,17 @@ logoutButton.addEventListener('click', () => {
     }
 });
 
-const profileId = getUrlParams();
+const deleteAccButton = document.getElementById('delete-acc');
+deleteAccButton.addEventListener('click', async () => {
+    const confirmed = confirm("Are you sure you want to delete your account?");
+    if (confirmed) {
+        await deleteAccount(profileId);
+        localStorage.removeItem('token');
+        localStorage.removeItem('loginAccId');
 
-setProfileName(profileId);
+        window.location.href = 'loginreg.html'; // Redirect to login page after logout
+    }
+});
 
 if (loginAccId != profileId) {
     document.getElementById("profile").classList.add('hide');
