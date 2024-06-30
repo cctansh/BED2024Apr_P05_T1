@@ -42,6 +42,7 @@ accId smallint IDENTITY(1,1),
 accName varchar(50) NOT NULL,
 accEmail varchar(120) NOT NULL,
 accPassword varchar(50) NOT NULL,
+accRole varchar(6) CHECK (accRole IN ('member', 'admin')) NOT NULL
 CONSTRAINT PK_Account PRIMARY KEY (accId)
 );
 
@@ -96,10 +97,10 @@ CREATE TABLE AnswerChoices (
 
 
 -- insert temp data for testing
-INSERT INTO Account(accName, accEmail, accPassword)
-VALUES ( 'account1' , 'hi@gmail.com' , 'abcd1234'),  
-('account2' , 'hello@yahoo.com.sg' , 'abcd1234'),
-('account3' , 'haha@yahoo.com.sg' , 'abcd1234');
+INSERT INTO Account(accName, accEmail, accPassword, accRole)
+VALUES ( 'account1' , 'hi@gmail.com' , 'abcd1234', 'member'),  
+('account2' , 'hello@yahoo.com.sg' , 'abcd1234', 'member'),
+('account3' , 'haha@yahoo.com.sg' , 'abcd1234', 'admin');
 
 INSERT INTO Post(postDateTime, postTitle, postText, postEdited, accId)
 VALUES ( '2024-05-25 16:56:00' , 'Welcome to Post 1', 'Post 1 contents', 0, 1),  
@@ -109,7 +110,9 @@ VALUES ( '2024-05-25 16:56:00' , 'Welcome to Post 1', 'Post 1 contents', 0, 1),
 
 INSERT INTO Reply(replyDateTime, replyText, replyEdited, accId, replyTo)
 VALUES ('2024-05-25 17:43:00' , 'This is Reply 1', 0, 2, 1),  
-('2024-05-26 13:12:19' , 'This is Reply 2', 0, 1, 1);
+('2024-05-26 13:12:19' , 'This is Reply 2', 0, 1, 1),
+('2024-05-23 12:54:34' , 'This is Reply 3', 0, 3, 2),
+('2024-05-27 18:43:23' , 'This is Reply 4', 0, 2, 2);
 
 -- Inserting data into QuizQuestions table
 INSERT INTO QuizQuestions (question, image_path)

@@ -4,11 +4,12 @@ const jwt = require("jsonwebtoken");
 const secretKey = "jwt_secret"; 
 
 class Account {
-    constructor(accId, accName, accEmail, accPassword) {
+    constructor(accId, accName, accEmail, accPassword, accRole) {
         this.accId = accId;
         this.accName = accName;
         this.accEmail = accEmail;
         this.accPassword = accPassword;
+        this.accRole = accRole;
     }
 
     static async getAllAccounts() {
@@ -22,7 +23,7 @@ class Account {
         connection.close();
 
         return result.recordset.map(
-        (row) => new Account(row.accId, row.accName, row.accEmail, row.accPassword)
+        (row) => new Account(row.accId, row.accName, row.accEmail, row.accPassword, row.accRole)
         ); 
     }
 
@@ -42,7 +43,8 @@ class Account {
             result.recordset[0].accId,
             result.recordset[0].accName,
             result.recordset[0].accEmail,
-            result.recordset[0].accPassword
+            result.recordset[0].accPassword,
+            result.recordset[0].accRole
             )
         : null; 
     }
@@ -50,12 +52,13 @@ class Account {
     static async createAccount(newAccountData) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `INSERT INTO Account (accName, accEmail, accPassword) VALUES (@accName, @accEmail, @accPassword); SELECT SCOPE_IDENTITY() AS accId;`; 
+        const sqlQuery = `INSERT INTO Account (accName, accEmail, accPassword, accRole) VALUES (@accName, @accEmail, @accPassword, @accRole); SELECT SCOPE_IDENTITY() AS accId;`; 
 
         const request = connection.request();
         request.input("accName", newAccountData.accName);
         request.input("accEmail", newAccountData.accEmail);
         request.input("accPassword", newAccountData.accPassword);
+        request.input("accRole", newAccountData.accRole);
 
         const result = await request.query(sqlQuery);
 
@@ -86,6 +89,11 @@ class Account {
             if (newAccountData.accPassword) {
                 sqlQuery += 'accPassword = @accPassword, ';
                 params.push({ name: 'accPassword', type: sql.VarChar, value: newAccountData.accPassword });
+            }
+
+            if (newAccountData.accRole) {
+                sqlQuery += 'accRole = @accRole, ';
+                params.push({ name: 'accRole', type: sql.VarChar, value: newAccountData.accRole });
             }
     
             // Remove the last comma and add the WHERE clause

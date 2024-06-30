@@ -11,7 +11,8 @@ const validateCreateAccount = async (req, res, next) => {
             .required()
             .messages({
                 'string.pattern.base': 'Password must contain at least one letter and one number, and no spaces or special characters.'
-            })
+            }),
+        accRole: Joi.string().valid('admin','member').required()
     });
 
     const validation = schema.validate(req.body, { abortEarly: false });
@@ -36,8 +37,9 @@ const validateUpdateAccount = (req, res, next) => {
             .optional()
             .messages({
                 'string.pattern.base': 'Password must contain at least one letter and one number.'
-            })
-    }).or('accName', 'accEmail', 'accPassword');
+            }),
+        accRole: Joi.string().valid('admin','member').required()
+    }).or('accName', 'accEmail', 'accPassword', 'accRole');
 
     const validation = schema.validate(req.body, { abortEarly: false }); // Validate request body
 

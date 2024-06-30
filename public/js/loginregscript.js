@@ -52,7 +52,8 @@ document.addEventListener('DOMContentLoaded', function () {
         const registerData = {
             accName: document.getElementById('registerName').value,
             accEmail: document.getElementById('registerEmail').value,
-            accPassword: document.getElementById('registerPassword').value
+            accPassword: document.getElementById('registerPassword').value,
+            accRole: 'member'
         };
         const confirmPassword = document.getElementById('registerPasswordConfirm').value;
 
