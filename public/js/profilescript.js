@@ -21,7 +21,12 @@ async function fetchPostsAndReplies(profileId) {
     const response = await fetch(`/accounts/postreply/${profileId}`);
     const postreply = await response.json();
 
-    
+    if (postreply == 0) {
+        const container = document.getElementById("postreply");
+        container.innerHTML = "This user has not made any posts or replies.";
+        return;
+    }
+
     for (const obj of postreply) {
         if (obj.type == 'Post') {
             await fetchPost(obj);
@@ -104,7 +109,7 @@ async function fetchReply(obj) {
 
     const replyBox = document.createElement("div");
     replyBox.classList.add("reply-box");
-    
+
     const connector = document.createElement("div");
     connector.classList.add("connector");
     connector.innerHTML = `
@@ -228,7 +233,7 @@ async function deleteReply(replyId) {
 async function fetchRepliedPost(replyId) {
     const response = await fetch(`/replies/post/${replyId}`);
     const post = await response.json();
-    
+
     const container = document.getElementById("postreply");
 
     const postItem = document.createElement("div");
@@ -287,7 +292,7 @@ async function fetchRepliedPost(replyId) {
     }
 
     container.appendChild(postItem);
-    
+
     const accountButton = postItem.querySelector('.account');
     accountButton.addEventListener('click', (e) => {
         e.stopPropagation();
