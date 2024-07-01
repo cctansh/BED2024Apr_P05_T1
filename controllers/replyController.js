@@ -40,6 +40,16 @@ const updateReply = async (req, res) => {
   const newReplyData = req.body;
 
   try {
+    const reply = await Reply.getReplyById(replyId);
+    if (!reply) {
+        return res.status(404).send("Reply not found");
+    }
+
+    // Check if the user is the owner of the reply or an admin
+    if (reply.accId !== req.user.accId && req.user.accRole !== 'admin') {
+        return res.status(403).json({ message: "You are not authorized to update this reply" });
+    }
+
     const updatedReply = await Reply.updateReply(replyId, newReplyData);
     if (!updatedReply) {
       return res.status(404).send("Reply not found");
@@ -55,6 +65,16 @@ const deleteReply = async (req, res) => {
   const replyId = parseInt(req.params.id);
 
   try {
+    const reply = await Reply.getReplyById(replyId);
+    if (!reply) {
+        return res.status(404).send("Reply not found");
+    }
+
+    // Check if the user is the owner of the reply or an admin
+    if (reply.accId !== req.user.accId && req.user.accRole !== 'admin') {
+        return res.status(403).json({ message: "You are not authorized to delete this reply" });
+    }
+    
     const success = await Reply.deleteReply(replyId);
     if (!success) {
       return res.status(404).send("Reply not found");

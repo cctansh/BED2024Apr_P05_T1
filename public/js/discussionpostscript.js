@@ -199,7 +199,10 @@ async function deletePost(postId) {
 
 async function deleteReply(replyId) {
     const response = await fetch(`/replies/${replyId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+          }
     });
     if (!response.ok) {
         alert('Failed to delete reply.');

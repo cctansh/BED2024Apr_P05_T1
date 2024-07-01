@@ -10,6 +10,7 @@ const bodyParser = require("body-parser");
 const validateAccount = require("./middlewares/validateAccount")
 const validatePost = require("./middlewares/validatePost")
 const validateReply = require("./middlewares/validateReply")
+const authenticate = require("./middlewares/authenticate")
 
 const app = express();
 const port = process.env.PORT || 3000; // Use environment variable or default port
@@ -46,9 +47,9 @@ app.get("/replies", replyController.getAllReplies);
 app.get("/replies/:id", replyController.getReplyById);
 app.get("/replies/by-post/:id", replyController.getRepliesByPost);
 app.get("/replies/post/:id", replyController.getRepliedPost);
-app.post("/replies", validateReply.validateCreateReply, replyController.createReply);
-app.put("/replies/:id", validateReply.validateUpdateReply, replyController.updateReply);
-app.delete("/replies/:id", replyController.deleteReply);
+app.post("/replies", authenticate.verifyJWT, validateReply.validateCreateReply, replyController.createReply);
+app.put("/replies/:id", authenticate.verifyJWT, validateReply.validateUpdateReply, replyController.updateReply);
+app.delete("/replies/:id", authenticate.verifyJWT, replyController.deleteReply);
 
 // Question routes
 app.get("/quiz/questions", quizController.getAllQuizQuestions);
