@@ -202,7 +202,7 @@ async function deleteReply(replyId) {
         method: 'DELETE',
         headers: {
             'Authorization': `Bearer ${token}`
-          }
+        }
     });
     if (!response.ok) {
         alert('Failed to delete reply.');

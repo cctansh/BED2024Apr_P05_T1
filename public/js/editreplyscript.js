@@ -75,7 +75,8 @@ async function fetchReply(replyId) {
                 const response = await fetch(`/replies/${reply.replyId}`, {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(newReplyData)
                 });
