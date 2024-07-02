@@ -58,18 +58,13 @@ async function fetchPost(obj) {
 
     const dateTimeElement = document.createElement("div");
     dateTimeElement.classList.add("datetime");
-    // Format the date and time
-    const postDate = new Date(obj.dateTime);
-    const year = postDate.getUTCFullYear();
-    const month = String(postDate.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(postDate.getUTCDate()).padStart(2, '0');
-    const hours = String(postDate.getUTCHours()).padStart(2, '0');
-    const minutes = String(postDate.getUTCMinutes()).padStart(2, '0');
-    const formattedDate = `${day}/${month}/${year}`;
-    const formattedTime = `${hours}:${minutes}`;
 
-    // display reply count and datetime
-    dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formattedDate}, ${formattedTime}`;
+    const postDate = new Date(obj.dateTime);
+    if (obj.edited == 0) {
+        dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}`;
+    } else {
+        dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | Edited at ${formatDate(postDate)}`;
+    }
 
     const textElement = document.createElement("div");
     textElement.classList.add("text");
@@ -198,45 +193,6 @@ async function fetchReply(obj) {
     }
 }
 
-function formatDate(ogDate) {
-    const year = ogDate.getUTCFullYear();
-    const month = String(ogDate.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(ogDate.getUTCDate()).padStart(2, '0');
-    const hours = String(ogDate.getUTCHours()).padStart(2, '0');
-    const minutes = String(ogDate.getUTCMinutes()).padStart(2, '0');
-    const formattedDate = `${day}/${month}/${year}`;
-    const formattedTime = `${hours}:${minutes}`;
-    return `${formattedDate}, ${formattedTime}`;
-}
-
-async function fetchAccountName(accId) {
-    const response = await fetch(`/accounts/${accId}`);
-    const account = await response.json();
-    return account.accName;
-}
-
-async function fetchAccountRole(accId) {
-    const response = await fetch(`/accounts/${accId}`);
-    const account = await response.json();
-    return account.accRole;
-}
-
-// function to fetch reply count for a post
-async function fetchReplyCount(postId) {
-    const response = await fetch(`/posts/${postId}/replyCount`);
-    const replyCount = await response.json();
-    return replyCount.replyCount;
-}
-
-async function deleteReply(replyId) {
-    const response = await fetch(`/replies/${replyId}`, {
-        method: 'DELETE'
-    });
-    if (!response.ok) {
-        alert('Failed to delete reply.');
-    }
-}
-
 async function fetchRepliedPost(replyId) {
     const response = await fetch(`/replies/post/${replyId}`);
     const post = await response.json();
@@ -262,14 +218,12 @@ async function fetchRepliedPost(replyId) {
     const dateTimeElement = document.createElement("div");
     dateTimeElement.classList.add("datetime");
     // Format the date and time
-    const postDate = new Date(post.postDateTime);
-    const year = postDate.getUTCFullYear();
-    const month = String(postDate.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(postDate.getUTCDate()).padStart(2, '0');
-    const hours = String(postDate.getUTCHours()).padStart(2, '0');
-    const minutes = String(postDate.getUTCMinutes()).padStart(2, '0');
-    const formattedDate = `${day}/${month}/${year}`;
-    const formattedTime = `${hours}:${minutes}`;
+    const postDate = new Date(obj.dateTime);
+    if (obj.edited == 0) {
+        dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}`;
+    } else {
+        dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | Edited at ${formatDate(postDate)}`;
+    }
 
     // display reply count and datetime
     dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formattedDate}, ${formattedTime}`;
@@ -307,6 +261,39 @@ async function fetchRepliedPost(replyId) {
     });
 }
 
+function formatDate(ogDate) {
+    const year = ogDate.getUTCFullYear();
+    const month = String(ogDate.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(ogDate.getUTCDate()).padStart(2, '0');
+    const hours = String(ogDate.getUTCHours()).padStart(2, '0');
+    const minutes = String(ogDate.getUTCMinutes()).padStart(2, '0');
+    const formattedDate = `${day}/${month}/${year}`;
+    const formattedTime = `${hours}:${minutes}`;
+    return `${formattedDate}, ${formattedTime}`;
+}
+
+async function fetchAccountName(accId) {
+    const response = await fetch(`/accounts/${accId}`);
+    const account = await response.json();
+    return account.accName;
+}
+
+// function to fetch reply count for a post
+async function fetchReplyCount(postId) {
+    const response = await fetch(`/posts/${postId}/replyCount`);
+    const replyCount = await response.json();
+    return replyCount.replyCount;
+}
+
+async function deleteReply(replyId) {
+    const response = await fetch(`/replies/${replyId}`, {
+        method: 'DELETE'
+    });
+    if (!response.ok) {
+        alert('Failed to delete reply.');
+    }
+}
+
 async function setProfileName(profileId) {
     const profileName = await fetchAccountName(profileId);
     document.getElementById("profile-name").textContent = `${profileName}'s Profile`;
@@ -326,6 +313,12 @@ async function setAccountDetails(profileId) {
     document.getElementById('email-info').textContent = `E-mail: ${account.accEmail}`;
 }
 
+async function fetchAccountRole(accId) {
+    const response = await fetch(`/accounts/${accId}`);
+    const account = await response.json();
+    return account.accRole;
+}
+
 async function deleteAccount(profileId) {
     try {
         fetch('/accounts/' + profileId, {
@@ -343,9 +336,6 @@ async function deleteAccount(profileId) {
 }
 
 const profileId = getUrlParams();
-
-setProfileName(profileId);
-setAdminIndicator(profileId);
 
 const logoutButton = document.getElementById('logout');
 logoutButton.addEventListener('click', () => {
@@ -376,13 +366,13 @@ changePasswordButton.addEventListener('click', () => {
     window.location.href = `/changepassword.html?id=${profileId}`;
 });
 
+setProfileName(profileId);
+setAdminIndicator(profileId);
 
 if (loginAccId != profileId) {
     document.getElementById("profile").classList.add('hide');
 } else {
     setAccountDetails(profileId);
 }
-
-// if (loginAccRole == "admin")
 
 fetchPostsAndReplies(profileId);
