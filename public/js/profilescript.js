@@ -219,14 +219,11 @@ async function fetchRepliedPost(replyId) {
     dateTimeElement.classList.add("datetime");
     // Format the date and time
     const postDate = new Date(post.postDateTime);
-    if (obj.edited == 0) {
+    if (post.postEdited == 0) {
         dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}`;
     } else {
         dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | Edited at ${formatDate(postDate)}`;
     }
-
-    // display reply count and datetime
-    dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formattedDate}, ${formattedTime}`;
 
     const textElement = document.createElement("div");
     textElement.classList.add("text");
