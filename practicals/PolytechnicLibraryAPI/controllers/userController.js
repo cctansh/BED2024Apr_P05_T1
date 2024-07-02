@@ -3,7 +3,7 @@ const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const secretKey = "lol"; 
+require('dotenv').config();
 
 const registerUser = async (req, res) => {
     // extract variables from user json object
@@ -66,7 +66,7 @@ const login = async (req, res) => {
         id: user.id,
         role: user.role,
       };
-      const token = jwt.sign(payload, secretKey, { expiresIn: "3600s" }); 
+      const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "3600s" }); 
   
       // return token
       return res.status(200).json({ token });
