@@ -67,8 +67,13 @@ async function fetchReply(replyId) {
                 return;
             }
 
+            let adminEdit = 0;
+            if (loginAccRole == 'admin') {
+                adminEdit = 1;
+            } 
             const newReplyData = {
-                replyText: replyText
+                replyText: replyText,
+                adminEdit: adminEdit
             };
 
             try {
@@ -89,7 +94,7 @@ async function fetchReply(replyId) {
                 }
             } catch (error) {
                 console.error("Error adding reply:", error);
-                alert("An error occurred while adding your reply. Please try again later.");
+                alert("An error occurred while editing your reply. Please try again later.");
             }
         }
     });

@@ -3,11 +3,12 @@ const dbConfig = require("../dbConfig");
 const Post = require("./post");
 
 class Reply {
-  constructor(replyId, replyDateTime, replyText, replyEdited, accId, replyTo) {
+  constructor(replyId, replyDateTime, replyText, replyEdited, adminEdit, accId, replyTo) {
     this.replyId = replyId;
     this.replyDateTime = replyDateTime;
     this.replyText = replyText;
     this.replyEdited = replyEdited;
+    this.adminEdit = adminEdit;
     this.accId = accId;
     this.replyTo = replyTo;
   }
@@ -23,7 +24,7 @@ class Reply {
     connection.close();
 
     return result.recordset.map(
-      (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.replyEdited, row.accId, row.replyTo)
+      (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.replyEdited, row.adminEdit, row.accId, row.replyTo)
     );
   }
 
@@ -44,6 +45,7 @@ class Reply {
         result.recordset[0].replyDateTime,
         result.recordset[0].replyText,
         result.recordset[0].replyEdited,
+        result.recordset[0].adminEdit,
         result.recordset[0].accId,
         result.recordset[0].replyTo
       )
@@ -53,7 +55,7 @@ class Reply {
   static async createReply(newReplyData) {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `INSERT INTO Reply (replyDateTime, replyText, replyEdited, accId, replyTo) VALUES (GETDATE(), @replyText, 0, @accId, @replyTo); SELECT SCOPE_IDENTITY() AS replyId;`;
+    const sqlQuery = `INSERT INTO Reply (replyDateTime, replyText, replyEdited, adminEdit, accId, replyTo) VALUES (GETDATE(), @replyText, 0, 0, @accId, @replyTo); SELECT SCOPE_IDENTITY() AS replyId;`;
 
     const request = connection.request();
     request.input("replyText", newReplyData.replyText);
@@ -70,11 +72,12 @@ class Reply {
   static async updateReply(id, newReplyData) {
     const connection = await sql.connect(dbConfig);
 
-    const sqlQuery = `UPDATE Reply SET replyDateTime = GETDATE(), replyText = @replyText, replyEdited = 1 WHERE replyId = @id`;
+    const sqlQuery = `UPDATE Reply SET replyDateTime = GETDATE(), replyText = @replyText, replyEdited = 1, adminEdit = @adminEdit WHERE replyId = @id`;
 
     const request = connection.request();
     request.input("id", id);
     request.input("replyText", newReplyData.replyText || null);
+    request.input("adminEdit", newReplyData.adminEdit);
 
     await request.query(sqlQuery);
 
@@ -102,7 +105,7 @@ class Reply {
 
     try {
       const query = `
-            SELECT r.replyId, r.replyDateTime, r.replyText, r.replyEdited, r.accId, r.replyTo
+            SELECT r.replyId, r.replyDateTime, r.replyText, r.replyEdited, r.adminEdit, r.accId, r.replyTo
             FROM Reply r
             LEFT JOIN Account a ON r.accId = a.accId
             WHERE a.accName LIKE '%${searchTerm}%'
@@ -110,7 +113,7 @@ class Reply {
 
       const result = await connection.request().query(query);
       return result.recordset.map(
-        (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.replyEdited, row.accId, row.replyTo)
+        (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.replyEdited, row.adminEdit, row.accId, row.replyTo)
       );
     } catch (error) {
       throw new Error("Error searching replies");
@@ -187,7 +190,7 @@ class Reply {
       connection.close();
 
       return result.recordset.map(
-        (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.replyEdited, row.accId, row.replyTo)
+        (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.replyEdited, row.adminEdit, row.accId, row.replyTo)
       );
     } catch (error) {
       throw new Error("Error fetching replied post");

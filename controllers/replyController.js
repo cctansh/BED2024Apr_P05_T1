@@ -46,7 +46,7 @@ const updateReply = async (req, res) => {
     }
 
     // Check if the user is the owner of the reply or an admin
-    if (reply.accId !== req.user.accId && req.user.accRole !== 'admin') {
+    if (reply.accId != req.user.accId && req.user.accRole != 'admin') {
         return res.status(403).json({ message: "You are not authorized to update this reply" });
     }
 

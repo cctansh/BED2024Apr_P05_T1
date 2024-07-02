@@ -204,6 +204,7 @@ class Account {
                 postTitle AS Title,
                 postText AS Text,
                 postEdited AS Edited,
+                NULL AS adminEdited,
                 NULL AS ReplyTo,
                 accId
             FROM 
@@ -220,6 +221,7 @@ class Account {
                 NULL AS Title,
                 replyText AS Text,
                 replyEdited AS Edited,
+                adminEdit AS adminEdited,
                 replyTo AS ReplyTo,
                 accId
             FROM 
@@ -243,6 +245,7 @@ class Account {
             title: row.Title,
             text: row.Text,
             edited: row.Edited,
+            adminEdited: row.adminEdited,
             replyto: row.ReplyTo,
             accId: row.accId
         }));

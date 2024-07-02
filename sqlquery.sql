@@ -68,6 +68,7 @@ replyId smallint IDENTITY(1,1),
 replyDateTime smalldatetime NOT NULL, 
 replyText varchar(5000) NOT NULL,
 replyEdited bit NOT NULL,
+adminEdit bit NOT NULL,
 accId smallint NOT NULL,
 replyTo smallint NOT NULL,
 CONSTRAINT PK_Reply PRIMARY KEY (replyId),
@@ -108,11 +109,11 @@ VALUES ( '2024-05-25 16:56:00' , 'Welcome to Post 1', 'Post 1 contents', 0, 1),
 ('2024-05-27 12:03:46' , 'Welcome to Post 3', 'Post 3 contents', 0, 1),
 ('2024-05-28 20:00:00' , 'Welcome to Post 4', 'Post 4 contents', 0, 3);
 
-INSERT INTO Reply(replyDateTime, replyText, replyEdited, accId, replyTo)
-VALUES ('2024-05-25 17:43:00' , 'This is Reply 1', 0, 2, 1),  
-('2024-05-26 13:12:19' , 'This is Reply 2', 0, 1, 1),
-('2024-05-23 12:54:34' , 'This is Reply 3', 0, 3, 2),
-('2024-05-27 18:43:23' , 'This is Reply 4', 0, 2, 2);
+INSERT INTO Reply(replyDateTime, replyText, replyEdited, adminEdit, accId, replyTo)
+VALUES ('2024-05-25 17:43:00' , 'This is Reply 1', 0, 0, 2, 1),  
+('2024-05-26 13:12:19' , 'This is Reply 2', 0, 0, 1, 1),
+('2024-05-23 12:54:34' , 'This is Reply 3', 0, 0, 3, 2),
+('2024-05-27 18:43:23' , 'This is Reply 4', 0, 0, 2, 2);
 
 -- Inserting data into QuizQuestions table
 INSERT INTO QuizQuestions (question, image_path)

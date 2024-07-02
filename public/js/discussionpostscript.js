@@ -73,7 +73,7 @@ async function fetchPost(postId) {
 
         } else {
             postContainer.innerHTML = `
-            <div class="post">
+            <div class="post no-hover">
                 <div class="text">${post.postText}</div>
             </div>
             `;
@@ -111,6 +111,8 @@ async function fetchReplies(postId) {
 
         if (reply.replyEdited == 0) {
             dateTimeElement.textContent = formatDate(replyDate);
+        } else if (reply.adminEdit == 1 && loginAccId != reply.accId) {
+            dateTimeElement.textContent = `Edited by admin at ${formatDate(replyDate)}`;
         } else {
             dateTimeElement.textContent = `Edited at ${formatDate(replyDate)}`;
         }
@@ -129,7 +131,7 @@ async function fetchReplies(postId) {
         replyItem.appendChild(headerElement);
         replyItem.appendChild(textElement);
 
-        if (token && loginAccId && loginAccId == reply.accId) {
+        if (token && ((loginAccId == reply.accId) || (loginAccRole == "admin"))) {
             replyItem.innerHTML += `
             <div class="edit-bar">
                 <button class="btn edit-reply"><i class="bi bi-pencil-fill"></i></button>
@@ -145,7 +147,7 @@ async function fetchReplies(postId) {
             window.location.href = `/profile.html?id=${reply.accId}`;
         });
 
-        if (token && loginAccId && loginAccId == reply.accId) {
+        if (token && ((loginAccId == reply.accId) || (loginAccRole == "admin"))) {
             const deleteReplyButton = replyItem.querySelector('.delete-reply');
             deleteReplyButton.addEventListener('click', async () => {
                 const confirmed = confirm("Are you sure you want to delete this reply?");

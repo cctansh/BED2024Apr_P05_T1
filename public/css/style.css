@@ -212,6 +212,11 @@ footer div {
     filter: brightness(95%);
 }
 
+.no-hover:hover {
+    cursor: default !important;
+    filter: brightness(100%) !important;
+}
+
 .reply, .rule{
     /* over write post */
     background-color: #ffffff;

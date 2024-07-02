@@ -86,7 +86,7 @@ async function fetchPost(obj) {
     postItem.appendChild(headerElement);
     postItem.appendChild(textElement);
 
-    if (token && loginAccId && loginAccId == obj.accId) {
+    if (token && ((loginAccId == obj.accId) || (loginAccRole == "admin"))) {
         postItem.innerHTML += `
         <div class="edit-bar">
             <button class="btn edit-reply"><i class="bi bi-pencil-fill"></i></button>
@@ -129,20 +129,16 @@ async function fetchReply(obj) {
     accountElement.classList.add("account");
     accountElement.textContent = await fetchAccountName(obj.accId);
 
+    const replyDate = new Date(obj.dateTime);
     const dateTimeElement = document.createElement("div");
     dateTimeElement.classList.add("datetime");
-    // Format the date and time
-    const replyDate = new Date(obj.dateTime);
-    const year = replyDate.getUTCFullYear();
-    const month = String(replyDate.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(replyDate.getUTCDate()).padStart(2, '0');
-    const hours = String(replyDate.getUTCHours()).padStart(2, '0');
-    const minutes = String(replyDate.getUTCMinutes()).padStart(2, '0');
-    const formattedDate = `${day}/${month}/${year}`;
-    const formattedTime = `${hours}:${minutes}`;
-
-    // display reply count and datetime
-    dateTimeElement.innerHTML = `${formattedDate}, ${formattedTime}`;
+    if (obj.edited == 0) {
+        dateTimeElement.textContent = formatDate(replyDate);
+    } else if (obj.adminEdited == 1) {
+        dateTimeElement.textContent = `Edited by admin at ${formatDate(replyDate)}`;
+    } else {
+        dateTimeElement.textContent = `Edited at ${formatDate(replyDate)}`;
+    }
 
     const textElement = document.createElement("div");
     textElement.classList.add("text");
@@ -158,7 +154,7 @@ async function fetchReply(obj) {
     replyItem.appendChild(headerElement);
     replyItem.appendChild(textElement);
 
-    if (token && loginAccId && loginAccId == obj.accId) {
+    if (token && ((loginAccId == obj.accId) || (loginAccRole == "admin"))) {
         replyItem.innerHTML += `
         <div class="edit-bar">
             <button class="btn edit-reply"><i class="bi bi-pencil-fill"></i></button>
@@ -178,7 +174,7 @@ async function fetchReply(obj) {
         window.location.href = `/profile.html?id=${obj.accId}`;
     });
 
-    if (token && loginAccId && loginAccId == obj.accId) {
+    if (token && ((loginAccId == obj.accId) || (loginAccRole == "admin"))) {
         const deleteReplyButton = replyItem.querySelector('.delete-reply');
         deleteReplyButton.addEventListener('click', async (e) => {
             e.stopPropagation();
@@ -200,6 +196,17 @@ async function fetchReply(obj) {
             window.location.href = `/editreply.html?id=${obj.id}`;
         });
     }
+}
+
+function formatDate(ogDate) {
+    const year = ogDate.getUTCFullYear();
+    const month = String(ogDate.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(ogDate.getUTCDate()).padStart(2, '0');
+    const hours = String(ogDate.getUTCHours()).padStart(2, '0');
+    const minutes = String(ogDate.getUTCMinutes()).padStart(2, '0');
+    const formattedDate = `${day}/${month}/${year}`;
+    const formattedTime = `${hours}:${minutes}`;
+    return `${formattedDate}, ${formattedTime}`;
 }
 
 async function fetchAccountName(accId) {
@@ -282,7 +289,7 @@ async function fetchRepliedPost(replyId) {
     postItem.appendChild(headerElement);
     postItem.appendChild(textElement);
 
-    if (token && loginAccId && loginAccId == post.accId) {
+    if (token && ((loginAccId == post.accId) || (loginAccRole == "admin"))) {
         postItem.innerHTML += `
         <div class="edit-bar">
             <button class="btn edit-reply"><i class="bi bi-pencil-fill"></i></button>
