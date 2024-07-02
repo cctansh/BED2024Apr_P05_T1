@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // For form data handling
 
 // book routes
 app.get("/books", authenticate.verifyJWT, bookController.getAllBooks);
-app.put("/books/:bookId/availability", validateBook.validateUpdateBook, authenticate.verifyJWT, bookController.updateBookAvailability); // PUT for updating books
+app.put("/books/:bookId/availability", authenticate.verifyJWT, validateBook.validateUpdateBook, bookController.updateBookAvailability); // PUT for updating books
 
 // user routes
 app.get("/users", userController.getAllUsers);
