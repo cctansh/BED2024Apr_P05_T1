@@ -44,6 +44,15 @@ const updateAccount = async (req, res) => {
   const newAccountData = req.body;
 
   try {
+    const account = await Account.getAccountById(id);
+    if (!account) {
+        return res.status(404).send("Account not found");
+    }
+
+    if (account.accId != req.user.accId) {
+      return res.status(403).json({ message: "You are not authorized to update this account" });
+    }
+
     const updatedAccount = await Account.updateAccount(id, newAccountData);
     if (!updatedAccount) {
       return res.status(404).send("Account not found");
@@ -59,6 +68,15 @@ const deleteAccount = async (req, res) => {
   const id = parseInt(req.params.id);
 
   try {
+    const account = await Account.getAccountById(id);
+    if (!account) {
+        return res.status(404).send("Account not found");
+    }
+
+    if (account.accId != req.user.accId && req.user.accRole != 'admin') {
+      return res.status(403).json({ message: "You are not authorized to delete this account" });
+    }
+
     const success = await Account.deleteAccount(id);
     if (!success) {
       return res.status(404).send("Account not found");
@@ -104,6 +122,10 @@ const checkPassword = async (req, res) => {
     const account = await Account.getAccountById(id);
     if (!account) {
       return res.status(404).json({ message: "Account not found" });
+    }
+
+    if (account.accId != req.user.accId) {
+      return res.status(403).json({ message: "You are not authorized to check this password" });
     }
 
     const passwordMatch = await bcrypt.compare(password, account.accPassword);

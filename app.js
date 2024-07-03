@@ -4,13 +4,14 @@ const postController = require("./controllers/postController");
 const replyController = require("./controllers/replyController");
 const quizController = require('./controllers/quizController');
 const answerController = require('./controllers/answerController');
-const sql = require("mssql"); 
+const sql = require("mssql");
 const dbConfig = require("./dbConfig");
 const bodyParser = require("body-parser");
 const validateAccount = require("./middlewares/validateAccount")
 const validatePost = require("./middlewares/validatePost")
 const validateReply = require("./middlewares/validateReply")
 const authenticate = require("./middlewares/authenticate")
+const seed = require("./seed");
 const seedDatabase = require("./seed");
 
 const app = express();
@@ -30,16 +31,20 @@ app.get("/accounts/:id", accountController.getAccountById);
 app.get("/accounts/postreply/:id", accountController.getPostsAndRepliesByAccount);
 app.post("/accounts/login", validateAccount.validateLoginAccount, accountController.loginAccount);
 app.post("/accounts", validateAccount.validateCreateAccount, accountController.createAccount);
-app.put("/accounts/:id", validateAccount.validateUpdateAccount, accountController.updateAccount); 
-app.delete("/accounts/:id", accountController.deleteAccount); 
-app.post("/accounts/check", accountController.checkPassword);
+// only account owner
+app.put("/accounts/:id", authenticate.verifyJWT, validateAccount.validateUpdateAccount, accountController.updateAccount);
+app.post("/accounts/check", authenticate.verifyJWT, accountController.checkPassword);
+// account owner and admin
+app.delete("/accounts/:id", authenticate.verifyJWT, accountController.deleteAccount);
+// to do: update controller, update frontend
+
 
 // post routes
 app.get("/posts", postController.getAllPosts);
 app.get("/posts/:id", postController.getPostById);
 app.post("/posts", validatePost.validateCreatePost, postController.createPost);
-app.put("/posts/:id", validatePost.validateUpdatePost, postController.updatePost); 
-app.delete("/posts/:id", postController.deletePost); 
+app.put("/posts/:id", validatePost.validateUpdatePost, postController.updatePost);
+app.delete("/posts/:id", postController.deletePost);
 app.get("/posts/:id/replyCount", postController.getReplyCount); // route to get reply count for a post (used in frontend js)
 
 // reply routes
@@ -57,7 +62,7 @@ app.delete("/replies/:id", authenticate.verifyJWT, replyController.deleteReply);
 app.get("/quiz/questions", quizController.getAllQuizQuestions);
 app.get("/quiz/questions/:id", quizController.getQuizQuestionById);
 app.post("/quiz/questions", quizController.createQuizQuestion);
-app.put("/quiz/questions/:id", quizController.updateQuizQuestion); 
+app.put("/quiz/questions/:id", quizController.updateQuizQuestion);
 app.delete("/quiz/questions/:id", quizController.deleteQuizQuestionById);
 
 //answer routes
@@ -74,6 +79,10 @@ app.listen(port, async () => {
   try {
     // Connect to the database
     await sql.connect(dbConfig);
+
+    // seeding database
+    seedDatabase();
+
     console.log("Database connection established successfully");
   } catch (err) {
     console.error("Database connection error:", err);

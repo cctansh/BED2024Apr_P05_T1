@@ -34,7 +34,8 @@ document.getElementById('change-password').addEventListener('submit', async func
     const oldPasswordMatch = await fetch(`/accounts/check`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ id: accId, password: oldPassword})
     });
@@ -54,7 +55,8 @@ document.getElementById('change-password').addEventListener('submit', async func
         const response = await fetch(`/accounts/${accId}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(changePasswordData)
         });

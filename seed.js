@@ -167,4 +167,4 @@ async function seedDatabase() {
     }
 }
 
-seedDatabase();
+module.exports = seedDatabase;

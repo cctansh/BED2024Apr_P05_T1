@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const token = localStorage.getItem('token');
     const loginAccId = localStorage.getItem('loginAccId');
-    const loginAccRole = localStorage.getItem('loginAccRole');
 
     if (token) {
         window.location.href = `profile.html?id=${loginAccId}`;

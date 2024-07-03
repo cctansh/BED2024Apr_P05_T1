@@ -284,7 +284,10 @@ async function fetchReplyCount(postId) {
 
 async function deleteReply(replyId) {
     const response = await fetch(`/replies/${replyId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
     });
     if (!response.ok) {
         alert('Failed to delete reply.');
@@ -321,7 +324,8 @@ async function deleteAccount(profileId) {
         fetch('/accounts/' + profileId, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         })
 
