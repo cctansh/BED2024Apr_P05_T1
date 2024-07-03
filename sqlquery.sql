@@ -41,7 +41,7 @@ CREATE TABLE Account
 accId smallint IDENTITY(1,1),
 accName varchar(50) NOT NULL,
 accEmail varchar(120) NOT NULL,
-accPassword varchar(50) NOT NULL,
+accPassword varchar(60) NOT NULL,
 accRole varchar(6) CHECK (accRole IN ('member', 'admin')) NOT NULL
 CONSTRAINT PK_Account PRIMARY KEY (accId)
 );

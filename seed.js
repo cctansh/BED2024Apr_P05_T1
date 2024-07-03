@@ -1,16 +1,107 @@
 const sql = require('mssql');
 const dbConfig = require("./dbConfig");
+const bcrypt = require('bcryptjs');
 
 async function seedDatabase() {
     try {
         await sql.connect(dbConfig);
 
+        // Drop existing tables (optional if you want to recreate them entirely)
+        await sql.query(`
+            if exists (SELECT * FROM sysobjects 
+            WHERE id = object_id('dbo.Reply') and sysstat & 0xf = 3)
+            DROP TABLE dbo.Reply;
+
+            if exists (SELECT * FROM sysobjects 
+            WHERE id = object_id('dbo.Post') and sysstat & 0xf = 3)
+            DROP TABLE dbo.Post;
+
+            if exists (SELECT * FROM sysobjects 
+            WHERE id = object_id('dbo.Account') and sysstat & 0xf = 3)
+            DROP TABLE dbo.Account;
+
+            if exists (SELECT * FROM sysobjects 
+            WHERE id = object_id('dbo.AnswerChoices') and sysstat & 0xf = 3)
+            DROP TABLE dbo.AnswerChoices;
+
+            if exists (SELECT * FROM sysobjects 
+            WHERE id = object_id('dbo.QuizQuestions') and sysstat & 0xf = 3)
+            DROP TABLE dbo.QuizQuestions;
+        `);
+
+        // Create tables
+        await sql.query(`
+            CREATE TABLE Account 
+            (
+            accId smallint IDENTITY(1,1),
+            accName varchar(50) NOT NULL,
+            accEmail varchar(120) NOT NULL,
+            accPassword varchar(60) NOT NULL,
+            accRole varchar(6) CHECK (accRole IN ('member', 'admin')) NOT NULL
+            CONSTRAINT PK_Account PRIMARY KEY (accId)
+            );
+
+            CREATE TABLE Post
+            ( 
+            postId smallint IDENTITY(1,1),
+            postDateTime smalldatetime NOT NULL, 
+            postTitle varchar(255) NOT NULL,
+            postText varchar(8000) NOT NULL,
+            postEdited bit NOT NULL,
+            accId smallint NOT NULL,
+            CONSTRAINT PK_Post PRIMARY KEY (postId),
+            CONSTRAINT FK_Post_accId
+            FOREIGN KEY (accId) REFERENCES Account(accId)
+            ); 
+
+            CREATE TABLE Reply
+            ( 
+            replyId smallint IDENTITY(1,1), 
+            replyDateTime smalldatetime NOT NULL, 
+            replyText varchar(5000) NOT NULL,
+            replyEdited bit NOT NULL,
+            adminEdit bit NOT NULL,
+            accId smallint NOT NULL,
+            replyTo smallint NOT NULL,
+            CONSTRAINT PK_Reply PRIMARY KEY (replyId),
+            CONSTRAINT FK_Reply_accId
+            FOREIGN KEY (accId) REFERENCES Account(accId),
+            CONSTRAINT FK_Reply_replyTo
+            FOREIGN KEY (replyTo) REFERENCES Post(postId)
+            ); 
+
+            CREATE TABLE QuizQuestions (
+                id INT IDENTITY PRIMARY KEY,
+                question TEXT NOT NULL,
+                image_path TEXT,
+                
+            );
+
+
+            CREATE TABLE AnswerChoices (
+                id INT IDENTITY PRIMARY KEY,
+                question_id INT NOT NULL,
+                answer_text TEXT,
+                is_correct BIT,
+                explanation TEXT,
+                FOREIGN KEY (question_id) REFERENCES QuizQuestions(id)
+            );
+        `);
+
+        // Hash passwords
+        let salt = await bcrypt.genSalt(10);
+        const hashedPassword1 = await bcrypt.hash('abcd1234', salt);
+        salt = await bcrypt.genSalt(10);
+        const hashedPassword2 = await bcrypt.hash('abcd1234', salt);
+        salt = await bcrypt.genSalt(10);
+        const hashedPassword3 = await bcrypt.hash('abcd1234', salt);
+
         // Insert data into Account table
         await sql.query(`
             INSERT INTO Account(accName, accEmail, accPassword, accRole)
-            VALUES ('account1', 'hi@gmail.com', 'abcd1234', 'member'),  
-                   ('account2', 'hello@yahoo.com.sg', 'abcd1234', 'member'),
-                   ('account3', 'haha@yahoo.com.sg', 'abcd1234', 'admin');
+            VALUES ('account1', 'hi@gmail.com', '${hashedPassword1}', 'member'),  
+                   ('account2', 'hello@yahoo.com.sg', '${hashedPassword2}', 'member'),
+                   ('account3', 'haha@yahoo.com.sg', '${hashedPassword3}', 'admin');
         `);
 
         // Insert data into Post table
@@ -76,4 +167,4 @@ async function seedDatabase() {
     }
 }
 
-module.exports = seedDatabase;
+seedDatabase();

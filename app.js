@@ -74,7 +74,6 @@ app.listen(port, async () => {
     // Connect to the database
     await sql.connect(dbConfig);
     console.log("Database connection established successfully");
-    await seedDatabase();
   } catch (err) {
     console.error("Database connection error:", err);
     // Terminate the application with an error code (optional)
