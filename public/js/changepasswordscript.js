@@ -30,20 +30,19 @@ document.getElementById('change-password').addEventListener('submit', async func
     const errorField = document.getElementById('changePasswordError');
     errorField.textContent = ''; // Clear previous error messages
 
-    //check old password matches
-    const oldPasswordConfirm = await fetchOldPassword(accId);
-
-    //testing
-    console.log(oldPassword);
-    console.log(oldPasswordConfirm);
-    console.log(changePasswordData.accPassword);
-    console.log(confirmPassword);
-
+    //old password match
+    const oldPasswordMatch = await fetch(`/accounts/check`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: accId, password: oldPassword})
+    });
 
     if (!changePasswordData.accPassword || !oldPassword || !confirmPassword) {
         errorField.textContent = 'Change password failed: All fields must be filled.';
         return;
-    } else if (oldPassword != oldPasswordConfirm) {
+    } else if (!oldPasswordMatch) {
         errorField.textContent = 'Change password failed: Old password does not match';
         return;
     } else if (changePasswordData.accPassword != confirmPassword) {
@@ -73,9 +72,3 @@ document.getElementById('change-password').addEventListener('submit', async func
         errorField.textContent = 'Change password failed: ' + err.message;
     }
 });
-
-async function fetchOldPassword(accId) {
-    const response = await fetch(`/accounts/${accId}`);
-    const account = await response.json();
-    return account.accPassword;
-}

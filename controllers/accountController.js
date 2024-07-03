@@ -1,4 +1,5 @@
 const Account = require("../models/account");
+const bcrypt = require("bcryptjs");
 
 const getAllAccounts = async (req, res) => {
   try {
@@ -26,6 +27,9 @@ const getAccountById = async (req, res) => {
 
 const createAccount = async (req, res) => {
     const newAccount = req.body;
+
+    // add check if account email already exists
+
     try {
       const createdAccount = await Account.createAccount(newAccount);
       res.status(201).json(createdAccount);
@@ -94,6 +98,27 @@ const getPostsAndRepliesByAccount = async (req, res) => {
   }
 };
 
+const checkPassword = async (req, res) => {
+  const {id, password} = req.body;
+  try {
+    const account = await Account.getAccountById(id);
+    if (!account) {
+      return res.status(404).json({ message: "Account not found" });
+    }
+
+    const passwordMatch = await bcrypt.compare(password, account.accPassword);
+    if (!passwordMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    // Passwords match
+    return res.status(200).json({ message: "Password match" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error retrieving account");
+  }
+}
+
 
 module.exports = {
   getAllAccounts,
@@ -102,5 +127,6 @@ module.exports = {
   updateAccount,
   deleteAccount,
   loginAccount,
-  getPostsAndRepliesByAccount
+  getPostsAndRepliesByAccount,
+  checkPassword
 };

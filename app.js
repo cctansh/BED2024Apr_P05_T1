@@ -32,6 +32,7 @@ app.post("/accounts/login", validateAccount.validateLoginAccount, accountControl
 app.post("/accounts", validateAccount.validateCreateAccount, accountController.createAccount);
 app.put("/accounts/:id", validateAccount.validateUpdateAccount, accountController.updateAccount); 
 app.delete("/accounts/:id", accountController.deleteAccount); 
+app.post("/accounts/check", accountController.checkPassword);
 
 // post routes
 app.get("/posts", postController.getAllPosts);

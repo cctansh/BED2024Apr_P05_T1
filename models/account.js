@@ -1,5 +1,6 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
 
@@ -50,6 +51,10 @@ class Account {
     }
 
     static async createAccount(newAccountData) {
+        //hashing password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newAccountData.accPassword, salt);
+
         const connection = await sql.connect(dbConfig);
 
         const sqlQuery = `INSERT INTO Account (accName, accEmail, accPassword, accRole) VALUES (@accName, @accEmail, @accPassword, @accRole); SELECT SCOPE_IDENTITY() AS accId;`; 
@@ -57,7 +62,7 @@ class Account {
         const request = connection.request();
         request.input("accName", newAccountData.accName);
         request.input("accEmail", newAccountData.accEmail);
-        request.input("accPassword", newAccountData.accPassword);
+        request.input("accPassword", hashedPassword);
         request.input("accRole", newAccountData.accRole);
 
         const result = await request.query(sqlQuery);
@@ -87,8 +92,10 @@ class Account {
             }
     
             if (newAccountData.accPassword) {
+                const salt = await bcrypt.genSalt(10);
+                const hashedPassword = await bcrypt.hash(newAccountData.accPassword, salt);
                 sqlQuery += 'accPassword = @accPassword, ';
-                params.push({ name: 'accPassword', type: sql.VarChar, value: newAccountData.accPassword });
+                params.push({ name: 'accPassword', type: sql.VarChar, value: hashedPassword });
             }
 
             if (newAccountData.accRole) {
@@ -168,29 +175,30 @@ class Account {
     static async loginAccount(loginAccountData) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Account WHERE accEmail = @accEmail AND accPassword = @accPassword`; 
+        const sqlQuery = `SELECT * FROM Account WHERE accEmail = @accEmail`; 
 
         const request = connection.request();
         request.input("accEmail", loginAccountData.accEmail);
-        request.input("accPassword", loginAccountData.accPassword);
 
         const result = await request.query(sqlQuery);
 
         connection.close();
 
         if (result.recordset[0]) {
-            const account = new Account(
-                result.recordset[0].accId,
-                result.recordset[0].accName,
-                result.recordset[0].accEmail,
-                result.recordset[0].accPassword,
-                result.recordset[0].accRole
-            );
-            const token = jwt.sign({ accId: account.accId.toString(), accRole: account.accRole }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '8h' });
-            return token;
-        } else {
-            return null;
-        }
+            const passwordMatch = await bcrypt.compare(loginAccountData.accPassword, result.recordset[0].accPassword);
+            if (passwordMatch) {
+                const account = new Account(
+                    result.recordset[0].accId,
+                    result.recordset[0].accName,
+                    result.recordset[0].accEmail,
+                    result.recordset[0].accPassword,
+                    result.recordset[0].accRole
+                );
+                const token = jwt.sign({ accId: account.accId.toString(), accRole: account.accRole }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '8h' });
+                return token;
+            }
+        } 
+        return null;
     }
 
     static async getPostsAndRepliesByAccount(id) {
