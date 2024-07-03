@@ -96,6 +96,7 @@ CREATE TABLE AnswerChoices (
 );
 
 
+/* insert statements
 
 -- insert temp data for testing
 INSERT INTO Account(accName, accEmail, accPassword, accRole)
@@ -172,3 +173,5 @@ SELECT * FROM Post;
 SELECT * FROM Reply;
 SELECT * FROM QuizQuestions;
 SELECT * FROM AnswerChoices;
+
+*/

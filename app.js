@@ -11,6 +11,7 @@ const validateAccount = require("./middlewares/validateAccount")
 const validatePost = require("./middlewares/validatePost")
 const validateReply = require("./middlewares/validateReply")
 const authenticate = require("./middlewares/authenticate")
+const seedDatabase = require("./seed");
 
 const app = express();
 const port = process.env.PORT || 3000; // Use environment variable or default port
@@ -73,6 +74,7 @@ app.listen(port, async () => {
     // Connect to the database
     await sql.connect(dbConfig);
     console.log("Database connection established successfully");
+    await seedDatabase();
   } catch (err) {
     console.error("Database connection error:", err);
     // Terminate the application with an error code (optional)
