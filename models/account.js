@@ -258,6 +258,51 @@ class Account {
             accId: row.accId
         }));
     }
+
+    // for checking create account
+    static async getAccountByEmail(email) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Account WHERE accEmail = @accEmail`; 
+
+        const request = connection.request();
+        request.input("accEmail", email);
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new Account(
+                result.recordset[0].accId,
+                result.recordset[0].accName,
+                result.recordset[0].accEmail,
+                result.recordset[0].accPassword,
+                result.recordset[0].accRole
+                )
+            : null;
+    }
+
+    static async getAccountByName(name) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `SELECT * FROM Account WHERE accName = @accName`; 
+
+        const request = connection.request();
+        request.input("accName", name);
+        const result = await request.query(sqlQuery);
+
+        connection.close();
+
+        return result.recordset[0]
+            ? new Account(
+                result.recordset[0].accId,
+                result.recordset[0].accName,
+                result.recordset[0].accEmail,
+                result.recordset[0].accPassword,
+                result.recordset[0].accRole
+                )
+            : null;
+    }
 }
 
 module.exports = Account;

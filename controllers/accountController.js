@@ -28,7 +28,17 @@ const getAccountById = async (req, res) => {
 const createAccount = async (req, res) => {
     const newAccount = req.body;
 
-    // add check if account email already exists
+    // Check for existing accEmail
+    const existingEmail = await Account.getAccountByEmail(newAccount.accEmail);
+    if (existingEmail) {
+        return res.status(400).json({ message: "Email is already in use" });
+    }
+
+    // Check for existing accEmail
+    const existingName = await Account.getAccountByName(newAccount.accName);
+    if (existingName) {
+        return res.status(400).json({ message: "Display name is already in use" });
+    }
 
     try {
       const createdAccount = await Account.createAccount(newAccount);
