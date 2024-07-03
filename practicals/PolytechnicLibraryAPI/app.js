@@ -23,6 +23,8 @@ app.put("/books/:bookId/availability", authenticate.verifyJWT, validateBook.vali
 app.get("/users", userController.getAllUsers);
 app.post("/register", validateUser.validateRegister, userController.registerUser);
 app.post("/login", validateUser.validateLogin, userController.login);
+app.post("/token", userController.token);
+app.delete("/logout", userController.logout);
 
 // database
 app.listen(port, async () => {

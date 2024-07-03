@@ -31,6 +31,12 @@ CREATE TABLE Books (
     availability CHAR(1) CHECK (availability IN ('Y', 'N')) NOT NULL
 );
 
+-- Refresh Tokens
+CREATE TABLE RefreshTokens (
+    token_id INT PRIMARY KEY IDENTITY(1,1),
+    refreshToken VARCHAR(255) NOT NULL
+);
+
 -- Books Data
 INSERT INTO Books(title, author, availability)
 VALUES ( 'title1', 'author1', 'Y'),
