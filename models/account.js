@@ -1,7 +1,7 @@
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 const jwt = require("jsonwebtoken");
-const secretKey = "jwt_secret"; 
+require('dotenv').config();
 
 class Account {
     constructor(accId, accName, accEmail, accPassword, accRole) {
@@ -186,7 +186,7 @@ class Account {
                 result.recordset[0].accPassword,
                 result.recordset[0].accRole
             );
-            const token = jwt.sign({ accId: account.accId.toString(), accRole: account.accRole }, secretKey, { expiresIn: '8h' });
+            const token = jwt.sign({ accId: account.accId.toString(), accRole: account.accRole }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '8h' });
             return token;
         } else {
             return null;

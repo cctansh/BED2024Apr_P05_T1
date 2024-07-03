@@ -1,6 +1,4 @@
 const Account = require("../models/account");
-const jwt = require("jsonwebtoken");
-const secretKey = "jwt_secret"; 
 
 const getAllAccounts = async (req, res) => {
   try {
