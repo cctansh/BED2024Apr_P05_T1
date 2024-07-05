@@ -328,11 +328,8 @@ async function deleteAccount(profileId) {
                 'Authorization': `Bearer ${token}`
             }
         })
-
-        alert('Account deleted. Returning to login page.');
-        window.location.href = 'loginreg.html';
     } catch (err) {
-        console.log('Deleteion failed: ' + err.message);
+        console.log('Deletion failed: ' + err.message);
     }
 }
 
@@ -357,8 +354,18 @@ deleteAccButton.addEventListener('click', async () => {
         localStorage.removeItem('token');
         localStorage.removeItem('loginAccId');
         localStorage.removeItem('loginAccRole');
-
+        alert('Account deleted. Returning to login page.');
         window.location.href = 'loginreg.html'; // Redirect to login page after logout
+    }
+});
+
+const deleteAccAdminButton = document.getElementById('delete-acc-admin');
+deleteAccAdminButton.addEventListener('click', async () => {
+    const confirmed = confirm("Are you sure you want to delete this account?");
+    if (confirmed) {
+        await deleteAccount(profileId);
+        alert('Account deleted. Returning to home page.');
+        window.location.href = 'index.html'; // Redirect to login page after logout
     }
 });
 
