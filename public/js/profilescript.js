@@ -366,6 +366,14 @@ const changePasswordButton = document.getElementById('change-password');
 changePasswordButton.addEventListener('click', () => {
     window.location.href = `/changepassword.html?id=${profileId}`;
 });
+const changeNameButton = document.getElementById('change-name');
+changeNameButton.addEventListener('click', () => {
+    window.location.href = `/changename.html?id=${profileId}`;
+});
+const changeEmailButton = document.getElementById('change-email');
+changeEmailButton.addEventListener('click', () => {
+    window.location.href = `/changeemail.html?id=${profileId}`;
+});
 
 setProfileName(profileId);
 setAdminIndicator(profileId);

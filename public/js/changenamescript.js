@@ -19,35 +19,21 @@ function getUrlParams() {
 
 const accId = getUrlParams();
 
-document.getElementById('change-password').addEventListener('submit', async function (e) {
+document.getElementById('change-name').addEventListener('submit', async function (e) {
     e.preventDefault();
-    const changePasswordData = {
-        accPassword: document.getElementById('newPassword').value
+    const changeNameData = {
+        accName: document.getElementById('newName').value
     };
-    const oldPassword = document.getElementById('oldPassword').value;
-    const confirmPassword = document.getElementById('newPasswordConfirm').value;
+    const confirmName = document.getElementById('newNameConfirm').value;
 
-    const errorField = document.getElementById('changePasswordError');
+    const errorField = document.getElementById('changeNameError');
     errorField.textContent = ''; // Clear previous error messages
 
-    //old password match
-    const oldPasswordMatch = await fetch(`/accounts/check`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ id: accId, password: oldPassword})
-    });
-
-    if (!changePasswordData.accPassword || !oldPassword || !confirmPassword) {
+    if (!changeNameData.accName || !confirmName) {
         errorField.textContent = 'Change password failed: All fields must be filled.';
         return;
-    } else if (!oldPasswordMatch) {
-        errorField.textContent = 'Change password failed: Old password does not match';
-        return;
-    } else if (changePasswordData.accPassword !== confirmPassword) {
-        errorField.textContent = 'Change password failed: New passwords do not match';
+    } else if (changeNameData.accName !== confirmName) {
+        errorField.textContent = 'Change password failed: New names do not match';
         return;
     }
 
@@ -58,7 +44,7 @@ document.getElementById('change-password').addEventListener('submit', async func
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify(changePasswordData)
+            body: JSON.stringify(changeNameData)
         });
 
         if (!response.ok) {
@@ -66,11 +52,11 @@ document.getElementById('change-password').addEventListener('submit', async func
         }
 
         const result = await response.json();
-        alert('Change password successful. Returning to profile page.');
+        alert('Change name successful. Returning to profile page.');
 
         window.location.href = `profile.html?id=${accId}`;
     } catch (err) {
         // Display error messages
-        errorField.textContent = 'Change password failed: ' + err.message;
+        errorField.textContent = 'Change name failed: ' + err.message;
     }
 });
