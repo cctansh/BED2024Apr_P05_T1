@@ -14,6 +14,7 @@ function verifyJWT(req, res, next) {
             return res.status(403).json({ message: "Forbidden" });
         }
 
+        // ive put speciifc role/user authorisation in the controllers themselves
         /*
         const authorizedRoles = {
             "POST /replies": ["member", "admin"],

@@ -97,11 +97,6 @@ class Account {
                 sqlQuery += 'accPassword = @accPassword, ';
                 params.push({ name: 'accPassword', type: sql.VarChar, value: hashedPassword });
             }
-
-            if (newAccountData.accRole) {
-                sqlQuery += 'accRole = @accRole, ';
-                params.push({ name: 'accRole', type: sql.VarChar, value: newAccountData.accRole });
-            }
     
             // Remove the last comma and add the WHERE clause
             sqlQuery = sqlQuery.slice(0, -2) + ' WHERE accId = @id';
@@ -114,7 +109,7 @@ class Account {
     
             await request.query(sqlQuery);
     
-            return await this.getAccountById(id); 
+            return this.getAccountById(id);
         } catch (err) {
             console.error("SQL error", err);
             throw err;
@@ -123,6 +118,22 @@ class Account {
                 await connection.close();
             }
         }
+    }
+
+    static async updateAccountRole(id, newRoleData) {
+        const connection = await sql.connect(dbConfig);
+
+        const sqlQuery = `UPDATE Account SET accRole = @accRole WHERE accId = @id`;
+
+        const request = connection.request();
+        request.input("id", id);
+        request.input("accRole", newRoleData.accRole);
+
+        await request.query(sqlQuery);
+
+        connection.close();
+
+        return this.getAccountById(id);
     }
 
     static async deleteAccount(id) {

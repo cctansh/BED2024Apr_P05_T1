@@ -37,9 +37,8 @@ const validateUpdateAccount = (req, res, next) => {
             .optional()
             .messages({
                 'string.pattern.base': 'Password must contain at least one letter and one number.'
-            }),
-        accRole: Joi.string().valid('admin','member').optional()
-    }).or('accName', 'accEmail', 'accPassword', 'accRole');
+            })
+    }).or('accName', 'accEmail', 'accPassword');
 
     const validation = schema.validate(req.body, { abortEarly: false }); // Validate request body
 
@@ -50,6 +49,22 @@ const validateUpdateAccount = (req, res, next) => {
     }
 
     next(); // If validation passes, proceed to the next route handler
+};
+
+const validateUpdateAccountRole = async (req, res, next) => {
+    const schema = Joi.object({
+        accRole: Joi.string().valid('admin','member').required()
+    });
+
+    const validation = schema.validate(req.body, { abortEarly: false });
+
+    if (validation.error) {
+        const errors = validation.error.details.map((error) => error.message);
+        res.status(400).json({ message: "Validation error", errors });
+        return;
+    }
+
+    next();
 };
 
 const validateLoginAccount = async (req, res, next) => {
@@ -73,5 +88,6 @@ const validateLoginAccount = async (req, res, next) => {
 module.exports = {
     validateCreateAccount,
     validateUpdateAccount,
+    validateUpdateAccountRole,
     validateLoginAccount
 };

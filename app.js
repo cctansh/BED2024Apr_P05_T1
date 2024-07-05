@@ -36,7 +36,8 @@ app.put("/accounts/:id", authenticate.verifyJWT, validateAccount.validateUpdateA
 app.post("/accounts/check", authenticate.verifyJWT, accountController.checkPassword);
 // account owner and admin
 app.delete("/accounts/:id", authenticate.verifyJWT, accountController.deleteAccount);
-// to do: update controller, update frontend
+// only admin
+app.put("/accounts/role/:id", authenticate.verifyJWT, validateAccount.validateUpdateAccountRole, accountController.updateAccountRole);
 
 
 // post routes
@@ -48,12 +49,13 @@ app.delete("/posts/:id", postController.deletePost);
 app.get("/posts/:id/replyCount", postController.getReplyCount); // route to get reply count for a post (used in frontend js)
 
 // reply routes
-app.get("/replies/search/account", replyController.searchRepliesByAccount);
-app.get("/replies/search/text", replyController.searchRepliesByText);
+app.get("/replies/search/account", replyController.searchRepliesByAccount); // consider adding search function
+app.get("/replies/search/text", replyController.searchRepliesByText); // consider adding search function
 app.get("/replies", replyController.getAllReplies);
 app.get("/replies/:id", replyController.getReplyById);
 app.get("/replies/by-post/:id", replyController.getRepliesByPost);
 app.get("/replies/post/:id", replyController.getRepliedPost);
+// reply owner and admin
 app.post("/replies", authenticate.verifyJWT, validateReply.validateCreateReply, replyController.createReply);
 app.put("/replies/:id", authenticate.verifyJWT, validateReply.validateUpdateReply, replyController.updateReply);
 app.delete("/replies/:id", authenticate.verifyJWT, replyController.deleteReply);

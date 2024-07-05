@@ -74,6 +74,31 @@ const updateAccount = async (req, res) => {
   }
 };
 
+const updateAccountRole = async (req, res) => {
+  const id = parseInt(req.params.id);
+  const newRoleData = req.body;
+
+  try {
+    const account = await Account.getAccountById(id);
+    if (!account) {
+        return res.status(404).send("Account not found");
+    }
+
+    if (req.user.accRole != 'admin') {
+      return res.status(403).json({ message: "You are not authorized to update account roles" });
+    }
+
+    const updatedAccount = await Account.updateAccount(id, newRoleData);
+    if (!updatedAccount) {
+      return res.status(404).send("Account not found");
+    }
+    res.json(updatedAccount);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error updating account");
+  }
+};
+
 const deleteAccount = async (req, res) => {
   const id = parseInt(req.params.id);
 
@@ -157,6 +182,7 @@ module.exports = {
   getAccountById,
   createAccount,
   updateAccount,
+  updateAccountRole,
   deleteAccount,
   loginAccount,
   getPostsAndRepliesByAccount,
