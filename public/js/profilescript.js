@@ -333,6 +333,28 @@ async function deleteAccount(profileId) {
     }
 }
 
+async function updateAccountRole(profileId) {
+    const changeRoleData = {
+        accRole: "admin"
+    };
+    try {
+        const response = await fetch(`/accounts/role/${profileId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(changeRoleData)
+        });
+
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
+    } catch (err) {
+        console.log('Change role failed: ' + err.message);
+    }
+}
+
 const profileId = getUrlParams();
 
 const logoutButton = document.getElementById('logout');
@@ -359,16 +381,6 @@ deleteAccButton.addEventListener('click', async () => {
     }
 });
 
-const deleteAccAdminButton = document.getElementById('delete-acc-admin');
-deleteAccAdminButton.addEventListener('click', async () => {
-    const confirmed = confirm("Are you sure you want to delete this account?");
-    if (confirmed) {
-        await deleteAccount(profileId);
-        alert('Account deleted. Returning to home page.');
-        window.location.href = 'index.html'; // Redirect to login page after logout
-    }
-});
-
 const changePasswordButton = document.getElementById('change-password');
 changePasswordButton.addEventListener('click', () => {
     window.location.href = `/changepassword.html?id=${profileId}`;
@@ -380,6 +392,26 @@ changeNameButton.addEventListener('click', () => {
 const changeEmailButton = document.getElementById('change-email');
 changeEmailButton.addEventListener('click', () => {
     window.location.href = `/changeemail.html?id=${profileId}`;
+});
+
+// admin view
+const changeRoleButton = document.getElementById('change-role');
+changeRoleButton.addEventListener('click', async () => {
+    const confirmed = confirm("Are you sure you want to make this user an admin?");
+    if (confirmed) {
+        await updateAccountRole(profileId);
+        alert('Success');
+        window.location.href = `/profile.html?id=${profileId}`; //refresh page
+    }
+});
+const deleteAccAdminButton = document.getElementById('delete-acc-admin');
+deleteAccAdminButton.addEventListener('click', async () => {
+    const confirmed = confirm("Are you sure you want to delete this account?");
+    if (confirmed) {
+        await deleteAccount(profileId);
+        alert('Account deleted. Returning to home page.');
+        window.location.href = 'index.html'; // Redirect to login page after logout
+    }
 });
 
 setProfileName(profileId);

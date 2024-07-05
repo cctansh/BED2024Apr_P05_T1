@@ -88,7 +88,7 @@ const updateAccountRole = async (req, res) => {
       return res.status(403).json({ message: "You are not authorized to update account roles" });
     }
 
-    const updatedAccount = await Account.updateAccount(id, newRoleData);
+    const updatedAccount = await Account.updateAccountRole(id, newRoleData);
     if (!updatedAccount) {
       return res.status(404).send("Account not found");
     }

@@ -109,7 +109,7 @@ class Account {
     
             await request.query(sqlQuery);
     
-            return this.getAccountById(id);
+            return await this.getAccountById(id);
         } catch (err) {
             console.error("SQL error", err);
             throw err;
@@ -133,7 +133,7 @@ class Account {
 
         connection.close();
 
-        return this.getAccountById(id);
+        return await this.getAccountById(id);
     }
 
     static async deleteAccount(id) {
