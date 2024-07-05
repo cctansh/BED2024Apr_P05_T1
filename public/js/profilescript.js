@@ -299,11 +299,14 @@ async function setProfileName(profileId) {
     document.getElementById("profile-name").textContent = `${profileName}'s Profile`;
 }
 
-async function setAdminIndicator(profileId) {
+async function setAdminIndicatorAndView(profileId) {
     const adminIndicator = document.getElementById('admin');
+    const adminView = document.getElementById('adminView');
     const profileRole = await fetchAccountRole(profileId);
     if (profileRole == 'admin') {
         adminIndicator.classList.remove('hide');
+    } else if (loginAccRole == 'admin') {
+        adminView.classList.remove('hide');
     }
 }
 
@@ -415,7 +418,7 @@ deleteAccAdminButton.addEventListener('click', async () => {
 });
 
 setProfileName(profileId);
-setAdminIndicator(profileId);
+setAdminIndicatorAndView(profileId);
 
 if (loginAccId != profileId) {
     document.getElementById("profile").classList.add('hide');
