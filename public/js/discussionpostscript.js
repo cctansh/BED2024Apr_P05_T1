@@ -31,10 +31,20 @@ async function fetchPost(postId) {
         // fetch reply count
         const replyCount = await fetchReplyCount(post.postId);
 
-        postHeader.innerHTML = `
-            <div class="account">${await fetchAccountName(post.accId)}</div>
-            <div class="datetime"><i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}</div>
-        `
+        // added edit status for post
+        const postEditStatus = await fetchEditStatus(post.postId);
+
+        if (postEditStatus === true) {
+            postHeader.innerHTML = `
+                <div class="account">${await fetchAccountName(post.accId)}</div>
+                <div class="datetime"><i class="bi bi-pencil-fill"></i>&nbsp<i>Edited</i>&nbsp&nbsp&nbsp&nbsp&nbsp<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}</div>
+            `
+        } else {
+            postHeader.innerHTML = `
+                <div class="account">${await fetchAccountName(post.accId)}</div>
+                <div class="datetime"><i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}</div>
+            `
+        }
 
         // Set the content of the existing <h1> tag
         const h1Title = document.querySelector('h1');
@@ -215,6 +225,7 @@ const postId = getUrlParams();
 
 fetchPost(postId);
 fetchReplies(postId);
+fetchEditStatus(postId);
 
 const addReply = document.getElementById("add-reply");
 addReply.onclick = () => {
@@ -231,4 +242,11 @@ async function fetchReplyCount(postId) {
     const response = await fetch(`/posts/${postId}/replyCount`);
     const replyCount = await response.json();
     return replyCount.replyCount;
+}
+
+// function to fetch edit status of a post
+async function fetchEditStatus(postId) {
+    const response = await fetch(`/posts/${postId}`);
+    const editStatus = await response.json();
+    return editStatus.postEdited;
 }
