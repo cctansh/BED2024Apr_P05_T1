@@ -449,6 +449,16 @@ h5 {
     margin-top: -0.8rem;
 }
 
+/* change account */
+
+#changePasswordError,
+#changeNameError,
+#changeEmailError {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+
 /* community rules styling */
 ol {
     margin-top: 10px;

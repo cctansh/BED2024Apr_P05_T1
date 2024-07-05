@@ -30,10 +30,10 @@ document.getElementById('change-name').addEventListener('submit', async function
     errorField.textContent = ''; // Clear previous error messages
 
     if (!changeNameData.accName || !confirmName) {
-        errorField.textContent = 'Change password failed: All fields must be filled.';
+        errorField.textContent = 'Change name failed: All fields must be filled.';
         return;
     } else if (changeNameData.accName !== confirmName) {
-        errorField.textContent = 'Change password failed: New names do not match';
+        errorField.textContent = 'Change name failed: New names do not match';
         return;
     }
 
@@ -59,4 +59,9 @@ document.getElementById('change-name').addEventListener('submit', async function
         // Display error messages
         errorField.textContent = 'Change name failed: ' + err.message;
     }
+});
+
+const cancelButton = document.getElementById('cancel-button');
+cancelButton.addEventListener('click', () => {
+    window.location.href = `/profile.html?id=${accId}`;
 });

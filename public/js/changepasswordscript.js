@@ -74,3 +74,8 @@ document.getElementById('change-password').addEventListener('submit', async func
         errorField.textContent = 'Change password failed: ' + err.message;
     }
 });
+
+const cancelButton = document.getElementById('cancel-button');
+cancelButton.addEventListener('click', () => {
+    window.location.href = `/profile.html?id=${accId}`;
+});

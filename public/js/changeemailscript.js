@@ -60,3 +60,8 @@ document.getElementById('change-email').addEventListener('submit', async functio
         errorField.textContent = 'Change email failed: ' + err.message;
     }
 });
+
+const cancelButton = document.getElementById('cancel-button');
+cancelButton.addEventListener('click', () => {
+    window.location.href = `/profile.html?id=${accId}`;
+});
