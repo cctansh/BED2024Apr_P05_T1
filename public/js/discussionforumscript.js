@@ -34,6 +34,9 @@ async function fetchPosts() {
         // fetch reply count
         const replyCount = await fetchReplyCount(post.postId);
 
+        // fetch edit status
+        const postEditStatus = await fetchEditStatus(post.postId);
+
         const dateTimeElement = document.createElement("div");
         dateTimeElement.classList.add("datetime");
         // Format the date and time
@@ -47,8 +50,12 @@ async function fetchPosts() {
         const formattedTime = `${hours}:${minutes}`;
 
         // display reply count and datetime
-        dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formattedDate}, ${formattedTime}`;
-
+        if (postEditStatus === true) {
+            dateTimeElement.innerHTML = `<i class="bi bi-pencil-fill"></i>&nbsp<i>Edited</i>&nbsp&nbsp&nbsp&nbsp&nbsp<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formattedDate}, ${formattedTime}`;
+        } else {
+            dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formattedDate}, ${formattedTime}`;
+        }
+        
         const textElement = document.createElement("div");
         textElement.classList.add("text");
         textElement.classList.add("title");
@@ -82,6 +89,13 @@ async function fetchReplyCount(postId) {
     const response = await fetch(`/posts/${postId}/replyCount`);
     const replyCount = await response.json();
     return replyCount.replyCount;
+}
+
+// function to fetch edit status of a post
+async function fetchEditStatus(postId) {
+    const response = await fetch(`/posts/${postId}`);
+    const editStatus = await response.json();
+    return editStatus.postEdited;
 }
 
 fetchPosts(); // Call the function to fetch and display book data
