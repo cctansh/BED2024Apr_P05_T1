@@ -80,7 +80,7 @@ const login = async (req, res) => {
 }
 
 function generateAccessToken(payload) {
-  return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "60s" }); 
+  return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "3600s" }); // edited this from 60s to 3600s for testing purposes
 }
 
 const token = async (req, res) => {

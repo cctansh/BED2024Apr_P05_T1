@@ -1,4 +1,6 @@
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json"); // Import generated spec
 const userController = require("./controllers/userController");
 const bookController = require("./controllers/bookController");
 const sql = require("mssql");
@@ -25,6 +27,9 @@ app.post("/register", validateUser.validateRegister, userController.registerUser
 app.post("/login", validateUser.validateLogin, userController.login);
 app.post("/token", userController.token);
 app.delete("/logout", userController.logout);
+
+// Serve the Swagger UI at a specific route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // database
 app.listen(port, async () => {
