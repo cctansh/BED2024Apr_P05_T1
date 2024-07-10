@@ -3,12 +3,13 @@ const dbConfig = require("../dbConfig");
 
 // added postTitle, postEdited field
 class Post {
-    constructor(postId, postDateTime, postTitle, postText, postEdited, accId) {
+    constructor(postId, postDateTime, postTitle, postText, postEdited, adminEdit, accId) {
         this.postId = postId;
         this.postDateTime = postDateTime;
         this.postTitle = postTitle;
         this.postText = postText;
         this.postEdited = postEdited;
+        this.adminEdit = adminEdit;
         this.accId = accId;
     }
 
@@ -23,7 +24,7 @@ class Post {
         connection.close();
 
         return result.recordset.map(
-        (row) => new Post(row.postId, row.postDateTime, row.postTitle, row.postText, row.postEdited, row.accId)
+        (row) => new Post(row.postId, row.postDateTime, row.postTitle, row.postText, row.postEdited, row.adminEdit, row.accId)
         ); 
     }
 
@@ -45,6 +46,7 @@ class Post {
             result.recordset[0].postTitle,
             result.recordset[0].postText,
             result.recordset[0].postEdited,
+            result.recordset[0].adminEdit,
             result.recordset[0].accId
             )
         : null; 
@@ -53,7 +55,7 @@ class Post {
     static async createPost(newPostData) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `INSERT INTO Post (postDateTime, postTitle, postText, postEdited, accId) VALUES (GETDATE(), @postTitle, @postText, 0, @accId); SELECT SCOPE_IDENTITY() AS postId;`; 
+        const sqlQuery = `INSERT INTO Post (postDateTime, postTitle, postText, postEdited, adminEdit, accId) VALUES (GETDATE(), @postTitle, @postText, 0, 0, @accId); SELECT SCOPE_IDENTITY() AS postId;`; 
 
         const request = connection.request();
         request.input("postTitle", newPostData.postTitle);
@@ -70,12 +72,13 @@ class Post {
     static async updatePost(id, newPostData) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `UPDATE Post SET postDateTime = GETDATE(), postTitle = @postTitle, postText = @postText, postEdited = 1 WHERE postId = @id`; 
+        const sqlQuery = `UPDATE Post SET postDateTime = GETDATE(), postTitle = @postTitle, postText = @postText, postEdited = 1, adminEdit = @adminEdit WHERE postId = @id`; 
 
         const request = connection.request();
         request.input("id", id);
         request.input("postTitle", newPostData.postTitle || null);
         request.input("postText", newPostData.postText || null);
+        request.input("adminEdit", newPostData.adminEdit);
 
         await request.query(sqlQuery);
 
