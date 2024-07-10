@@ -50,26 +50,35 @@ async function fetchPost(postId) {
     
             if (!postTitleText.length > 200) {
                 alert("Post title should be within 200 characters.");
+                return;
             }
     
             if (!postContentText) {
                 alert("Post content cannot be empty.");
+                return;
             }
     
             if (!postContentText.length > 10000) {
                 alert("Post content should be within 10000 characters.");
+                return;
             }
 
+            let adminEdit = 0;
+            if (loginAccRole == 'admin') {
+                adminEdit = 1;
+            }
             const newPostData = {
                 postTitle: postTitleText,
-                postText: postContentText
+                postText: postContentText,
+                adminEdit: adminEdit
             };
 
             try {
                 const response = await fetch(`/posts/${post.postId}`, {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
                     },
                     body: JSON.stringify(newPostData)
                 });
