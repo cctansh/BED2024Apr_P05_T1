@@ -34,15 +34,21 @@ async function fetchPost(postId) {
         // added edit status for post
         const postEditStatus = await fetchEditStatus(post.postId);
 
-        if (postEditStatus === true) {
-            postHeader.innerHTML = `
-                <div class="account">${await fetchAccountName(post.accId)}</div>
-                <div class="datetime"><i class="bi bi-pencil-fill"></i>&nbsp<i>Edited</i>&nbsp&nbsp&nbsp&nbsp&nbsp<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}</div>
-            `
-        } else {
+        // added display edit status based on who edited the post
+        if (postEditStatus == false) {
             postHeader.innerHTML = `
                 <div class="account">${await fetchAccountName(post.accId)}</div>
                 <div class="datetime"><i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}</div>
+            `
+        } else if ((post.adminEdit == true && loginAccId != post.accId) || (post.adminEdit == true && loginAccId == post.accId)) {
+            postHeader.innerHTML = `
+                <div class="account">${await fetchAccountName(post.accId)}</div>
+                <div class="datetime"><i class="bi bi-chat-dots-fill"></i>  ${replyCount} | <i class="bi bi-pencil-fill"></i>&nbsp<i>Edited by admin at ${formatDate(postDate)}</i></div>
+            `
+        } else if (post.adminEdit == false && postEditStatus == true) {
+            postHeader.innerHTML = `
+                <div class="account">${await fetchAccountName(post.accId)}</div>
+                <div class="datetime"><i class="bi bi-chat-dots-fill"></i>  ${replyCount} | <i class="bi bi-pencil-fill"></i>&nbsp<i>Edited at ${formatDate(postDate)}</i></div>
             `
         }
 
@@ -50,8 +56,8 @@ async function fetchPost(postId) {
         const h1Title = document.querySelector('h1');
         h1Title.textContent = post.postTitle; // Replace with the actual title from post data
 
-        // if user is owner of post, show different view
-        if (token && loginAccId && loginAccId == post.accId) {
+        // if user is owner of post or admin, show different view
+        if (token && ((loginAccId == post.accId) || (loginAccRole == "admin"))) {
             postContainer.innerHTML = `
             <div class="post">
                 <div class="text">${post.postText}</div>
@@ -200,7 +206,10 @@ function formatDate(ogDate) {
 // function for deleting post and redirect to main forum page
 async function deletePost(postId) {
     const response = await fetch(`/posts/${postId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
     });
     if (!response.ok) {
         alert('Failed to delete post.');
