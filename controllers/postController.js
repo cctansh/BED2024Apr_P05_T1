@@ -40,6 +40,16 @@ const updatePost = async (req, res) => {
   const newPostData = req.body;
 
   try {
+    const post = await Post.getPostById(postId);
+    if (!post) {
+      return res.status(404).send("Post not found");
+    }
+
+    // Check if the user is the owner of the post or an admin
+    if (post.accId != req.user.accId && req.user.accRole != 'admin') {
+      return res.status(403).json({ message: "You are not authorized to update this post" })
+    }
+
     const updatedPost = await Post.updatePost(postId, newPostData);
     if (!updatedPost) {
       return res.status(404).send("Post not found");
