@@ -42,6 +42,7 @@ const validateUpdatePost = (req, res, next) => {
   const schema = Joi.object({
     postTitle: Joi.string().min(1).max(8000).required(),
     postText: Joi.string().min(1).max(8000).required(),
+    adminEdit: Joi.number().integer().min(0).max(1).required()
   });
 
   const validation = schema.validate(req.body, { abortEarly: false }); // Validate request body
