@@ -44,7 +44,7 @@ app.put("/accounts/role/:id", authenticate.verifyJWT, validateAccount.validateUp
 app.get("/posts", postController.getAllPosts);
 app.get("/posts/:id", postController.getPostById);
 app.post("/posts", validatePost.validateCreatePost, postController.createPost);
-app.put("/posts/:id", validatePost.validateUpdatePost, postController.updatePost);
+app.put("/posts/:id", authenticate.verifyJWT, validatePost.validateUpdatePost, postController.updatePost);
 app.delete("/posts/:id", postController.deletePost);
 app.get("/posts/:id/replyCount", postController.getReplyCount); // route to get reply count for a post (used in frontend js)
 
