@@ -1,12 +1,14 @@
+// Import Post model to postController.js
 const Post = require("../models/post");
 
+// Controller to get all posts
 const getAllPosts = async (req, res) => {
   try {
-    const posts = await Post.getAllPosts();
-    res.json(posts);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error retrieving posts");
+    const posts = await Post.getAllPosts(); // Wait for promise to resolve
+    res.json(posts); // Return the posts in JSON
+  } catch (error) { 
+    console.error(error); // Log the error in console
+    res.status(500).send("Error retrieving posts"); // Respond with status code 500 with message "Error retrieving posts"
   }
 };
 
