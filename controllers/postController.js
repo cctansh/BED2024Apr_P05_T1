@@ -94,7 +94,7 @@ const getReplyCount = async (req, res) => {
   }
 };
 
-// Export all controllers from postController.js so that it can be imported and used in other files
+// Export all controllers from postController.js so that it can be imported and used in other files/modules
 module.exports = {
   getAllPosts,
   getPostById,

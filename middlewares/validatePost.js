@@ -80,7 +80,7 @@ const validateUpdatePost = (req, res, next) => {
   next(); // If validation passes, proceed to the next route handler
 };
 
-// Export all controllers from validatePost.js so that it can be imported and used in other files
+// Export all controllers from validatePost.js so that it can be imported and used in other files/modules
 module.exports = {
   validateCreatePost,
   validateUpdatePost
