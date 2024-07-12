@@ -8,7 +8,7 @@ const getAllPosts = async (req, res) => {
     res.json(posts); // Send the post data as JSON response
   } catch (error) { 
     console.error(error); // Log errors occured in console
-    res.status(500).send("Error retrieving posts"); // Respond with status code 500 with message "Error retrieving posts"
+    res.status(500).send("Error retrieving posts"); // Respond with status code 500 (Internal Server Error) with message "Error retrieving posts"
   }
 };
 
@@ -18,12 +18,12 @@ const getPostById = async (req, res) => {
   try {
     const post = await Post.getPostById(postId); // Retrieve the post with the postId from the data source
     if (!post) {
-      return res.status(404).send("Post not found"); // If post not found, send response with status code 404 with message "Post not found"
+      return res.status(404).send("Post not found"); // If post not found, send response with status code 404 (Not Found) with message "Post not found"
     }
     res.json(post); // If post is found, send the post data as JSON response
   } catch (error) {
     console.error(error); // Log errors occured in console
-    res.status(500).send("Error retrieving post"); // Respond with status code 500 with message "Error retrieving post"
+    res.status(500).send("Error retrieving post"); // Respond with status code 500 (Internal Server Error) with message "Error retrieving post"
   }
 };
 
@@ -32,10 +32,10 @@ const createPost = async (req, res) => {
     const newPost = req.body; // Extract the new post data from request body
     try {
       const createdPost = await Post.createPost(newPost); // Create new post
-      res.status(201).json(createdPost); // If successful, respond with status code 201 and return createdPost as JSON
+      res.status(201).json(createdPost); // If successful, respond with status code 201 (Created) and return createdPost as JSON
     } catch (error) {
       console.error(error); // Log errors occured in console
-      res.status(500).send("Error creating post"); // Respond with status code 500 with message "Error creating post"
+      res.status(500).send("Error creating post"); // Respond with status code 500 (Internal Server Error) with message "Error creating post"
     }
 };
 
@@ -47,22 +47,22 @@ const updatePost = async (req, res) => {
   try {
     const post = await Post.getPostById(postId); // Retrieve the post with the postId from the data source
     if (!post) {
-      return res.status(404).send("Post not found"); // If post not found, respond with status code 404 with message "Post not found"
+      return res.status(404).send("Post not found"); // If post not found, respond with status code 404 (Not Found) with message "Post not found"
     }
 
     // Check if the user is the owner of the post or an admin
     if (post.accId != req.user.accId && req.user.accRole != 'admin') {
-      return res.status(403).json({ message: "You are not authorized to update this post" }) // If user not authorized, respond with status code 403 with message "You are not authorized to update this post"
+      return res.status(403).json({ message: "You are not authorized to update this post" }) // If user not authorized, respond with status code 403 (Forbidden) with message "You are not authorized to update this post"
     }
 
     const updatedPost = await Post.updatePost(postId, newPostData); // Update the post with new post data from before
     if (!updatedPost) {
-      return res.status(404).send("Post not found"); // If cannot find new post data, respond with status code 404 with message "Post not found"
+      return res.status(404).send("Post not found"); // If cannot find new post data, respond with status code 404 (Not Found) with message "Post not found"
     }
     res.json(updatedPost); // If found, send updatedPost as JSON response
   } catch (error) {
     console.error(error); // Log errors occured in console
-    res.status(500).send("Error updating post"); // Respond with status code 500 with message "Error updating post"
+    res.status(500).send("Error updating post"); // Respond with status code 500 (Internal Server Error) with message "Error updating post"
   }
 };
 
@@ -73,12 +73,12 @@ const deletePost = async (req, res) => {
   try {
     const success = await Post.deletePost(postId); // Delete the post with the postId from the data source
     if (!success) {
-      return res.status(404).send("Post not found"); // If post is not found, respond with status code 404 with message "Post not found"
+      return res.status(404).send("Post not found"); // If post is not found, respond with status code 404 (Not Found) with message "Post not found"
     }
-    res.status(204).send(); // If successfully deleted post, respond with status code 204
+    res.status(204).send(); // If successfully deleted post, respond with status code 204 (No Content)
   } catch (error) {
     console.error(error); // Log errors occured in console
-    res.status(500).send("Error deleting post"); // Respond with status code 500 with message "Error deleting post"
+    res.status(500).send("Error deleting post"); // Respond with status code 500 (Internal Server Error) with message "Error deleting post"
   }
 };
 
@@ -90,7 +90,7 @@ const getReplyCount = async (req, res) => {
     res.json({ replyCount }); // Send replyCount as JSON response
   } catch (error) {
     console.error(`Error fetching reply count for post ${postId}:`, error); // Log errors occured in this format
-    res.status(500).json({ error: 'Server error' }); // Respond with status code 500 and a generic error message as shown
+    res.status(500).json({ error: 'Server error' }); // Respond with status code 500 (Internal Server Error) and a generic error message as shown
   }
 };
 
