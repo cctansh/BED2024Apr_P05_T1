@@ -5,12 +5,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Post</title>
+    <!-- Bootstrap CSS -->
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container-fluid">
             <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
@@ -19,6 +23,8 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -37,19 +43,33 @@
         </div>
     </nav>
 
+    <!-- Main Content Area -->
     <div class="pad-nav">
+        <!-- Forum Title -->
         <h1>Forum Title</h1><br>
+
+        <!-- Container for displaying Posts -->
         <div id="post-container"></div>
+
+        <!-- Edit Post Section -->
         <h2>Edit Post</h2>
+        <!-- Textarea for Post Title -->
         <textarea id="newposttitle" class="form-control" placeholder="Enter a title for your post..." rows="1"></textarea><br>
+        <!-- Textarea for Post Content -->
         <textarea id="newpostcontent" class="form-control" placeholder="Enter the content for your post..." rows="5"></textarea>
+        
+        <!-- Confirmation Buttons -->
         <div class="confirm-bar">
+            <!-- Button to Cancel Edit -->
             <button id="cancel-post" type="button" class="btn btn-secondary">Cancel</button>
+            <!-- Button to Confirm Edit -->
             <button id="confirm-post" type="button" class="btn btn-danger create-post">Edit Post&ensp;<i class="bi bi-pencil-fill"></i></button>
         </div>
     </div>
 
+    <!-- Bootstrap Bundle (includes Popper) -->
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <!-- Custom Script for Edit Post -->
     <script src="js/editpostscript.js"></script>
 </body>
 
