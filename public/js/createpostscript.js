@@ -2,7 +2,7 @@
 const token = localStorage.getItem('token'); // Retrieve token from local storage
 const loginProfileLink = document.getElementById('login-profile-link'); // Retrieve profile link element
 const loginAccId = localStorage.getItem('loginAccId'); // Retrieve logged-in account ID from local storage
-const loginAccRole = localStorage.getItem('loginAccRole'); // Retrive logged-in account role from local storage
+const loginAccRole = localStorage.getItem('loginAccRole'); // Retrieve logged-in account role from local storage
 
 // Update profile link based on presence of token
 if (token) {
