@@ -1,48 +1,60 @@
-// token
-const token = localStorage.getItem('token');
-const loginProfileLink = document.getElementById('login-profile-link');
-const loginAccId = localStorage.getItem('loginAccId');
-const loginAccRole = localStorage.getItem('loginAccRole');
+// Token
+const token = localStorage.getItem('token'); // Retrieve token from local storage
+const loginProfileLink = document.getElementById('login-profile-link'); // Retrieve profile link element
+const loginAccId = localStorage.getItem('loginAccId'); // Retrieve logged-in account ID from local storage
+const loginAccRole = localStorage.getItem('loginAccRole'); // Retrieve logged-in account role from local storage
 
 if (token) {
+    // If token is present (user is logged in)
+    // Show logged in display ("Profile" and person icon) and set href to redirect to the user's account page
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else {
+    // If token is not present (user not logged in)
+    // Show default display ("Login" and person icon) and set href to redirect to user register page
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
     loginProfileLink.setAttribute("href", 'loginreg.html')
 }
 
+// Function to get 'id' parameter from the URL query string
 function getUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get('id');
 }
 
+// Async function to fetch post details by postId and populate edit form
 async function fetchPost(postId) {
-    const response = await fetch(`/posts/${postId}`);
-    const post = await response.json();
+    // Fetch post data from server
+    const response = await fetch(`/posts/${postId}`); // Fetch post data from API endpoint
+    const post = await response.json(); // Convert response to JSON format
 
+    // Get text areas for post title and content from HTML
     const newPostTitleTextarea = document.getElementById("newposttitle");
     const newPostContentTextarea = document.getElementById("newpostcontent");
 
-    // set text area as post title and post content
+    // Set values of text areas to current post title and content
     newPostTitleTextarea.value = post.postTitle;
     newPostContentTextarea.value = post.postText;
 
-    // cancel post
+    // Event listener for cancel button
     const cancelPost = document.getElementById("cancel-post");
     cancelPost.onclick = () => {
+        // When click on cancel button, redirect back to the specific post page
         window.location.href = `/discussionpost.html?id=${post.postId}`;
     };
 
-    //confirm edit
+    // Event listener for confirm button
     const confirmPost = document.getElementById("confirm-post");
 
+    // When click on confirm button
     confirmPost.addEventListener('click', async () => {
+        // Ask user if they really want to save their changes
         const confirmed = confirm("Save changes?");
         if (confirmed) {
+            // If confirm, trim and validate post title and content
             const postTitleText = newPostTitleTextarea.value.trim();
             const postContentText = newPostContentTextarea.value.trim();
-
+            
             if (!postTitleText) {
                 alert("Post title cannot be empty.");
                 return;
@@ -63,10 +75,13 @@ async function fetchPost(postId) {
                 return;
             }
 
+            // Determine admin edit status
             let adminEdit = 0;
             if (loginAccRole == 'admin') {
                 adminEdit = 1;
             }
+
+            // Construct updated post data object
             const newPostData = {
                 postTitle: postTitleText,
                 postText: postContentText,
@@ -74,6 +89,7 @@ async function fetchPost(postId) {
             };
 
             try {
+                // Send updated post data to server via PUT request, given that they are authorized
                 const response = await fetch(`/posts/${post.postId}`, {
                     method: 'PUT',
                     headers: {
@@ -83,13 +99,17 @@ async function fetchPost(postId) {
                     body: JSON.stringify(newPostData)
                 });
 
+                // Check if update is successful
                 if (response.ok) {
+                    // If successful, redirect back to specific post page
                     window.location.href = `/discussionpost.html?id=${post.postId}`;
                 } else {
+                    // If failed, display error message
                     const errorData = await response.json();
                     alert(`Error: ${errorData.message}\nDetails: ${errorData.errors.join(', ')}`);
                 }
             } catch (error) {
+                // If got error when adding post, log the error message in console and alert user about the error
                 console.error("Error adding post:", error);
                 alert("An error occurred while creating your post. Please try again later.");
             }
@@ -97,7 +117,9 @@ async function fetchPost(postId) {
     });
 }
 
+// Get postId form URL parameter
 const postId = getUrlParams();
 console.log(postId)
 
+// Fetch and display post details (for editing post)
 fetchPost(postId);
