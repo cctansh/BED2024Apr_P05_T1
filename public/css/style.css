@@ -477,35 +477,38 @@ li {
 
 /*quiz question*/
 
+/* Main container */
 .app {
     background: #ff9393;
     width: 90%;
     max-width: 600px;
-    margin: 32px auto; /* top bottom space and centers horizontally */
-    border-radius: 10px; /* rounded edges */
+    margin: 32px auto;
+    border-radius: 10px;
     padding: 30px;
-    
 }
 
-.app h1 { /* header */
+/* Header */
+.app h1 {
     font-size: 30px;
     font-weight: 500;
     border-bottom: 1px solid #333;
     padding-bottom: 24px;
     padding-top: 40px;
-    
 }
 
+/* Quiz container */
 .quiz {
     padding: 20px 0;
 }
 
-.quiz h2 { /* question */
+/* Question */
+.quiz h2 {
     font-size: 22px;
     font-weight: 400;
 }
 
-.btn { /* answers */
+/* Answer buttons */
+.btn {
     font-size: 18px;
     font-weight: 300;
     background: #fff;
@@ -524,7 +527,7 @@ li {
     color: #fff;
 }
 
-.btn:disabled{ /* if answer has been picked, show cursor as cancel */
+.btn:disabled {
     cursor: no-drop;
 }
 
@@ -536,7 +539,7 @@ li {
     width: 150px;
     border: 0;
     padding: 10px;
-    margin: 20px auto 0; /* top spacing, no bottom spacing, centers horizontally */
+    margin: 20px auto 0;
     border-radius: 4px;
     cursor: pointer;
     display: none;
@@ -547,20 +550,21 @@ li {
 }
 
 .correct {
-    background: #9aeabc;
+    background: #367E18 !important;
+    color: #fff !important;
 }
 
 .incorrect {
-    background: #ff9393;
+    background: #DF2E38 !important;
+    color: #fff !important;
 }
 
 .question-image {
     width: 100%;
     height: 100%;
-    max-width: 602px; /* ensures the image is not larger than its container */
-    display: block; /* fixes any potential alignment issues */
-    margin: 20px auto; /* centers the image and adds some space around it */
-
+    max-width: 602px;
+    display: block;
+    margin: 20px auto;
 }
 
 .explanation {
@@ -570,6 +574,11 @@ li {
     border-left: 4px solid #8bc34a;
     font-size: 16px;
 }
+
+.hidden {
+    display: none;
+}
+
 
 
 /*edit quiz answer */

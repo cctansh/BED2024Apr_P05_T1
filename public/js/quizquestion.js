@@ -1,20 +1,18 @@
-// Selection of DOM elements that will be manipulated
+// Select DOM elements
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
-const explanationElement = document.getElementById("explanation");
-const explanationText = document.getElementById("explanation-text");
 
-// Variables to track current question index and user score
+// Variables to track the current question index and user score
 let currentQuestionIndex = 0;
 let score = 0;
 let questions = [];
 
-// Function to start the quiz
+// Start the quiz
 function startQuiz() {
     currentQuestionIndex = 0;
     score = 0;
-    nextButton.innerHTML = "NEXT";
+    nextButton.innerHTML = "Next";
     fetchQuestions();
 }
 
@@ -29,12 +27,22 @@ async function fetchQuestions() {
     }
 }
 
-// Shows the current question and its answers
-function showQuestion() {
+// Fetch answers for a specific question from the server
+async function fetchAnswers(questionId) {
+    try {
+        const response = await fetch(`/quiz/answers/${questionId}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching answers:', error);
+        return [];
+    }
+}
+
+// Show the current question and its answers
+async function showQuestion() {
     resetState(); // Clear any previous question's state
     const currentQuestion = questions[currentQuestionIndex];
-    const questionNo = currentQuestionIndex + 1;
-    questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
+    questionElement.innerHTML = `${currentQuestionIndex + 1}. ${currentQuestion.question}`;
 
     // Check if there's an image for the current question
     if (currentQuestion.image_path) {
@@ -44,81 +52,81 @@ function showQuestion() {
         questionElement.appendChild(imageElement);
     }
 
-    // Create buttons for each answer option
-    currentQuestion.answers.forEach(answer => {
+    // Fetch answers from the server and create buttons for each answer option
+    const answers = await fetchAnswers(currentQuestion.id);
+    answers.forEach(answer => {
         const button = document.createElement("button");
         button.innerHTML = answer.answer_text;
         button.classList.add("btn");
-        answerButtons.appendChild(button);
-        if (answer.is_correct) {
-            button.dataset.correct = answer.is_correct;
-        }
+        button.dataset.correct = answer.is_correct;
+        button.dataset.explanation = answer.explanation; // Store explanation in the button dataset
         button.addEventListener("click", selectAnswer);
+        answerButtons.appendChild(button);
     });
 }
 
-// Function to reset quiz state to default Q1
+// Reset the quiz state to default for the new question
 function resetState() {
-    nextButton.style.display = "none"; // Hide next button
+    nextButton.style.display = "none"; // Hide the next button
 
-    while (answerButtons.firstChild) { // Remove previous answers
+    // Remove previous answers and explanations
+    while (answerButtons.firstChild) {
         answerButtons.removeChild(answerButtons.firstChild);
     }
 }
 
-// Function to handle user answer selection
+// Handle user answer selection
 function selectAnswer(e) {
     const selectedBtn = e.target;
     const isCorrect = selectedBtn.dataset.correct === "true";
+
+    // Disable all buttons after selection and show the correct answer
+Array.from(answerButtons.children).forEach(button => {
+    button.disabled = true;
+    if (button.dataset.correct === "true") {
+        button.classList.add("correct"); // Highlight the correct answer
+        // Show explanation for correct answer
+        const explanationDiv = document.createElement("div");
+        explanationDiv.classList.add("explanation");
+        explanationDiv.innerHTML = button.dataset.explanation;
+        button.parentNode.insertBefore(explanationDiv, button.nextSibling);
+    } else if (button === selectedBtn) {
+        button.classList.add("incorrect"); // Highlight the incorrectly selected answer
+    }
+});
+
+    // Increment score if the selected answer is correct
     if (isCorrect) {
-        selectedBtn.classList.add("correct");
         score++;
-    } else {
-        selectedBtn.classList.add("incorrect");
     }
 
-    const explanationText = document.createElement("p");
-    explanationText.classList.add("explanation");
-    explanationText.innerText = questions[currentQuestionIndex].explanation;
-    selectedBtn.after(explanationText);
-
-    // Disable all buttons and highlight correct answer
-    Array.from(answerButtons.children).forEach(button => {
-        if (button.dataset.correct === "true") {
-            button.classList.add("correct");
-        }
-        button.disabled = true;
-    });
-
-    // Display next button
-    nextButton.style.display = "block";
+    nextButton.style.display = "block"; // Show the next button
 }
 
-// Displays the final score and calculates a discount
+
+// Display the final score
 function showScore() {
     resetState();
     questionElement.innerHTML = `You scored ${score} out of ${questions.length}!`;
-    // Update next button for completion
-    nextButton.innerHTML = "DONE";
+    nextButton.innerHTML = "Done";
     nextButton.style.display = "block";
 }
 
-// Controls the flow when the next button is clicked
+// Handle the next button click
 function handleNextButton() {
     currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) { // If questions still remaining
+    if (currentQuestionIndex < questions.length) {
         showQuestion();
-    } else { // End quiz and show score
+    } else {
         showScore();
     }
 }
 
-// Acts when clicking next button
+// Navigate to the homepage on quiz completion
 nextButton.addEventListener("click", () => {
-    if (currentQuestionIndex < questions.length) { // If questions still remaining
+    if (currentQuestionIndex < questions.length) {
         handleNextButton();
     } else {
-        // Navigate to index.html only when patch is successful
         window.location.href = 'index.html';
     }
 });
