@@ -479,7 +479,7 @@ li {
 
 /* Main container */
 .app {
-    background: #ff9393;
+    background: #fff;
     width: 90%;
     max-width: 600px;
     margin: 32px auto;
