@@ -48,6 +48,7 @@ async function seedDatabase() {
             postTitle varchar(255) NOT NULL,
             postText varchar(8000) NOT NULL,
             postEdited bit NOT NULL,
+            adminEdit bit NOT NULL,
             accId smallint NOT NULL,
             CONSTRAINT PK_Post PRIMARY KEY (postId),
             CONSTRAINT FK_Post_accId
@@ -106,11 +107,11 @@ async function seedDatabase() {
 
         // Insert data into Post table
         await sql.query(`
-            INSERT INTO Post(postDateTime, postTitle, postText, postEdited, accId)
-            VALUES ('2024-05-25 16:56:00', 'Welcome to Post 1', 'Post 1 contents', 0, 1),  
-                   ('2024-05-27 12:03:46', 'Welcome to Post 2', 'Post 2 contents', 0, 2),
-                   ('2024-05-27 12:03:46', 'Welcome to Post 3', 'Post 3 contents', 0, 1),
-                   ('2024-05-28 20:00:00', 'Welcome to Post 4', 'Post 4 contents', 0, 3);
+            INSERT INTO Post(postDateTime, postTitle, postText, postEdited, adminEdit, accId)
+            VALUES ('2024-05-25 16:56:00', 'Welcome to Post 1', 'Post 1 contents', 0, 0, 1),  
+                   ('2024-05-27 12:03:46', 'Welcome to Post 2', 'Post 2 contents', 0, 0, 2),
+                   ('2024-05-27 12:03:46', 'Welcome to Post 3', 'Post 3 contents', 0, 0, 1),
+                   ('2024-05-28 20:00:00', 'Welcome to Post 4', 'Post 4 contents', 0, 0, 3);
         `);
 
         // Insert data into Reply table

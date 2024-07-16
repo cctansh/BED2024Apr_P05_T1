@@ -473,3 +473,145 @@ li {
 #forum-title {
     padding-top: -5px;
 }
+
+
+/*quiz question*/
+
+/* Main container */
+.app {
+    background: #fff;
+    width: 90%;
+    max-width: 600px;
+    margin: 32px auto;
+    border-radius: 10px;
+    padding: 10px;
+    
+}
+
+/* Header */
+.app h1 {
+    font-size: 30px;
+    font-weight: 500;
+    border-bottom: 1px solid #333;
+    padding-bottom: 24px;
+    padding-top: 40px;
+    
+    
+}
+
+/* Quiz container */
+.quiz {
+    padding: 20px 0;
+}
+
+/* Question */
+.quiz h2 {
+    font-size: 22px;
+    font-weight: 400;
+}
+
+/* Answer buttons */
+.btn {
+    font-size: 18px;
+    font-weight: 300;
+    background: #fff;
+    color: #222;
+    width: 100%;
+    border: 1px solid #222;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: left;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover:not([disabled]) {
+    background: #222;
+    color: #fff;
+}
+
+.btn:disabled {
+    cursor: no-drop;
+}
+
+#next-btn {
+    background: #333;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 300;
+    width: 150px;
+    border: 0;
+    padding: 10px;
+    margin: 20px auto 0;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+}
+
+#next-btn:hover {
+    background: #5b5b5b;
+}
+
+.correct {
+    background: #367E18 !important;
+    color: #fff !important;
+}
+
+.incorrect {
+    background: #DF2E38 !important;
+    color: #fff !important;
+}
+
+.question-image {
+    width: 100%;
+    height: 100%;
+    max-width: 602px;
+    display: block;
+    margin: 20px auto;
+}
+
+.explanation {
+    margin-top: 10px;
+    padding: 10px;
+    background: #e1f5c4;
+    border-left: 4px solid #8bc34a;
+    font-size: 16px;
+}
+
+
+/* Admin view styles */
+#adminView1 {
+    gap: 0.3rem !important;
+    padding: 1.5rem !important;
+    
+    
+    
+}
+
+.horizontal-flex {
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    top: 55px;
+    right: 685px;
+    padding-top: 55px;
+    
+}
+
+.horizontal-flex .btn {
+    background-color: #dc3545; /* Red color for buttons */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    margin-left: 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.horizontal-flex .btn:hover {
+    background-color: #5b0707; /* Darker red for hover effect */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}

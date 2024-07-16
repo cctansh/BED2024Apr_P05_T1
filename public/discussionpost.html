@@ -5,12 +5,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Post</title>
+    <!-- Bootstrap CSS -->
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+    <!-- Custom Styles -->
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container-fluid">
             <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
@@ -19,6 +23,8 @@
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Navbar Links -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -37,19 +43,29 @@
         </div>
     </nav>
 
+    <!-- Main Content Area -->
     <div class="pad-nav">
+        <!-- Post Header Section -->
         <div id="post-header"></div>
+        <!-- Main Title -->
         <h1></h1>
+        <!-- Container for Posts -->
         <div id="post-container"></div>
+
+        <!-- Replies Section -->
         <div class="reply-header">
             <h2>Replies</h2>
+            <!-- Button to Add Reply -->
             <button id="add-reply" type="button" class="btn btn-danger add-reply">Add Reply&ensp;<i class="bi bi-send-fill"></i></button>
         </div>
 
+        <!-- Container for displaying Replies -->
         <div id="reply-container"></div>
     </div>
 
+    <!-- Bootstrap Bundle (includes Popper) -->
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <!-- Custom Script for Discussion Post -->
     <script src="js/discussionpostscript.js"></script>
 </body>
 

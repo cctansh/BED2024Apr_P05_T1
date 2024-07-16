@@ -5,12 +5,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Forum</title>
+  <!-- Bootstrap CSS -->
   <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+  <!-- Custom Styles -->
   <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
+  <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
     <div class="container-fluid">
       <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
@@ -18,6 +22,8 @@
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
+      <!-- Navbar Links -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
@@ -36,14 +42,18 @@
     </div>
   </nav>
 
+  <!-- Main Content Area -->
   <div class="pad-nav">
+    <!-- Forum Header -->
     <div>
       <h1 id="forum-title">Forum header here</h1>
+      <!-- Community Rules Section -->
       <div class="rule-container">
         <div class="rule">
           <h3><strong>Community Rules</strong></h3>
           <div class="text">
             <ol>
+              <!-- List of Community Rules -->
               <li><strong>Respect Others:</strong> Treat fellow members with courtesy and respect. Personal attacks, harassment, hate speech, and discriminatory remarks are not tolerated.</li>
               <li><strong>Stay On Topic:</strong> Keep discussions relevant to the forum's theme or specific topic. Off-topic posts may be removed or relocated.</li>
               <li><strong>No Spam or Self-Promotion:</strong> Avoid posting spam, advertisements, or self-promotional content. This includes unsolicited links or repeated posting of similar content.</li>
@@ -59,14 +69,21 @@
         </div>
       </div>
     </div>
+
+    <!-- Post Section Header -->
     <div class="post-header">
       <h2>Posts</h2>
+      <!-- Button to Create New Post -->
       <button id="create-post" type="button" class="btn btn-danger create-post">Create Post&ensp;<i class="bi bi-plus-circle-fill"></i></button>
     </div>  
+
+    <!-- Container for displaying Posts -->
     <div id="post-container"></div>
   </div>
 
+    <!-- Bootstrap Bundle (includes Popper) -->
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <!-- Custom Script for Discussion Forum -->
     <script src="js/discussionforumscript.js"></script>
 </body>
 

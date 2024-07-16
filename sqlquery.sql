@@ -56,6 +56,7 @@ postDateTime smalldatetime NOT NULL,
 postTitle varchar(255) NOT NULL,
 postText varchar(8000) NOT NULL,
 postEdited bit NOT NULL,
+adminEdit bit NOT NULL,
 accId smallint NOT NULL,
 CONSTRAINT PK_Post PRIMARY KEY (postId),
 CONSTRAINT FK_Post_accId
