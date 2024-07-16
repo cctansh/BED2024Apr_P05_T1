@@ -15,7 +15,8 @@ if (token && !isTokenExpired(token)) {
   // Show default display ("Login" and person icon) and set href to redirect to user register page
   if (token && isTokenExpired(token)) {
       sessionStorage.clear();
-      location.reload();
+      alert('Login timed out.');
+      window.location.href = `/index.html`;
   }
 
   loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;

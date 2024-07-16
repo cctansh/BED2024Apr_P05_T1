@@ -4,6 +4,9 @@ const loginProfileLink = document.getElementById('login-profile-link');
 const loginAccId = sessionStorage.getItem('loginAccId');
 const loginAccRole = sessionStorage.getItem('loginAccRole');
 
+// Get postId form URL parameter
+const postId = getUrlParams();
+
 if (token && !isTokenExpired(token)) {
     // If token is present (user is logged in)
     // Show logged in display ("Profile" and person icon) and set href to redirect to the user's account page
@@ -15,7 +18,8 @@ if (token && !isTokenExpired(token)) {
     // Show default display ("Login" and person icon) and set href to redirect to user register page
     if (token && isTokenExpired(token)) {
         sessionStorage.clear();
-        location.reload();
+        alert('Login timed out.');
+        window.location.href = `/discussionpost.html?id=${postId}`;
     }
 
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
@@ -122,10 +126,6 @@ async function fetchPost(postId) {
         }
     });
 }
-
-// Get postId form URL parameter
-const postId = getUrlParams();
-console.log(postId)
 
 // Fetch and display post details (for editing post)
 fetchPost(postId);

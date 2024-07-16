@@ -4,6 +4,9 @@ const loginProfileLink = document.getElementById('login-profile-link');
 const loginAccId = sessionStorage.getItem('loginAccId');
 const loginAccRole = sessionStorage.getItem('loginAccRole');
 
+// post ID
+const postId = getUrlParams();
+
 if (token && !isTokenExpired(token)) {
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
@@ -12,7 +15,8 @@ if (token && !isTokenExpired(token)) {
     // Clear the session storage if the token is expired
     if (token && isTokenExpired(token)) {
         sessionStorage.clear();
-        location.reload();
+        alert('Login timed out.');
+        window.location.href = `/discussionpost.html?id=${postId}`;
     }
 
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
@@ -43,9 +47,6 @@ async function fetchPost(postId) {
     }
 }
 
-const postId = getUrlParams();
-console.log(postId)
-
 fetchPost(postId);
 
 // cancel reply
@@ -64,7 +65,7 @@ confirmReply.addEventListener('click', async () => {
     const confirmed = confirm("Are you sure you want to add this reply?");
     if (confirmed) {
         const replyText = newReplyTextarea.value.trim();
-    
+
         if (!replyText) {
             alert("Reply cannot be empty.");
             return;

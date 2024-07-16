@@ -12,7 +12,8 @@ if (token && !isTokenExpired(token)) {
     // Clear the session storage if the token is expired
     if (token && isTokenExpired(token)) {
         sessionStorage.clear();
-        location.reload();
+        alert('Login timed out.');
+        window.location.href = `/discussionforum.html`;
     }
 
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
