@@ -4,12 +4,17 @@ const loginProfileLink = document.getElementById('login-profile-link');
 const loginAccId = sessionStorage.getItem('loginAccId');
 const loginAccRole = sessionStorage.getItem('loginAccRole');
 
-if (token) {
-    // If token exist, display profile link with person icon and link to profile page
+if (token && !isTokenExpired(token)) {
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else {
-    // If no token, display login link with person icon and link to login page
+    // If token is not present or is expired (user not logged in)
+    // Clear the session storage if the token is expired
+    if (token && isTokenExpired(token)) {
+        sessionStorage.clear();
+        location.reload();
+    }
+
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
     loginProfileLink.setAttribute("href", 'loginreg.html')
 }
@@ -86,3 +91,9 @@ confirmReply.addEventListener('click', async () => {
         }
     }
 });
+
+function isTokenExpired(token) {
+    const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
+    const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
+    return Date.now() > expiry; // Check if the current time is past the expiry time
+}

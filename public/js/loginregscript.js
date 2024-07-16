@@ -2,9 +2,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const token = sessionStorage.getItem('token');
     const loginAccId = sessionStorage.getItem('loginAccId');
 
-    if (token) {
+    if (token && !isTokenExpired(token)) {
         window.location.href = `profile.html?id=${loginAccId}`;
         console.log("Logged in")
+    } else if (token && isTokenExpired(token)) {
+        sessionStorage.clear();
+        location.reload();
     }
 
     document.getElementById('login').addEventListener('submit', async function (e) {
@@ -104,4 +107,10 @@ function parseJwt(token) {
         console.error('Error parsing JWT token:', error);
         return null;
     }
+}
+
+function isTokenExpired(token) {
+    const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
+    const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
+    return Date.now() > expiry; // Check if the current time is past the expiry time
 }

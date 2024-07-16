@@ -4,14 +4,20 @@ const loginProfileLink = document.getElementById('login-profile-link');
 const loginAccId = sessionStorage.getItem('loginAccId');
 const loginAccRole = sessionStorage.getItem('loginAccRole');
 
-if (token) {
+if (token && !isTokenExpired(token)) {
     // If token is present (user is logged in)
     // Show logged in display ("Profile" and person icon) and set href to redirect to the user's account page
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else {
-    // If token is not present (user not logged in)
+    // If token is not present or is expired (user not logged in)
+    // Clear the session storage if the token is expired
     // Show default display ("Login" and person icon) and set href to redirect to user register page
+    if (token && isTokenExpired(token)) {
+        sessionStorage.clear();
+        location.reload();
+    }
+
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
     loginProfileLink.setAttribute("href", 'loginreg.html')
 }
@@ -302,4 +308,10 @@ async function fetchEditStatus(postId) {
     const response = await fetch(`/posts/${postId}`); // Fetch edit status data from API endpoint
     const editStatus = await response.json(); // Convert response to JSON format
     return editStatus.postEdited; // Return the edit status of a specific post
+}
+
+function isTokenExpired(token) {
+    const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
+    const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
+    return Date.now() > expiry; // Check if the current time is past the expiry time
 }
