@@ -205,7 +205,7 @@ class Account {
                     result.recordset[0].accPassword,
                     result.recordset[0].accRole
                 );
-                const token = jwt.sign({ accId: account.accId.toString(), accRole: account.accRole }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15s' });
+                const token = jwt.sign({ accId: account.accId.toString(), accRole: account.accRole }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '8h' });
                 return token;
             }
         } 
