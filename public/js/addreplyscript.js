@@ -1,8 +1,8 @@
 // token
-const token = localStorage.getItem('token');
+const token = sessionStorage.getItem('token');
 const loginProfileLink = document.getElementById('login-profile-link');
-const loginAccId = localStorage.getItem('loginAccId');
-const loginAccRole = localStorage.getItem('loginAccRole');
+const loginAccId = sessionStorage.getItem('loginAccId');
+const loginAccRole = sessionStorage.getItem('loginAccRole');
 
 if (token) {
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
@@ -51,7 +51,7 @@ cancelReply.onclick = () => {
 const confirmReply = document.getElementById("confirm-reply");
 const newReplyTextarea = document.getElementById("newreply");
 
-const accId = parseInt(localStorage.getItem('loginAccId'));
+const accId = parseInt(sessionStorage.getItem('loginAccId'));
 
 confirmReply.addEventListener('click', async () => {
     const confirmed = confirm("Are you sure you want to add this reply?");

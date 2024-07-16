@@ -1,7 +1,7 @@
-const token = localStorage.getItem('token');
+const token = sessionStorage.getItem('token');
 const loginProfileLink = document.getElementById('login-profile-link');
-const loginAccId = localStorage.getItem('loginAccId');
-const loginAccRole = localStorage.getItem('loginAccRole');
+const loginAccId = sessionStorage.getItem('loginAccId');
+const loginAccRole = sessionStorage.getItem('loginAccRole');
 
 if (token) {
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
@@ -364,9 +364,9 @@ const logoutButton = document.getElementById('logout');
 logoutButton.addEventListener('click', () => {
     const confirmed = confirm("Are you sure you want to log out?");
     if (confirmed) {
-        localStorage.removeItem('token');
-        localStorage.removeItem('loginAccId');
-        localStorage.removeItem('loginAccRole');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('loginAccId');
+        sessionStorage.removeItem('loginAccRole');
         window.location.href = 'loginreg.html'; // Redirect to login page after logout
     }
 });
@@ -376,9 +376,9 @@ deleteAccButton.addEventListener('click', async () => {
     const confirmed = confirm("Are you sure you want to delete your account?");
     if (confirmed) {
         await deleteAccount(profileId);
-        localStorage.removeItem('token');
-        localStorage.removeItem('loginAccId');
-        localStorage.removeItem('loginAccRole');
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('loginAccId');
+        sessionStorage.removeItem('loginAccRole');
         alert('Account deleted. Returning to login page.');
         window.location.href = 'loginreg.html'; // Redirect to login page after logout
     }

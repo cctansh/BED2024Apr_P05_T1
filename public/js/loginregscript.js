@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const token = localStorage.getItem('token');
-    const loginAccId = localStorage.getItem('loginAccId');
+    const token = sessionStorage.getItem('token');
+    const loginAccId = sessionStorage.getItem('loginAccId');
 
     if (token) {
         window.location.href = `profile.html?id=${loginAccId}`;
@@ -33,9 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const loginAccId = decodedToken.accId;
             const loginAccRole = decodedToken.accRole;
 
-            localStorage.setItem('token', token);
-            localStorage.setItem('loginAccId', loginAccId);
-            localStorage.setItem('loginAccRole', loginAccRole);
+            sessionStorage.setItem('token', token);
+            sessionStorage.setItem('loginAccId', loginAccId);
+            sessionStorage.setItem('loginAccRole', loginAccRole);
             console.log(token);
             console.log(loginAccId);
             console.log(loginAccRole);

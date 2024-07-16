@@ -1,8 +1,8 @@
 // token
-const token = localStorage.getItem('token');
+const token = sessionStorage.getItem('token');
 const loginProfileLink = document.getElementById('login-profile-link');
-const loginAccId = localStorage.getItem('loginAccId');
-const loginAccRole = localStorage.getItem('loginAccRole');
+const loginAccId = sessionStorage.getItem('loginAccId');
+const loginAccRole = sessionStorage.getItem('loginAccRole');
 
 if (token) {
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
@@ -23,7 +23,7 @@ const confirmReply = document.getElementById("confirm-post");
 const newPostTitleTextarea = document.getElementById("newposttitle");
 const newPostContentTextarea = document.getElementById("newpostcontent");
 
-const accId = parseInt(localStorage.getItem('loginAccId'));
+const accId = parseInt(sessionStorage.getItem('loginAccId'));
 
 confirmReply.addEventListener('click', async () => {
     const confirmed = confirm("Are you sure you want to create a new post?");
