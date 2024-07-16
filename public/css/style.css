@@ -484,7 +484,8 @@ li {
     max-width: 600px;
     margin: 32px auto;
     border-radius: 10px;
-    padding: 30px;
+    padding: 10px;
+    
 }
 
 /* Header */
@@ -494,6 +495,8 @@ li {
     border-bottom: 1px solid #333;
     padding-bottom: 24px;
     padding-top: 40px;
+    
+    
 }
 
 /* Quiz container */
@@ -575,94 +578,40 @@ li {
     font-size: 16px;
 }
 
-.hidden {
-    display: none;
+
+/* Admin view styles */
+#adminView1 {
+    gap: 0.3rem !important;
+    padding: 1.5rem !important;
+    
+    
+    
 }
 
-
-
-/*edit quiz answer */
-.image-upload {
+.horizontal-flex {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 20px;
+    justify-content: flex-end;
+    position: absolute;
+    top: 55px;
+    right: 685px;
+    padding-top: 55px;
+    
 }
 
-.image-label {
+.horizontal-flex .btn {
+    background-color: #dc3545; /* Red color for buttons */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    margin-left: 20px;
+    border-radius: 5px;
     font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-#image-upload {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-}
-
-.answer-buttons {
-    margin-bottom: 20px;
-}
-
-.answer-container {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.correct-answer-checkbox {
-    margin-right: 10px;
-    transform: scale(1.2);
-    cursor: pointer;
-}
-
-.btn {
-    font-size: 18px;
-    font-weight: 300;
-    background: #fff;
-    color: #333;
-    border: 1px solid #333;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s;
-    margin-right: 10px;
-    flex-grow: 1;
-    text-align: left;
-}
-
-.btn:hover {
-    background: #333;
-    color: #fff;
-}
-
-.delete-answer-button {
-    background: none;
-    border: none;
-    color: #ff0000;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-.delete-answer-button:hover {
-    color: #cc0000;
-}
-
-#add-reply {
-    background: #ff4d4d;
-    color: #fff;
-    font-size: 20px;
-    font-weight: 500;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-    display: block;
-    margin: 20px auto;
-}
-
-#add-reply:hover {
-    background: #cc0000;
+.horizontal-flex .btn:hover {
+    background-color: #5b0707; /* Darker red for hover effect */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
