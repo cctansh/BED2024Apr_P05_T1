@@ -1,5 +1,7 @@
 // Import all modules required
 const express = require("express");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger-output.json"); // Import generated spec
 const accountController = require("./controllers/accountController");
 const postController = require("./controllers/postController");
 const replyController = require("./controllers/replyController");
@@ -73,6 +75,9 @@ app.get("/quiz/answer/:id", answerController.getAnswerById);
 app.post("/quiz/answers", answerController.createAnswer);
 app.put("/quiz/answers/:id", answerController.updateAnswer);
 app.delete("/quiz/answers/:id", answerController.deleteAnswer);
+
+// Serve the Swagger UI at a specific route
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Start the server and connect to DB
 app.listen(port, async () => {
