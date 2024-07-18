@@ -94,6 +94,24 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accName": {
+                  "example": "any"
+                },
+                "accEmail": {
+                  "example": "xyz@email.com"
+                },
+                "accPassword": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "tags": ["account"],
@@ -271,6 +289,18 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accRole": {
+                  "example": "member or admin"
+                }
+              }
+            }
           }
         ],
         "tags": ["account"],
@@ -312,6 +342,11 @@
       "post": {
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -394,9 +429,6 @@
                 },
                 "postText": {
                   "example": "any"
-                },
-                "adminEdit": {
-                  "example": "0 or 1"
                 }
               }
             }
@@ -431,6 +463,11 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           }
         ],
@@ -544,6 +581,9 @@
                 },
                 "replyTo": {
                   "example": "any"
+                },
+                "replyText": {
+                  "example": "any"
                 }
               }
             }
@@ -606,6 +646,18 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "replyText": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "tags": ["reply"],
