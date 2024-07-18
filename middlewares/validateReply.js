@@ -48,8 +48,7 @@ const validateCreateReply = async (req, res, next) => {
 
 const validateUpdateReply = (req, res, next) => {
     const schema = Joi.object({
-        replyText: Joi.string().min(1).max(5000).required(),
-        adminEdit: Joi.number().integer().min(0).max(1).required()
+        replyText: Joi.string().min(1).max(5000).required()
     });
 
     const validation = schema.validate(req.body, { abortEarly: false });
