@@ -223,7 +223,7 @@ class Account {
                 postTitle AS Title,
                 postText AS Text,
                 postEdited AS Edited,
-                NULL AS adminEdited,
+                adminEdit AS adminEdited,
                 NULL AS ReplyTo,
                 accId
             FROM 

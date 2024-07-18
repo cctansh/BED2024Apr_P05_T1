@@ -50,6 +50,9 @@ const updateReply = async (req, res) => {
         return res.status(403).json({ message: "You are not authorized to update this reply" });
     }
 
+    // Ensure the adminEdit field is set correctly
+    newReplyData.adminEdit = req.user.accRole == 'admin' ? 1 : 0;
+
     const updatedReply = await Reply.updateReply(replyId, newReplyData);
     if (!updatedReply) {
       return res.status(404).send("Reply not found");

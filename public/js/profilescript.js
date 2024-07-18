@@ -3,6 +3,9 @@ const loginProfileLink = document.getElementById('login-profile-link');
 const loginAccId = sessionStorage.getItem('loginAccId');
 const loginAccRole = sessionStorage.getItem('loginAccRole');
 
+const profileId = getUrlParams();
+console.log(profileId);
+
 if (token && !isTokenExpired(token)) {
     // If token is present (user is logged in)
     // Show logged in display ("Profile" and person icon) and set href to redirect to the user's account page
@@ -25,27 +28,45 @@ if (token && !isTokenExpired(token)) {
 
 function getUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('id');
+    const id = urlParams.get('id');
+    console.log('Profile ID:', id); // Debug statement
+    return id;
 }
 
 async function fetchPostsAndReplies(profileId) {
-    const response = await fetch(`/accounts/postreply/${profileId}`);
-    const postreply = await response.json();
+    try {
+        const response = await fetch(`/accounts/postreply/${profileId}`);
 
-    if (postreply == 0) {
-        const container = document.getElementById("postreply");
-        container.innerHTML = "This user has not made any posts or replies.";
-        return;
-    }
-
-    for (const obj of postreply) {
-        if (obj.type == 'Post') {
-            await fetchPost(obj);
-        } else {
-            await fetchRepliedPost(obj.id);
-            await fetchReply(obj);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
-    };
+
+        const postreplyText = await response.text();
+        let postreply;
+        try {
+            postreply = JSON.parse(postreplyText);
+        } catch (error) {
+            console.error('Error parsing JSON:', error);
+            return;
+        }
+
+        if (!Array.isArray(postreply) || postreply.length === 0) {
+            const container = document.getElementById("postreply");
+            container.innerHTML = "This user has not made any posts or replies.";
+            return;
+        }
+
+        for (const obj of postreply) {
+            if (obj.type == 'Post') {
+                await fetchPost(obj);
+            } else if (obj.type == 'Reply') {
+                await fetchRepliedPost(obj.id);
+                await fetchReply(obj);
+            }
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+    }
 }
 
 async function fetchPost(obj) {
@@ -368,8 +389,6 @@ async function updateAccountRole(profileId) {
         console.log('Change role failed: ' + err.message);
     }
 }
-
-const profileId = getUrlParams();
 
 const logoutButton = document.getElementById('logout');
 logoutButton.addEventListener('click', () => {

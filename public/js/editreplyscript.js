@@ -73,13 +73,8 @@ async function fetchReply(replyId) {
                 return;
             }
 
-            let adminEdit = 0;
-            if (loginAccRole == 'admin') {
-                adminEdit = 1;
-            } 
             const newReplyData = {
-                replyText: replyText,
-                adminEdit: adminEdit
+                replyText: replyText
             };
 
             try {
@@ -104,6 +99,11 @@ async function fetchReply(replyId) {
             }
         }
     });
+}
+
+function getUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
 }
 
 const replyId = getUrlParams();
