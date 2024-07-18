@@ -54,12 +54,16 @@ const updatePost = async (req, res) => {
     if (post.accId != req.user.accId && req.user.accRole != 'admin') {
       return res.status(403).json({ message: "You are not authorized to update this post" }) // If user not authorized, respond with status code 403 (Forbidden) with message "You are not authorized to update this post"
     }
+    
+    // Ensure the adminEdit field is set correctly
+    newPostData.adminEdit = req.user.accRole == 'admin' ? 1 : 0;
 
     const updatedPost = await Post.updatePost(postId, newPostData); // Update the post with new post data from before
     if (!updatedPost) {
       return res.status(404).send("Post not found"); // If cannot find new post data, respond with status code 404 (Not Found) with message "Post not found"
     }
     res.json(updatedPost); // If found, send updatedPost as JSON response
+    
   } catch (error) {
     console.error(error); // Log errors occured in console
     res.status(500).send("Error updating post"); // Respond with status code 500 (Internal Server Error) with message "Error updating post"
@@ -71,6 +75,17 @@ const deletePost = async (req, res) => {
   const postId = parseInt(req.params.id); // Extract postId from request parameters and convert to integer
 
   try {
+    const post = await Post.getPostById(postId); // Retrieve the post with the postId from the data source
+
+    if (!post) {
+      return res.status(404).send("Post not found"); // If post not found, respond with status code 404 (Not Found) with message "Post not found"
+    }
+
+    // Check if the user is the owner of the post or an admin
+    if (post.accId != req.user.accId && req.user.accRole != 'admin') {
+      return res.status(403).json({ message: "You are not authorized to delete this post" }) // If user not authorized, respond with status code 403 (Forbidden) with message "You are not authorized to delete this post"
+    }
+
     const success = await Post.deletePost(postId); // Delete the post with the postId from the data source
     if (!success) {
       return res.status(404).send("Post not found"); // If post is not found, respond with status code 404 (Not Found) with message "Post not found"
