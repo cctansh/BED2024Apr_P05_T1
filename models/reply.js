@@ -148,7 +148,7 @@ class Reply {
 
     try {
       const sqlQuery = `
-            SELECT p.postId, p.postDateTime, p.postTitle, p.postText, p.postEdited, p.accId
+            SELECT p.postId, p.postDateTime, p.postTitle, p.postText, p.postEdited, p.adminEdit, p.accId
             FROM Reply r
             LEFT JOIN Post p ON r.replyTo = p.postId
             WHERE r.replyId = @id;
@@ -165,6 +165,7 @@ class Reply {
           result.recordset[0].postTitle,
           result.recordset[0].postText,
           result.recordset[0].postEdited,
+          result.recordset[0].adminEdit,
           result.recordset[0].accId,
         )
         : null;
