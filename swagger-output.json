@@ -178,6 +178,23 @@
     "/accounts/login": {
       "post": {
         "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accEmail": {
+                  "example": "xyz@email.com"
+                },
+                "accPassword": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "tags": ["account"],
         "responses": {
           "200": {
@@ -302,6 +319,12 @@
               "type": "object",
               "properties": {
                 "accId": {
+                  "example": "A number (e.g. 1, 2, 3)"
+                },
+                "postTitle": {
+                  "example": "any"
+                },
+                "postText": {
                   "example": "any"
                 }
               }
@@ -359,6 +382,24 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "postTitle": {
+                  "example": "any"
+                },
+                "postText": {
+                  "example": "any"
+                },
+                "adminEdit": {
+                  "example": "0 or 1"
+                }
+              }
+            }
           }
         ],
         "tags": ["post"],
