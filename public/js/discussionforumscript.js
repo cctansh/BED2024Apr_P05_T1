@@ -162,7 +162,7 @@ function getCookie(cname) {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   }
 
-async function refreshToken(rToken) {
+  async function refreshToken(rToken) {
     try {
         const response = await fetch('/token', {
             method: 'POST',
@@ -189,8 +189,9 @@ async function refreshToken(rToken) {
         location.reload();
     } catch {
         console.log("error")
+        alert('Login timed out.');
         sessionStorage.clear();
         deleteCookie('rToken');   
-        location.reload(); 
+        location.reload();
     }
 }
