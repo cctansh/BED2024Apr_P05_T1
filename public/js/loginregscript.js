@@ -170,15 +170,11 @@ async function refreshToken(rToken) {
         sessionStorage.setItem('loginAccId', loginAccId);
         sessionStorage.setItem('loginAccRole', loginAccRole);
         
-        if (token == null) {
-            sessionStorage.clear();
-            deleteCookie('rToken');    
-        }
-        console.log(token);
         location.reload();
-        
-        return true;
     } catch {
         console.log("error")
+        sessionStorage.clear();
+        deleteCookie('rToken');   
+        location.reload(); 
     }
 }
