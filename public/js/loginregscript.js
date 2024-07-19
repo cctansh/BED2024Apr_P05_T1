@@ -36,9 +36,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const loginAccId = decodedToken.accId;
             const loginAccRole = decodedToken.accRole;
 
+            const refreshToken = result.refreshToken;
+
             sessionStorage.setItem('token', token);
             sessionStorage.setItem('loginAccId', loginAccId);
             sessionStorage.setItem('loginAccRole', loginAccRole);
+            sessionStorage.setItem('refreshToken', refreshToken);
             console.log(token);
             console.log(loginAccId);
             console.log(loginAccRole);

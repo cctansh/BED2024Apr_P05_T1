@@ -16,7 +16,7 @@ class Account {
     static async getAllAccounts() {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Account`; 
+        const sqlQuery = `SELECT * FROM Account`;
 
         const request = connection.request();
         const result = await request.query(sqlQuery);
@@ -24,14 +24,14 @@ class Account {
         connection.close();
 
         return result.recordset.map(
-        (row) => new Account(row.accId, row.accName, row.accEmail, row.accPassword, row.accRole)
-        ); 
+            (row) => new Account(row.accId, row.accName, row.accEmail, row.accPassword, row.accRole)
+        );
     }
 
     static async getAccountById(id) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Account WHERE accId = @id`; 
+        const sqlQuery = `SELECT * FROM Account WHERE accId = @id`;
 
         const request = connection.request();
         request.input("id", id);
@@ -40,14 +40,14 @@ class Account {
         connection.close();
 
         return result.recordset[0]
-        ? new Account(
-            result.recordset[0].accId,
-            result.recordset[0].accName,
-            result.recordset[0].accEmail,
-            result.recordset[0].accPassword,
-            result.recordset[0].accRole
+            ? new Account(
+                result.recordset[0].accId,
+                result.recordset[0].accName,
+                result.recordset[0].accEmail,
+                result.recordset[0].accPassword,
+                result.recordset[0].accRole
             )
-        : null; 
+            : null;
     }
 
     static async createAccount(newAccountData) {
@@ -57,7 +57,7 @@ class Account {
 
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `INSERT INTO Account (accName, accEmail, accPassword, accRole) VALUES (@accName, @accEmail, @accPassword, @accRole); SELECT SCOPE_IDENTITY() AS accId;`; 
+        const sqlQuery = `INSERT INTO Account (accName, accEmail, accPassword, accRole) VALUES (@accName, @accEmail, @accPassword, @accRole); SELECT SCOPE_IDENTITY() AS accId;`;
 
         const request = connection.request();
         request.input("accName", newAccountData.accName);
@@ -72,43 +72,43 @@ class Account {
         return this.getAccountById(result.recordset[0].accId);
     }
 
-    static async updateAccount(id, newAccountData) { 
+    static async updateAccount(id, newAccountData) {
         // allows for dynamic input data, eg name + email + pass, name + email only, name only
         let connection;
         try {
             connection = await sql.connect(dbConfig);
-    
+
             let sqlQuery = 'UPDATE Account SET ';
             const params = [];
-    
+
             if (newAccountData.accName) {
                 sqlQuery += 'accName = @accName, ';
                 params.push({ name: 'accName', type: sql.VarChar, value: newAccountData.accName });
             }
-    
+
             if (newAccountData.accEmail) {
                 sqlQuery += 'accEmail = @accEmail, ';
                 params.push({ name: 'accEmail', type: sql.VarChar, value: newAccountData.accEmail });
             }
-    
+
             if (newAccountData.accPassword) {
                 const salt = await bcrypt.genSalt(10);
                 const hashedPassword = await bcrypt.hash(newAccountData.accPassword, salt);
                 sqlQuery += 'accPassword = @accPassword, ';
                 params.push({ name: 'accPassword', type: sql.VarChar, value: hashedPassword });
             }
-    
+
             // Remove the last comma and add the WHERE clause
             sqlQuery = sqlQuery.slice(0, -2) + ' WHERE accId = @id';
             params.push({ name: 'id', type: sql.Int, value: id });
-    
+
             const request = connection.request();
             params.forEach(param => {
                 request.input(param.name, param.type, param.value);
             });
-    
+
             await request.query(sqlQuery);
-    
+
             return await this.getAccountById(id);
         } catch (err) {
             console.error("SQL error", err);
@@ -142,7 +142,7 @@ class Account {
         try {
             const transaction = new sql.Transaction(connection);
             await transaction.begin();
-    
+
             // Delete replies
             const deleteRepliesQuery = `
                 DELETE FROM Reply
@@ -158,7 +158,7 @@ class Account {
                 );
             `;
             await transaction.request().input("id", sql.Int, id).query(deleteRepliesToPostsQuery);
-    
+
             // Delete posts
             const deletePostQuery = `
                 DELETE FROM Post
@@ -171,10 +171,10 @@ class Account {
             WHERE accId = @id;
             `;
             const result = await transaction.request().input("id", id).query(deleteAccQuery);
-    
+
             await transaction.commit();
             connection.close();
-    
+
             return result.rowsAffected[0] > 0; // Return true if at least one row was affected
         } catch (err) {
             console.error("Error deleting accout:", err);
@@ -186,7 +186,7 @@ class Account {
     static async loginAccount(loginAccountData) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Account WHERE accEmail = @accEmail`; 
+        const sqlQuery = `SELECT * FROM Account WHERE accEmail = @accEmail`;
 
         const request = connection.request();
         request.input("accEmail", loginAccountData.accEmail);
@@ -205,12 +205,109 @@ class Account {
                     result.recordset[0].accPassword,
                     result.recordset[0].accRole
                 );
-                const token = jwt.sign({ accId: account.accId.toString(), accRole: account.accRole }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '8h' });
-                return token;
+                const token = await this.generateAccessToken({ accId: account.accId.toString(), accRole: account.accRole });
+
+                const refreshToken = jwt.sign({ accId: account.accId.toString(), accRole: account.accRole }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+                const salt = await bcrypt.genSalt(10);
+                const hashedRefreshToken = await bcrypt.hash(refreshToken, salt);
+
+                const connection = await sql.connect(dbConfig);
+                const sqlQuery = `INSERT INTO RefreshTokens (refreshToken) VALUES (@refreshToken);`;
+                const request = connection.request();
+                request.input("refreshToken", hashedRefreshToken);
+                await request.query(sqlQuery);
+                connection.close();
+                
+                return { token: token, refreshToken: refreshToken };
             }
-        } 
+        }
         return null;
     }
+    static async generateAccessToken(payload) {
+        return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "8h" });
+    }
+
+    static async refreshAccessToken(refreshToken) {
+        try {
+            let payload;
+            const connection = await sql.connect(dbConfig);
+            const sqlQuery = `SELECT * FROM RefreshTokens WHERE refreshToken IS NOT NULL`;
+            const request = connection.request();
+            const result = await request.query(sqlQuery);
+            connection.close();
+
+            if (result.recordset.length === 0) {
+                return null;
+            }
+
+            let match = null;
+
+            for (const tokenRecord of result.recordset) {
+                const isMatch = await bcrypt.compare(refreshToken, tokenRecord.refreshToken);
+                if (isMatch) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (!match) {
+                return null;
+            }
+
+            jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
+                if (err) {
+                    return null
+                }
+                payload = { accId: decoded.accId, accRole: decoded.accRole }
+            });
+
+            const accessToken = await this.generateAccessToken(payload);
+            return accessToken;
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+    }
+
+    static async logout(refreshToken) {
+      
+        try {
+          const connection = await sql.connect(dbConfig);
+          const sqlQuery = `SELECT * FROM RefreshTokens WHERE refreshToken IS NOT NULL`;
+          const request = connection.request();
+          const result = await request.query(sqlQuery);
+      
+          if (result.recordset.length === 0) {
+            return null;
+          }
+      
+          let tokenToDelete = null;
+      
+          for (const tokenRecord of result.recordset) {
+            const isMatch = await bcrypt.compare(refreshToken, tokenRecord.refreshToken);
+            if (isMatch) {
+              tokenToDelete = tokenRecord.refreshToken;
+              break;
+            }
+          }
+      
+          if (!tokenToDelete) {
+            return null;
+          }
+      
+          const deleteQuery = `DELETE FROM RefreshTokens WHERE refreshToken = @refreshToken`;
+          request.input("refreshToken", tokenToDelete);
+          await request.query(deleteQuery);
+      
+          connection.close();
+      
+          return result.rowsAffected[0] > 0; // Return true if at least one row was affected
+        } catch (err) {
+            console.error("Error logging out:", err);
+            connection.close();
+            return false;
+        }
+      }
 
     static async getPostsAndRepliesByAccount(id) {
         const connection = await sql.connect(dbConfig);
@@ -274,7 +371,7 @@ class Account {
     static async getAccountByEmail(email) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Account WHERE accEmail = @accEmail`; 
+        const sqlQuery = `SELECT * FROM Account WHERE accEmail = @accEmail`;
 
         const request = connection.request();
         request.input("accEmail", email);
@@ -289,14 +386,14 @@ class Account {
                 result.recordset[0].accEmail,
                 result.recordset[0].accPassword,
                 result.recordset[0].accRole
-                )
+            )
             : null;
     }
 
     static async getAccountByName(name) {
         const connection = await sql.connect(dbConfig);
 
-        const sqlQuery = `SELECT * FROM Account WHERE accName = @accName`; 
+        const sqlQuery = `SELECT * FROM Account WHERE accName = @accName`;
 
         const request = connection.request();
         request.input("accName", name);
@@ -311,7 +408,7 @@ class Account {
                 result.recordset[0].accEmail,
                 result.recordset[0].accPassword,
                 result.recordset[0].accRole
-                )
+            )
             : null;
     }
 }

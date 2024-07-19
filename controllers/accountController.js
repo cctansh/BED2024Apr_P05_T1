@@ -126,19 +126,51 @@ const deleteAccount = async (req, res) => {
 const loginAccount = async (req, res) => {
   const logAccount = req.body;
   try {
-    const token = await Account.loginAccount(logAccount);
+    const { token, refreshToken } = await Account.loginAccount(logAccount);
     if (!token) {
       return res.status(404).send("Invalid email or password");
     }
     res.status(200).json({
       message: "Login successful",
-      token: token
+      token: token,
+      refreshToken: refreshToken
     });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving account");
   }
 };
+
+const refreshAccessToken = async (req, res) => {
+  const refreshToken = req.headers.authorization && req.headers.authorization.split(" ")[1];
+  try {
+    const token = await Account.refreshAccessToken(refreshToken);
+    if (!token) {
+      return res.status(404).send("Invalid refresh token");
+    }
+    res.status(200).json({
+      message: "successful",
+      token: token
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error generating token");
+  }
+}
+
+const logout = async (req, res) => {
+  const refreshToken = req.headers.authorization && req.headers.authorization.split(" ")[1];
+  try {
+    const success = await Account.logout(refreshToken);
+    if (!success) {
+      return res.status(404).send("Unsuccessful");
+    }
+    res.status(204).send();
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error logging out");
+  }
+}
 
 const getPostsAndRepliesByAccount = async (req, res) => {
   const id = parseInt(req.params.id);
@@ -186,5 +218,7 @@ module.exports = {
   deleteAccount,
   loginAccount,
   getPostsAndRepliesByAccount,
-  checkPassword
+  checkPassword,
+  refreshAccessToken,
+  logout
 };

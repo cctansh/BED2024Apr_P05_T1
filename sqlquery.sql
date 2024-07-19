@@ -97,6 +97,12 @@ CREATE TABLE AnswerChoices (
 );
 
 
+-- Refresh Tokens
+CREATE TABLE RefreshTokens (
+    token_id INT PRIMARY KEY IDENTITY(1,1),
+    refreshToken VARCHAR(255) NOT NULL UNIQUE
+);
+
 /* insert statements
 
 -- insert temp data for testing

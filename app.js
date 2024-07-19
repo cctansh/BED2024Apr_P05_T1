@@ -41,6 +41,9 @@ app.post("/accounts/check", authenticate.verifyJWT, accountController.checkPassw
 app.delete("/accounts/:id", authenticate.verifyJWT, accountController.deleteAccount);
 // Only admin
 app.put("/accounts/role/:id", authenticate.verifyJWT, validateAccount.validateUpdateAccountRole, accountController.updateAccountRole);
+// refresh token stuff
+app.post("/token", accountController.refreshAccessToken);
+app.delete("/logout", accountController.logout);
 
 // Post routes
 app.get("/posts", postController.getAllPosts);
