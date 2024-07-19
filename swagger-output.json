@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "My API",
-    "description": "Description of your API",
+    "title": "OurFoodSG - Food Security API Documentation",
+    "description": "This API documentation contains API endpoints for account, post, reply, quiz question, and quiz answer for OurFoodSG.",
     "version": "1.0.0"
   },
   "host": "localhost:3000",
@@ -13,7 +13,7 @@
   "paths": {
     "/accounts": {
       "get": {
-        "description": "",
+        "description": "Retrieve all accounts",
         "tags": ["account"],
         "responses": {
           "200": {
@@ -25,7 +25,7 @@
         }
       },
       "post": {
-        "description": "",
+        "description": "Create a new account",
         "parameters": [
           {
             "name": "body",
@@ -59,7 +59,7 @@
     },
     "/accounts/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieve a specific account (by its accId)",
         "parameters": [
           {
             "name": "id",
@@ -82,7 +82,7 @@
         }
       },
       "put": {
-        "description": "",
+        "description": "Update a specific account (by its accId)",
         "parameters": [
           {
             "name": "id",
@@ -94,6 +94,24 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accName": {
+                  "example": "any"
+                },
+                "accEmail": {
+                  "example": "xyz@email.com"
+                },
+                "accPassword": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "tags": ["account"],
@@ -119,7 +137,7 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "Delete a specific account (by its accId)",
         "parameters": [
           {
             "name": "id",
@@ -155,7 +173,7 @@
     },
     "/accounts/postreply/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieve posts and replies posted by a particular account (by its accId)",
         "parameters": [
           {
             "name": "id",
@@ -177,7 +195,24 @@
     },
     "/accounts/login": {
       "post": {
-        "description": "",
+        "description": "Log in to an account",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accEmail": {
+                  "example": "xyz@email.com"
+                },
+                "accPassword": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "tags": ["account"],
         "responses": {
           "200": {
@@ -197,7 +232,7 @@
     },
     "/accounts/check": {
       "post": {
-        "description": "",
+        "description": "Check if entered password is the account's real password (only owner of account can check)",
         "parameters": [
           {
             "name": "authorization",
@@ -242,7 +277,7 @@
     },
     "/accounts/role/{id}": {
       "put": {
-        "description": "",
+        "description": "Retrieve a spefcific account's role (by its accId)",
         "parameters": [
           {
             "name": "id",
@@ -254,6 +289,18 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accRole": {
+                  "example": "member or admin"
+                }
+              }
+            }
           }
         ],
         "tags": ["account"],
@@ -281,7 +328,7 @@
     },
     "/posts": {
       "get": {
-        "description": "",
+        "description": "Retrieve all posts",
         "tags": ["post"],
         "responses": {
           "200": {
@@ -293,8 +340,13 @@
         }
       },
       "post": {
-        "description": "",
+        "description": "Create a new post",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -302,6 +354,12 @@
               "type": "object",
               "properties": {
                 "accId": {
+                  "example": "A number (e.g. 1, 2, 3)"
+                },
+                "postTitle": {
+                  "example": "any"
+                },
+                "postText": {
                   "example": "any"
                 }
               }
@@ -324,7 +382,7 @@
     },
     "/posts/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieve a specific post (by its postId)",
         "parameters": [
           {
             "name": "id",
@@ -347,7 +405,7 @@
         }
       },
       "put": {
-        "description": "",
+        "description": "Update a specific post (by its postId)",
         "parameters": [
           {
             "name": "id",
@@ -359,6 +417,21 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "postTitle": {
+                  "example": "any"
+                },
+                "postText": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "tags": ["post"],
@@ -384,12 +457,17 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "Delete a specific post (by its postId)",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
             "type": "string"
           }
         ],
@@ -409,7 +487,7 @@
     },
     "/posts/{id}/replyCount": {
       "get": {
-        "description": "",
+        "description": "Retrieve reply count for a specific post (by its postId)",
         "parameters": [
           {
             "name": "id",
@@ -431,7 +509,7 @@
     },
     "/replies/search/account": {
       "get": {
-        "description": "",
+        "description": "Search for a reply based on its associated accId",
         "parameters": [
           {
             "name": "searchTerm",
@@ -452,7 +530,7 @@
     },
     "/replies/search/text": {
       "get": {
-        "description": "",
+        "description": "Search for a reply based on the text entered",
         "parameters": [
           {
             "name": "searchTerm",
@@ -473,7 +551,7 @@
     },
     "/replies": {
       "get": {
-        "description": "",
+        "description": "Retrieve all replies",
         "tags": ["reply"],
         "responses": {
           "200": {
@@ -485,7 +563,7 @@
         }
       },
       "post": {
-        "description": "",
+        "description": "Create a new reply",
         "parameters": [
           {
             "name": "authorization",
@@ -502,6 +580,9 @@
                   "example": "any"
                 },
                 "replyTo": {
+                  "example": "any"
+                },
+                "replyText": {
                   "example": "any"
                 }
               }
@@ -530,7 +611,7 @@
     },
     "/replies/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieve a specific reply (by its replyId)",
         "parameters": [
           {
             "name": "id",
@@ -553,7 +634,7 @@
         }
       },
       "put": {
-        "description": "",
+        "description": "Update a specific reply (by its replyId)",
         "parameters": [
           {
             "name": "id",
@@ -565,6 +646,18 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "replyText": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "tags": ["reply"],
@@ -590,7 +683,7 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "Delete a specific reply (by its replyId)",
         "parameters": [
           {
             "name": "id",
@@ -626,7 +719,7 @@
     },
     "/replies/by-post/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieve replies associated to same postId",
         "parameters": [
           {
             "name": "id",
@@ -651,7 +744,7 @@
     },
     "/replies/post/{id}": {
       "get": {
-        "description": "",
+        "description": "Retrieve post that a reply (based on its replyId) is associated to",
         "parameters": [
           {
             "name": "id",

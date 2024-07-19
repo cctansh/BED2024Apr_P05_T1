@@ -86,16 +86,16 @@ async function fetchPost(postId) {
             }
 
             // Determine admin edit status
-            let adminEdit = 0;
-            if (loginAccRole == 'admin') {
-                adminEdit = 1;
-            }
+            //let adminEdit = 0;
+            //if (loginAccRole == 'admin') {
+            //    adminEdit = 1;
+            //}
 
             // Construct updated post data object
             const newPostData = {
                 postTitle: postTitleText,
                 postText: postContentText,
-                adminEdit: adminEdit
+                //adminEdit: adminEdit
             };
 
             try {
@@ -119,12 +119,18 @@ async function fetchPost(postId) {
                     alert(`Error: ${errorData.message}\nDetails: ${errorData.errors.join(', ')}`);
                 }
             } catch (error) {
-                // If got error when adding post, log the error message in console and alert user about the error
-                console.error("Error adding post:", error);
-                alert("An error occurred while creating your post. Please try again later.");
+                // If got error when editing post, log the error message in console and alert user about the error
+                console.error("Error editing post:", error);
+                alert("An error occurred while editing your post. Please try again later.");
             }
         }
     });
+}
+
+// new, to be checked again
+function getUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('id');
 }
 
 // Fetch and display post details (for editing post)

@@ -48,9 +48,9 @@ app.delete("/logout", accountController.logout);
 // Post routes
 app.get("/posts", postController.getAllPosts);
 app.get("/posts/:id", postController.getPostById);
-app.post("/posts", validatePost.validateCreatePost, postController.createPost);
+app.post("/posts", authenticate.verifyJWT, validatePost.validateCreatePost, postController.createPost);
 app.put("/posts/:id", authenticate.verifyJWT, validatePost.validateUpdatePost, postController.updatePost);
-app.delete("/posts/:id", postController.deletePost);
+app.delete("/posts/:id", authenticate.verifyJWT, postController.deletePost);
 app.get("/posts/:id/replyCount", postController.getReplyCount); // route to get reply count for a post (used in frontend js)
 
 // Reply routes
