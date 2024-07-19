@@ -5,8 +5,8 @@ const routes = ["./app.js"]; // Path to your API route files
 
 const doc = {
   info: {
-    title: "My API",
-    description: "Description of your API",
+    title: "OurFoodSG - Food Security API Documentation",
+    description: "This API documentation contains API endpoints for account, post, reply, quiz question, and quiz answer for OurFoodSG.",
   },
   host: "localhost:3000", // Replace with your actual host if needed
 };
