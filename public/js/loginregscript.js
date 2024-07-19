@@ -1,12 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
     const token = sessionStorage.getItem('token');
     const loginAccId = sessionStorage.getItem('loginAccId');
+    const rToken = getCookie('rToken');
 
     if (token && !isTokenExpired(token)) {
         window.location.href = `profile.html?id=${loginAccId}`;
         console.log("Logged in")
-    } else if (token && isTokenExpired(token)) {
+    } else if (rToken) {
+        refreshToken(rToken);
+    } else if (token && isTokenExpired(token)){
         sessionStorage.clear();
+        deleteCookie('rToken');
         location.reload();
     }
 
@@ -41,10 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
             sessionStorage.setItem('token', token);
             sessionStorage.setItem('loginAccId', loginAccId);
             sessionStorage.setItem('loginAccRole', loginAccRole);
-            sessionStorage.setItem('refreshToken', refreshToken);
-            console.log(token);
-            console.log(loginAccId);
-            console.log(loginAccRole);
+            setCookie('rToken', refreshToken, 7);
 
             window.location.href = 'index.html';
         } catch (err) {
@@ -116,4 +117,68 @@ function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
     const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
     return Date.now() > expiry; // Check if the current time is past the expiry time
+}
+
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  function deleteCookie(cname) {
+    document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
+
+async function refreshToken(rToken) {
+    try {
+        const response = await fetch('/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${rToken}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
+
+        const result = await response.json();
+
+        const token = result.token;
+        const decodedToken = parseJwt(token);
+        const loginAccId = decodedToken.accId;
+        const loginAccRole = decodedToken.accRole;
+
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('loginAccId', loginAccId);
+        sessionStorage.setItem('loginAccRole', loginAccRole);
+        
+        if (token == null) {
+            sessionStorage.clear();
+            deleteCookie('rToken');    
+        }
+        console.log(token);
+        location.reload();
+        
+        return true;
+    } catch {
+        console.log("error")
+    }
 }

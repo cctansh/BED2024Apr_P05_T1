@@ -108,13 +108,20 @@
     const loginAccId = sessionStorage.getItem('loginAccId');
     const loginAccRole = sessionStorage.getItem('loginAccRole');
 
-    if (token) {
-        loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
-        loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
-    } else {
-        loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
-        loginProfileLink.setAttribute("href", 'loginreg.html')
+    if (token && !isTokenExpired(token)) {
+    loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
+} else {
+    // If token is not present or is expired (user not logged in)
+    // Clear the session storage if the token is expired
+    if (token && isTokenExpired(token)) {
+        sessionStorage.clear();
+        location.reload();
     }
+
+    loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.setAttribute("href", 'loginreg.html')
+}
   </script>
 </body>
 
