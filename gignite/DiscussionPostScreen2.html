@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiscussionPostScreen</title>
+</head>
+<body>
+
+    <div style="background: #f9fafb; min-height: 100vh;">
+  <nav style="background: #ffffff; padding: 16px 16px 8px; position: sticky; top: 0; z-index: 10;">
+    <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1120px; margin: auto;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <img src="https://avatars.githubusercontent.com/u/122350750" alt="Logo" style="height: 32px; width: 32px; border-radius: 9999px;"/>
+        <div style="position: relative;">
+          <input type="text" placeholder="Search" style="background: #f0f1f3; padding-left: 32px; padding-right: 12px; padding-top: 8px; padding-bottom: 8px; border-radius: 8px; width: 192px; outline: none; border: none; ring-2: focus; ring-color: #3b82f6; ring-offset-2;"/>
+          <div style="position: absolute; inset-y: 0; left: 0; padding-left: 12px; display: flex; align-items: center; pointer-events: none;">🔍</div>
+        </div>
+        <button style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Home</button>
+        <button style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Popular</button>
+        <button style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">Communities</button>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">
+          <div class="avatar">
+            <div style="display: inline-flex; height: 32px; width: 32px; border-radius: 9999px; overflow: hidden; align-items: center; justify-content: center; background: #e5e7eb;">JD</div>
+            <img src="https://cdn.devdojo.com/images/dash/avatar.svg" alt="Jon Oh" style="height: 100%; width: 100%;" />
+          </div>
+          Username
+        </button>
+      </div>
+    </div>
+  </nav>
+  
+  <header style="border-bottom: 1px solid #e5e7eb; padding-bottom: 24px; padding-top: 24px;">
+    <div style="max-width: 1120px; margin: auto; padding-left: 16px; padding-right: 16px;">
+      <h1 style="font-size: 2.25rem; font-weight: 700;">
+        <a href="#" style="color: inherit; text-decoration: none;">What is your favorite coding music?</a>
+      </h1>
+      <div style="display: flex; align-items: center; gap: 8px; color: #6b7280;">
+        <button style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">
+          <div class="avatar">
+            <div style="display: inline-flex; height: 32px; width: 32px; border-radius: 9999px; overflow: hidden; align-items: center; justify-content: center; background: #e5e7eb;">JD</div>
+            <img src="https://cdn.devdojo.com/images/dash/avatar.svg" alt="Jon Oh" style="height: 100%; width: 100%;" />
+          </div>
+        </button>
+        <div>
+          <p style="margin: 0;">
+            <a href="#" style="font-weight: 500; color: #1f2937; text-decoration: none;">Author</a> 
+            <a href="#" style="font-weight: 500; color: #1f2937; text-decoration: none;">September 14, 2023</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main style="margin-top: -96px; max-width: 1120px; margin: auto; padding-left: 16px; padding-right: 16px;">
+    <div style="display: grid; grid-template-columns: repeat(1, minmax(0, 1fr)); gap: 24px; margin-top: 24px;">
+      <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px;">
+        <div style="padding: 16px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+            <h2 style="font-size: 1.125rem; font-weight: 600;">Post Details</h2>
+            <button style="font-size: 0.875rem; font-weight: 500; color: #2563eb;">Edit</button>
+            <button style="font-size: 0.875rem; font-weight: 500; color: #ef4444;">Delete</button>
+          </div>
+          <p>Here is the original post content. It can be as long or as short as needed to convey the information.</p>
+        </div>
+      </div>
+
+      <div style="grid-column: span 2;">
+        <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 8px;">Replies</h2>
+        <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px;">
+          <div class="card bg-card-50 ml-12 mt-4" style="background: #f9fafb; margin-left: 48px; margin-top: 16px; border: 1px solid #e5e7eb; border-radius: 8px;" key="0">
+            <div style="padding: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">
+                    <div class="avatar">
+                      <div style="display: inline-flex; height: 32px; width: 32px; border-radius: 9999px; overflow: hidden; align-items: center; justify-content: center; background: #e5e7eb;">JD</div>
+                      <img src="https://cdn.devdojo.com/images/dash/avatar.svg" alt="Jon Oh" style="height: 100%; width: 100%;" />
+                    </div>
+                  </button>
+                  <p style="margin: 0;">
+                    <a href="#" style="font-weight: 500; color: #1f2937; text-decoration: none;">Reply author</a>
+                  </p>
+                </div>
+                <div style="font-size: 0.875rem; color: #6b7280;">2 hours ago</div>
+              </div>
+              <p>Here is the reply content. It can be as long or as short as needed to convey the information.</p>
+            </div>
+          </div>
+
+          <div class="card bg-card-50 ml-12 mt-4" style="background: #f9fafb; margin-left: 48px; margin-top: 16px; border: 1px solid #e5e7eb; border-radius: 8px;" key="1">
+            <div style="padding: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">
+                    <div class="avatar">
+                      <div style="display: inline-flex; height: 32px; width: 32px; border-radius: 9999px; overflow: hidden; align-items: center; justify-content: center; background: #e5e7eb;">JD</div>
+                      <img src="https://cdn.devdojo.com/images/dash/avatar.svg" alt="Jon Oh" style="height: 100%; width: 100%;" />
+                    </div>
+                  </button>
+                  <p style="margin: 0;">
+                    <a href="#" style="font-weight: 500; color: #1f2937; text-decoration: none;">Reply author</a>
+                  </p>
+                </div>
+                <div style="font-size: 0.875rem; color: #6b7280;">2 hours ago</div>
+              </div>
+              <p>Here is the reply content. It can be as long or as short as needed to convey the information.</p>
+            </div>
+          </div>
+
+          <div class="card bg-card-50 ml-12 mt-4" style="background: #f9fafb; margin-left: 48px; margin-top: 16px; border: 1px solid #e5e7eb; border-radius: 8px;" key="2">
+            <div style="padding: 16px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <button style="font-size: 0.875rem; font-weight: 500; color: #1f2937;">
+                    <div class="avatar">
+                      <div style="display: inline-flex; height: 32px; width: 32px; border-radius: 9999px; overflow: hidden; align-items: center; justify-content: center; background: #e5e7eb;">JD</div>
+                      <img src="https://cdn.devdojo.com/images/dash/avatar.svg" alt="Jon Oh" style="height: 100%; width: 100%;" />
+                    </div>
+                  </button>
+                  <p style="margin: 0;">
+                    <a href="#" style="font-weight: 500; color: #1f2937; text-decoration: none;">Reply author</a>
+                  </p>
+                </div>
+                <div style="font-size: 0.875rem; color: #6b7280;">2 hours ago</div>
+              </div>
+              <p>Here is the reply content. It can be as long or as short as needed to convey the information.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 24px;">
+          <div style="background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px;">
+            <div style="padding: 16px;">
+              <h2 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 8px;">Leave a Reply</h2>
+              <textarea rows="3" placeholder="Write your reply here..." style="width: 100%; padding: 8px; border: 1px solid #e5e7eb; border-radius: 8px; background: #f9fafb; resize: vertical;" value=""></textarea>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <input type="checkbox" id="remember" name="remember" value="remember" style="position: relative; top: 0; border: 1px solid #e5e7eb; border-radius: 4px; cursor: pointer;" checked={false}/>
+                  <label for="remember" style="font-size: 0.875rem; color: #1f2937;">Email me about related products and services.</label>
+                </div>
+
+                <button style="padding: 8px 16px; background: #3b82f6; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Submit Reply</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+
+</body>
+</html>
