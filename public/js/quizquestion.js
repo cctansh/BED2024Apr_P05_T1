@@ -1,8 +1,8 @@
 // Retrieve necessary elements
-const token = localStorage.getItem('token'); // Retrieve token from local storage
+const token = sessionStorageStorage.getItem('token'); // Retrieve token from local storage
 const loginProfileLink = document.getElementById('login-profile-link'); // Retrieve profile link element
-const loginAccId = localStorage.getItem('loginAccId'); // Retrieve logged-in account ID from local storage
-const loginAccRole = localStorage.getItem('loginAccRole'); // Retrieve logged-in account role from local storage
+const loginAccId = sessionStorage.getItem('loginAccId'); // Retrieve logged-in account ID from local storage
+const loginAccRole = sessionStorage.getItem('loginAccRole'); // Retrieve logged-in account role from local storage
 const rToken = getCookie('rToken');
 
 if (token && !isTokenExpired(token)) {
