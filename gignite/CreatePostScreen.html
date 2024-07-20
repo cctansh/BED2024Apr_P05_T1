@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreatePostScreen</title>
+</head>
+<body>
+
+    <div style="display: flex; flex-direction: column; align-items: center; width: 100%; background-color: #f9fafb; padding-top: 32px;" data-testid="CreateNewPostScreenContainer">
+  <div style="position: sticky; top: 0; z-index: 50; background-color: white; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);" data-testid="CreateNewPostNavBar">
+    <div style="display: flex; align-items: center; justify-content: space-between; max-width: 1120px; margin-left: auto; margin-right: auto; padding-left: 16px; padding-right: 16px;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <img src="https://avatars.githubusercontent.com/u/122350750" alt="BED Logo" style="height: 40px; width: 40px; border-radius: 9999px;" />
+        <a href="#" style="color: #1a202c; text-decoration: none;">Home</a>
+        <a href="#" style="color: #1a202c; text-decoration: none;">Discussions</a>
+        <a href="#" style="color: #1a202c; text-decoration: none;">Resources</a>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <input type="text" placeholder="Search" style="padding-left: 12px; padding-right: 12px; padding-top: 6px; padding-bottom: 6px; border-radius: 9999px; border: 1px solid #cbd5e0; color: #1a202c; outline: none; transition: all 0.2s ease;"/>
+        <button style="color: #1a202c; background: none; border: none;">
+          <img src="https://static.ex.co/ext/common/mobile/img/android-chrome-48x48.png" alt="Profile" style="height: 32px; width: 32px; border-radius: 9999px;" />
+        </button>
+      </div>
+    </div>
+  </div>
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; max-width: 768px; margin-left: auto; margin-right: auto; margin-top: 32px; padding-left: 16px; padding-right: 16px;" data-testid="CreateNewPostContent">
+    <h1 style="font-size: 36px; font-weight: 700; margin-top: 32px; text-align: center;" data-testid="PageTitle">Create New Post</h1>
+    <input 
+      type="text" 
+      placeholder="Enter post title here..." 
+      style="width: 100%; color: #1a202c; font-size: 20px; border-radius: 9999px; border: 1px solid #EDF2F7; padding: 12px; margin-top: 32px; margin-bottom: 16px; background-color: #FFFFFF;"
+      data-testid="TitleInput"
+    />
+    <input 
+      type="text" 
+      placeholder="Share your thoughts here..." 
+      style="width: 100%; height: 192px; color: #1a202c; border-radius: 5px 5px 0 0; border-bottom: 2px solid #EDF2F7; padding: 12px;"
+      data-testid="PostBodyInput"
+    />
+    <button style="background-color: #3182ce; color: white; font-weight: 600; border-radius: 8px; padding: 16px; margin-top: 16px; width: 100%;" data-testid="ConfirmPostButton">Confirm Post</button>
+  </div>
+</div>
+
+</body>
+</html>
