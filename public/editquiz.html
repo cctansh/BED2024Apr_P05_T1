@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forum</title>
+    <title>Quiz Questions</title>
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container-fluid">
-            <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -31,27 +28,31 @@
                         <a class="nav-link" href="quizquestion.html">Quiz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="login-profile-link" href="loginreg.html">Login&ensp;<i
-                                class="bi bi-person-fill"></i></a>
+                        <a class="nav-link" id="login-profile-link" href="loginreg.html">Login&ensp;<i class="bi bi-person-fill"></i></a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div id="adminView1" class="editquiz">
-        <div class="horizontal-flex">
-            <button id="edit-button" type="button" class="btn btn-danger">&ensp;<i
-                class="bi bi-pencil-fill"></i></button>
-            <button id="delete-button" type="button" class="btn btn-danger"><i class="bi bi-trash3"></i></button>
-        </div>
+    <div class="container mt-5">
+        <button onclick="goBack()" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</button>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Question</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody id="questions-table-body">
+                <!-- Questions will be populated here -->
+            </tbody>
+        </table>
     </div>
 
-
-    
-
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
-    <script src="js/quizquestion.js"></script>
+    <script src="js/editquizscript.js"></script>
 </body>
-
 </html>

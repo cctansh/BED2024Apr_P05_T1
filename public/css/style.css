@@ -615,3 +615,35 @@ li {
     background-color: #5b0707; /* Darker red for hover effect */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
+
+/*edit quiz*/
+.table {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+.table th, .table td {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f1f1f1;
+}
+
+/* Button styling for 'Back' button */
+button.btn-primary.mb-3 {
+    margin-bottom: 20px;
+    margin-top: 20px; /* Add margin at the top */
+    padding: 12px 20px; /* Increase padding */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.btn-primary.mb-3 i {
+    margin-right: 5px;
+}
