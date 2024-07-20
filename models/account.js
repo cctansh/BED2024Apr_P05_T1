@@ -224,7 +224,7 @@ class Account {
         return null;
     }
     static async generateAccessToken(payload) {
-        return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "8h" });
+        return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "10m" });
     }
 
     static async refreshAccessToken(refreshToken) {

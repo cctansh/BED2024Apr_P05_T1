@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UserProfileScreen</title>
+</head>
+<body>
+
+    <div style="display: flex; height: 100vh; flex-direction: column;">
+  <!-- Top Navigation -->
+  <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid; padding: 1rem;">
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <img src="https://avatars.githubusercontent.com/u/122350750" alt="LinkedUp Logo" style="width: 2rem; height: 2rem; border-radius: 50%;" />
+      <span style="font-size: 1.125rem; font-weight: bold;">LinkedUp</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+      <button style="border-radius: 50%; padding: 0.5rem;">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M10 10c1.657 0 2.99-1.343 2.99-3s-1.333-3-2.99-3S7.01 5.343 7.01 7s1.333 3 2.99 3Zm.005 1a3.993 3.993 0 0 0-3.856 2.824 4.044 4.044 0 0 0-.144 2.808L10.01 21H14l1.991-3.368c.533-.896.962-2.01 1.055-3.163C15.89 13.128 13.246 11 10.005 11ZM21.82 22.733A12.034 12.034 0 0 0 19.03 14c-.09-.153-1.001-1.76-.874-3.882.059-1.015.31-3.084-1.136-4.709C16.83 4.12 15.93 2.95 13.833 3c-1.919 0-2.748.981-3.252 1.115 1.925 1.103 2.67 3.399 1.374 5.475-1.34 2.149-3.676 3.192-6.288 2.386-.442-1.164.057-4.06-.572-6.86-1.273-5.792-3.745 0-3.745 0C1 5.208.362 8.665 1.439 12.589c.914 3.342 3.285 5.556 6.148 5.829 1.182-.273 3.216 2.804 3.216 2.804 2.282 1.773 4.835-.181 5.379-4.098.369-3.332 3.144-6.645 3.144-6.645.374-.784.91-1.49 1.603-2.087C24 11.176 23.924 19.715 21.82 22.733Z"></path></svg>
+      </button>
+      <button style="border-radius: 50%; padding: 0.5rem;">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M22.914 17.471l-.753-.379c-.814-6.443-15.238-6.443-16.047 0l-.75.375a1.99 1.99 0 0 0-.883 2.599l1.502 3.002A2.001 2.001 0 0 0 8 24h8c.741 0 1.416-.406 1.751-1.002l1.503-3.002a2.001 2.001 0 0 0-.789-2.525ZM12.005 11c1.658 0 2.99-1.343 2.99-3S13.662 5 12.005 5s-2.995 1.343-2.995 3 1.337 3 2.995 3Z"></path></svg>
+      </button>
+      <button style="border-radius: 50%; padding: 0.5rem;">
+        <svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 7a1 1 0 0 0-.707 1.707l8 8a1 1 0 0 0 1.414 0l8-8A1 1 0 0 0 19 8V7H4Zm12 8h1v1H8v-1h1l5-5a1 1 0 0 1 1.707 0 1 1 0 0 1 0 1.415L15 15Zm-9 3h14v1H6v-1Z"></path></svg>
+      </button>
+      <img src="https://storage.gignite.ai/mediaengine/gignite-logo.png" alt="User's profile" style="width: 2.5rem; height: 2.5rem; border-radius: 50%;" />
+    </div>
+  </div>
+
+  <div style="display: flex; flex: 1; grid-template-columns: repeat(4, auto); column-gap: 1rem; padding: 1rem;">
+    <!-- Left Sidebar -->
+    <div style="grid-column: span 1; background-color: #e5e7eb; padding: 1rem; border-radius: 0.5rem;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+        <div style="width: 8rem; height: 8rem;">
+          <img src="https://storage.gignite.ai/mediaengine/gignite-logo.png" alt="User profile picture" style="width: 100%; height: 100%; border-radius: 50%;" />
+        </div>
+        <div style="text-align: center;">
+          <p style="font-weight: bold; font-size: 1.125rem;">Jon Oh</p>
+          <p style="font-size: 0.875rem; color: #6b7280;">Full Stack Developer</p>
+          <p style="font-size: 0.875rem; color: #6b7280;">New York City</p>
+        </div>
+      </div>
+      <div style="margin-top: 2rem; gap: 0.5rem;">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <svg viewBox="0 0 24 24" width="16" height="16" style="color: #6b7280;"><path d="M22.914 17.471l-.753-.379c-.814-6.443-15.238-6.443-16.047 0l-.75.375a1.99 1.99 0 0 0-.883 2.599l1.502 3.002A2.001 2.001 0 0 0 8 24h8c.741 0 1.416-.406 1.751-1.002l1.503-3.002a2.001 2.001 0 0 0-.789-2.525ZM12.005 11c1.658 0 2.99-1.343 2.99-3S13.662 5 12.005 5s-2.995 1.343-2.995 3 1.337 3 2.995 3Z"></path></svg>
+          <span>0 Connections</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <svg viewBox="0 0 24 24" width="16" height="16" style="color: #6b7280;"><path d="M10 10c1.657 0 2.99-1.343 2.99-3s-1.333-3-2.99-3S7.01 5.343 7.01 7s1.333 3 2.99 3Zm.005 1a3.993 3.993 0 0 0-3.856 2.824 4.044 4.044 0 0 0-.144 2.808L10.01 21H14l1.991-3.368c.533-.896.962-2.01 1.055-3.163C15.89 13.128 13.246 11 10.005 11ZM21.82 22.733A12.034 12.034 0 0 0 19.03 14c-.09-.153-1.001-1.76-.874-3.882.059-1.015.31-3.084-1.136-4.709C16.83 4.12 15.93 2.95 13.833 3c-1.919 0-2.748.981-3.252 1.115 1.925 1.103 2.67 3.399 1.374 5.475-1.34 2.149-3.676 3.192-6.288 2.386-.442-1.164.057-4.06-.572-6.86-1.273-5.792-3.745 0-3.745 0C1 5.208.362 8.665 1.439 12.589c.914 3.342 3.285 5.556 6.148 5.829 1.182-.273 3.216 2.804 3.216 2.804 2.282 1.773 4.835-.181 5.379-4.098.369-3.332 3.144-6.645 3.144-6.645.374-.784.91-1.49 1.603-2.087C24 11.176 23.924 19.715 21.82 22.733Z"></path></svg>
+          <span>Member Info</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div style="grid-column: span 3; background-color: #e5e7eb; padding: 1rem; border-radius: 0.5rem;">
+      <div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button>Posts</button>
+          <button>Replies</button>
+          <button>Settings</button>
+        </div>
+        <div>
+          <div style="gap: 1rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <h2 style="font-size: 1.5rem; font-weight: bold;">My Latest Post</h2>
+              <button style="border-radius: 50%; background-color: #ef4444; padding: 0.5rem; font-size: 0.875rem; color: #fff;">New Post</button>
+            </div>
+            <div style="padding: 1rem; background-color: #fff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">
+              <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">
+                <a href="#" style="color: inherit; text-decoration: none;">Hello World App Released!</a>
+              </h3>
+              <p style="color: #6b7280;">Published on June 15, 2023</p>
+              <p style="margin-top: 0.5rem;">Exciting news! Our team has released the much anticipated Hello World app. Give it a try and let us know what you think.</p>
+              <div style="margin-top: 1rem;">
+                <a href="#" style="color: #3b82f6; text-decoration: none;">Read more...</a>  
+              </div>
+            </div>
+          </div>
+          <!-- Other Tabs Contents can be added similarly -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

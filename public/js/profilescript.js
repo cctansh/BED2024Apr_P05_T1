@@ -3,27 +3,20 @@ const loginProfileLink = document.getElementById('login-profile-link');
 const loginAccId = sessionStorage.getItem('loginAccId');
 const loginAccRole = sessionStorage.getItem('loginAccRole');
 
+const rToken = getCookie('rToken');
+
 const profileId = getUrlParams();
 console.log(profileId);
 
 if (token && !isTokenExpired(token)) {
-    // If token is present (user is logged in)
-    // Show logged in display ("Profile" and person icon) and set href to redirect to the user's account page
     loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
+} else if (rToken) {
+    refreshToken(rToken);
 } else {
-    // If token is not present or is expired (user not logged in)
-    // Clear the session storage if the token is expired
-    // Show default display ("Login" and person icon) and set href to redirect to user register page
-    if (token && isTokenExpired(token)) {
-        sessionStorage.clear();
-        alert('Login timed out.');
-        window.location.href = `/index.html`;
-    }
-
+    sessionStorage.clear()
     loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
     loginProfileLink.setAttribute("href", 'loginreg.html')
-    loginProfileLink.classList.remove('active');
 }
 
 function getUrlParams() {
@@ -390,13 +383,30 @@ async function updateAccountRole(profileId) {
     }
 }
 
+async function deleteRefreshToken(rToken) {
+    try {
+        fetch('/logout', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${rToken}`
+            }
+        })
+        console.log("aa")
+    } catch (err) {
+        console.log('Deletion failed: ' + err.message);
+    }
+}
+
 const logoutButton = document.getElementById('logout');
-logoutButton.addEventListener('click', () => {
+logoutButton.addEventListener('click', async () => {
     const confirmed = confirm("Are you sure you want to log out?");
     if (confirmed) {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('loginAccId');
         sessionStorage.removeItem('loginAccRole');
+        await deleteRefreshToken(rToken);
+        deleteCookie('rToken');
         window.location.href = 'loginreg.html'; // Redirect to login page after logout
     }
 });
@@ -409,6 +419,7 @@ deleteAccButton.addEventListener('click', async () => {
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('loginAccId');
         sessionStorage.removeItem('loginAccRole');
+        deleteCookie('rToken');
         alert('Account deleted. Returning to login page.');
         window.location.href = 'loginreg.html'; // Redirect to login page after logout
     }
@@ -462,4 +473,73 @@ function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
     const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
     return Date.now() > expiry; // Check if the current time is past the expiry time
+}
+
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        console.error('Error parsing JWT token:', error);
+        return null;
+    }
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+      let c = ca[i];
+      while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+      }
+      if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+      }
+    }
+    return "";
+  }
+
+  function deleteCookie(cname) {
+    document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
+
+  async function refreshToken(rToken) {
+    try {
+        const response = await fetch('/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${rToken}`
+            }
+        });
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
+
+        const result = await response.json();
+
+        const token = result.token;
+        const decodedToken = parseJwt(token);
+        const loginAccId = decodedToken.accId;
+        const loginAccRole = decodedToken.accRole;
+
+        sessionStorage.setItem('token', token);
+        sessionStorage.setItem('loginAccId', loginAccId);
+        sessionStorage.setItem('loginAccRole', loginAccRole);
+        
+        location.reload();
+    } catch {
+        console.log("error")
+        alert('Login timed out.');
+        sessionStorage.clear();
+        deleteCookie('rToken');   
+        location.reload();
+    }
 }

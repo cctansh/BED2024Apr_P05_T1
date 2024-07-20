@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreateReplyScreen</title>
+</head>
+<body>
+
+    <div style="display: flex; flex-direction: column; align-items: center; max-width: 80rem; margin: auto;">
+  <div style="width: 100%; background-color: white; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24); border-radius: 0.5rem; padding: 1.5rem; margin-bottom: 2rem;">
+    <h1 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Replying to [Post Title]</h1>
+    <textarea 
+      style="width: 100%; height: 10rem; resize: none; border-radius: 0.375rem; border: 1px solid #d1d5db; padding: 0.5rem 0.75rem;" 
+      placeholder="Compose your reply here..."
+    ></textarea>
+    <div style="margin-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <button 
+          style="background-color: #f9fafb; border: 1px solid #e5e7eb; color: #374151; padding: 0.25rem; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
+          onmouseover="this.style.backgroundColor='#f3f4f6'" onmouseout="this.style.backgroundColor='#f9fafb'"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" style="height: 1rem; width: 1rem; color: #374151;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h9"></path><path d="M8 20h10"></path><path d="M14 4l-8 16"></path></svg>
+        </button>
+        <button 
+          style="background-color: #f9fafb; border: 1px solid #e5e7eb; color: #374151; padding: 0.25rem; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
+          onmouseover="this.style.backgroundColor='#f3f4f6'" onmouseout="this.style.backgroundColor='#f9fafb'"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" style="height: 1rem; width: 1rem; color: #374151;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 4h-9"></path><path d="M14 20H5"></path><path d="M15 4L7 20"></path></svg>
+        </button>
+        <button 
+          style="background-color: #f9fafb; border: 1px solid #e5e7eb; color: #374151; padding: 0.25rem; border-radius: 0.375rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background-color 0.3s;" 
+          onmouseover="this.style.backgroundColor='#f3f4f6'" onmouseout="this.style.backgroundColor='#f9fafb'"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" style="height: 1rem; width: 1rem; color: #374151;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        </button>
+      </div>
+      <button 
+        style="background-color: #1f2937; color: #e5e7eb; padding: 0.5rem 1rem; border-radius: 0.375rem; cursor: pointer; transition: background-color 0.3s;" 
+        onmouseover="this.style.backgroundColor='#111827'" onmouseout="this.style.backgroundColor='#1f2937'"
+      >
+        Confirm Reply
+      </button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoginRegisterScreen</title>
+</head>
+<body>
+
+    <div style="display: flex; height: 100vh;" alt="Split screen with hero image on the left and forms on the right">
+    <div style="width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;" alt="Left half with hero image">
+        <img 
+            style="object-fit: cover;" 
+            src="https://images.unsplash.com/photo-1499951365902-3ad364fa82f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8SGVvbiB3aXRoIHVwIGF8fHx8fHwxNzE0NDk5NjAy&ixlib=rb-4.0.3&q=80&utm_expid=92849790-119.YmXqXehvQZaqzmLIAUqO4g.utm_referrer=8~9~&w=1080"
+            width="800"
+            height="1080"
+        />
+    </div>
+
+    <div style="width: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem;" alt="Right half with login and register tabs">
+        <div>
+            <div style="margin-bottom: 2rem;">
+                <button style="background: white; color: black; padding: 1rem 2rem; border-radius: 0.5rem; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);">
+                    Login
+                </button>
+                <button style="background: white; color: black; padding: 1rem 2rem; border-radius: 0.5rem; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); margin-left: 0.5rem;">
+                    Register
+                </button>
+            </div>
+
+            <div style="background: white; border-radius: 0.5rem; padding: 2rem; box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); width: 20rem;" alt="Login form">
+                <h2 style="font-size: 2rem; font-weight: 600; margin-bottom: 1rem;">Welcome Back</h2>
+                
+                <input 
+                    type="email"
+                    placeholder="Email" 
+                    style="margin-bottom: 1rem; width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem;" 
+                />
+                
+                <input
+                    type="password"
+                    placeholder="Password"
+                    style="margin-bottom: 1rem; width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 0.25rem;" 
+                />
+                
+                <button style="background: #0d6efd; color: white; width: 100%; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem;">
+                    Login
+                </button>
+
+                <div style="margin-bottom: 1rem;">
+                    <strong>Error</strong>
+                    <p>Invalid email or password</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

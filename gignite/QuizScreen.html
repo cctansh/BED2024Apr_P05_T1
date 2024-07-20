@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizScreen</title>
+</head>
+<body>
+
+    <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+        color: #333;
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+      .header {
+        background-color: #fff;
+        padding: 1rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .header img {
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+      }
+      .header h1 {
+        margin-left: 1rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .header button {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      .header button:hover {
+        background-color: #0056b3;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      @media (min-width: 600px) {
+        .container {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (min-width: 1024px) {
+        .container {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      .card {
+        background-color: #fff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .card h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+      .card img {
+        width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+      }
+      .card button {
+        width: 100%;
+        background-color: #212529;
+        border: none;
+        color: white;
+        padding: 0.75rem;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-bottom: 0.5rem;
+      }
+      .card button:hover {
+        background-color: #343a40;
+      }
+      .next-button {
+        background-color: #6c757d;
+        color: white;
+        margin-top: 1rem;
+      }
+      .next-button:disabled {
+        background-color: #ced4da;
+      }
+      .alert {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem;
+        margin-top: 1rem;
+        border-radius: 0.5rem;
+      }
+      .alert.correct {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .alert.incorrect {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      .alert svg {
+        width: 1rem;
+        height: 1rem;
+      }
+      .alert-title {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div style="display: flex; align-items: center;">
+        <img src="https://avatars.githubusercontent.com/u/122350750" alt="App logo">
+        <h1>Quiz App</h1>
+      </div>
+      <button>Home</button>
+    </header>
+    <div class="container">
+      <div class="card">
+        <h2>What is the capital of France?</h2>
+        <img src="https://storage.gignite.ai/mediaengine/model1/c1e4b7c6-3a86-4319-88b7-7fd035b2b381.png" alt="What is the capital of France?">
+        <button>A Paris</button>
+        <button>B London</button>
+        <button>C Rome</button>
+        <button>D Berlin</button>
+        <button class="next-button" disabled>Next Question</button>
+      </div>
+      <div class="card">
+        <h2>Who painted the Mona Lisa?</h2>
+        <img src="https://storage.gignite.ai/mediaengine/model1/6120f5cf-e0e1-4785-9d28-d7a81959429a.png" alt="Who painted the Mona Lisa?">
+        <button>A Leonardo da Vinci</button>
+        <button>B Pablo Picasso</button>
+        <button>C Vincent van Gogh</button>
+        <button>D Claude Monet</button>
+        <button class="next-button" disabled>Next Question</button>
+      </div>
+      <div class="card">
+        <h2>What is the currency of Japan?</h2>
+        <img src="https://storage.gignite.ai/mediaengine/model1/15dcdccc-ddf1-4bb9-8da0-ef091e0a5130.png" alt="What is the currency of Japan?">
+        <button>A Yuan</button>
+        <button>B Yen</button>
+        <button>C Won</button>
+        <button>D Yenom</button>
+        <button class="next-button" disabled>Next Question</button>
+      </div>
+      <div class="card">
+        <h2>What is the tallest mountain in the world?</h2>
+        <img src="https://storage.gignite.ai/mediaengine/model1/d7bca286-380e-4650-903d-f19185620a8f.png" alt="What is the tallest mountain in the world?">
+        <button>A K2</button>
+        <button>B Mount Everest</button>
+        <button>C Makalu</button>
+        <button>D Lhotse</button>
+        <button class="next-button" disabled>Next Question</button>
+      </div>
+    </div>
+  </body>
+</html>
+
+</body>
+</html>
