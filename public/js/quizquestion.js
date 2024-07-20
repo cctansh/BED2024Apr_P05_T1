@@ -1,5 +1,5 @@
 // Retrieve necessary elements
-const token = sessionStorageStorage.getItem('token'); // Retrieve token from local storage
+const token = sessionStorage.getItem('token'); // Retrieve token from local storage
 const loginProfileLink = document.getElementById('login-profile-link'); // Retrieve profile link element
 const loginAccId = sessionStorage.getItem('loginAccId'); // Retrieve logged-in account ID from local storage
 const loginAccRole = sessionStorage.getItem('loginAccRole'); // Retrieve logged-in account role from local storage
@@ -78,7 +78,7 @@ async function showQuestion() {
   answers.forEach(answer => {
     const button = document.createElement("button");
     button.innerHTML = answer.answer_text;
-    button.classList.add("btn");
+    button.classList.add("answerbtn");
     button.dataset.correct = answer.is_correct;
     button.dataset.explanation = answer.explanation; // Store explanation in the button dataset
     button.addEventListener("click", selectAnswer);
