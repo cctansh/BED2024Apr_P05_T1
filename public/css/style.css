@@ -511,7 +511,7 @@ li {
 }
 
 /* Answer buttons */
-.btn {
+.answerbtn {
     font-size: 18px;
     font-weight: 300;
     background: #fff;
@@ -525,12 +525,12 @@ li {
     cursor: pointer;
 }
 
-.btn:hover:not([disabled]) {
+.answerbtn:hover:not([disabled]) {
     background: #222;
     color: #fff;
 }
 
-.btn:disabled {
+.answerbtn:disabled {
     cursor: no-drop;
 }
 
