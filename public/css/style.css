@@ -344,10 +344,25 @@ form .btn {
 
 .tab-content,
 .tab-pane,
-.form-group,
+.form-group{
+    width: 100%;
+}
+
 .inputs,
 form input {
     width: 100%;
+}
+
+#login,
+#register,
+#change-password-form,
+#change-email-form,
+#change-name-form {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 50%;
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
 
 /* Change the default color of the nav-pills */
