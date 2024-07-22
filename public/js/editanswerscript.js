@@ -1,4 +1,7 @@
-// Retrieve necessary elements
+function goBack() {
+    window.history.back();
+}
+
 const token = sessionStorage.getItem('token'); // Retrieve token from session storage
 const loginProfileLink = document.getElementById('login-profile-link'); // Retrieve profile link element
 const loginAccId = sessionStorage.getItem('loginAccId'); // Retrieve logged-in account ID from session storage
@@ -90,7 +93,6 @@ async function refreshToken(rToken) {
     }
 }
 
-
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('DOM fully loaded and parsed');
     await loadQuestionAndAnswers();
@@ -175,9 +177,8 @@ function addAnswer(text = '', isCorrect = false) {
     document.getElementById('editAnswersContainer').appendChild(answerGroup);
 }
 
-
 const addAnswerButton = document.getElementById('add-answer');
-const editAnswersForm = document.getElementById('edit-answers-form');
+const editAnswersForm = document.getElementById('edit-answers-form1');
 
 addAnswerButton.addEventListener('click', () => {
     addAnswer('', false);
@@ -219,7 +220,3 @@ editAnswersForm.addEventListener('submit', async (e) => {
         console.error('Error saving changes:', error);
     }
 });
-
-window.goBack = function () {
-    window.history.back();
-};
