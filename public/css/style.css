@@ -65,14 +65,13 @@ footer div {
 /* nav bar */
 
 .navbar {
-    border-bottom: 8px solid #dc3545;
     /* Red border underneath the navbar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-nav {
     flex-grow: 1;
     /* Allows nav items to use up remaining space */
-    justify-content: space-between;
     /* Spacing between nav items */
     padding-left: 10px;
     padding-right: 10px;
@@ -81,9 +80,8 @@ footer div {
 .navbar .nav-link {
     /* styles the page link text */
     font-size: 18px;
-    font-weight: 600;
     color: #686868;
-    margin-bottom: -10px;
+    margin-bottom: -6px;
 }
 
 .navbar .nav-item .active {

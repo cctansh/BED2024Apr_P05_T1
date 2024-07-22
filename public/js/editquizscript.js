@@ -6,7 +6,7 @@ const loginAccRole = sessionStorage.getItem('loginAccRole'); // Retrieve logged-
 const rToken = getCookie('rToken');
 
 if (token && !isTokenExpired(token)) {
-    loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.innerHTML = `Profile`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else if (rToken) {
     refreshToken(rToken);

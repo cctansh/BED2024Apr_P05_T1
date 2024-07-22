@@ -9,13 +9,13 @@ const profileId = getUrlParams();
 console.log(profileId);
 
 if (token && !isTokenExpired(token)) {
-    loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.innerHTML = `Profile`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else if (rToken) {
     refreshToken(rToken);
 } else {
     sessionStorage.clear()
-    loginProfileLink.innerHTML = `Login&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.innerHTML = `Login`;
     loginProfileLink.setAttribute("href", 'loginreg.html')
 }
 
