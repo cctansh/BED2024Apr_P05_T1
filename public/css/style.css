@@ -733,3 +733,31 @@ button.btn-primary.mb-3 i {
 form {
     margin-top: 20px;
 }
+
+.answer-item {
+    margin-bottom: 10px;
+}
+
+.answer-text {
+    font-size: 16px;
+    margin: 0;
+}
+
+.answer-correct {
+    font-weight: bold;
+    color: green;
+}
+
+.input-group-append .form-check-input {
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+.input-group-append .ansbtn {
+    margin-left: 0.5rem;
+}
+
+.wider-textbox {
+    flex: 1;
+    min-width: 9000px; /* You can adjust the width as needed */
+}

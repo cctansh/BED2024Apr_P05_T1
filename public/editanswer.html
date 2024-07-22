@@ -37,15 +37,20 @@
     </div>
   </nav>
   <div class="container mt-5 pt-5">
+    <button onclick="goBack()" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</button>
     <div id="question-container" class="card">
       <div class="card-body">
         <h5 class="card-title">Quiz Question</h5>
         <p id="questionText">Example question text here...</p>
         <label for="upload-image" class="form-label">Upload Image</label>
         <input type="file" id="upload-image" class="form-control mb-3">
-        <h5 class="card-title">Edit Answers</h5>
+        <h5 class="card-title">Quiz Answers</h5>
+        <div id="answersContainer">
+          <!-- Answers will be displayed here -->
+        </div>
+        
         <form id="edit-answers-form">
-          <div id="answersContainer">
+          <div id="editAnswersContainer">
             <!-- Dynamic answer fields will be added here -->
           </div>
           <button type="button" class="btn btn-secondary mt-2" id="add-answer">Add Answer</button>
