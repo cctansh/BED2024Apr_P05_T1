@@ -335,12 +335,6 @@ async function setAdminIndicatorAndView(profileId) {
     }
 }
 
-async function setAccountDetails(profileId) {
-    const response = await fetch(`/accounts/${profileId}`);
-    const account = await response.json();
-    document.getElementById('email-info').textContent = `E-mail: ${account.accEmail}`;
-}
-
 async function fetchAccountRole(accId) {
     const response = await fetch(`/accounts/${accId}`);
     const account = await response.json();
@@ -462,10 +456,8 @@ setProfileName(profileId);
 setAdminIndicatorAndView(profileId);
 
 if (loginAccId != profileId) {
-    document.getElementById("profile").classList.add('hide');
-} else {
-    setAccountDetails(profileId);
-}
+  document.getElementById('settings').classList.add('hide');  
+} 
 
 fetchPostsAndReplies(profileId);
 

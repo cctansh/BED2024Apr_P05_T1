@@ -393,9 +393,20 @@ h5 {
 
 #profile-head {
     display: flex;
-    gap: 1rem;
     align-items: center;
     height: fit-content;
+    justify-content: space-between;
+}
+
+.line {
+    display: flex;
+    align-items: center;
+    height: fit-content;
+    gap: 1rem;
+}
+
+.dropdown-item:active {
+    background-color: #a72f3b;
 }
 
 #admin {
@@ -588,7 +599,7 @@ li {
     
 }
 
-.horizontal-flex {
+.horizontal-flex1 {
     display: flex;
     justify-content: flex-end;
     position: absolute;
@@ -598,7 +609,7 @@ li {
     
 }
 
-.horizontal-flex .btn {
+.horizontal-flex1 .btn {
     background-color: #dc3545; /* Red color for buttons */
     color: white;
     border: none;
@@ -611,7 +622,7 @@ li {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.horizontal-flex .btn:hover {
+.horizontal-flex1 .btn:hover {
     background-color: #5b0707; /* Darker red for hover effect */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
