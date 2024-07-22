@@ -100,27 +100,29 @@ async function seedDatabase() {
         // Insert data into Account table
         await sql.query(`
             INSERT INTO Account(accName, accEmail, accPassword, accRole)
-            VALUES ('account1', 'hi@gmail.com', '${hashedPassword1}', 'member'),  
-                   ('account2', 'hello@yahoo.com.sg', '${hashedPassword2}', 'member'),
-                   ('account3', 'haha@yahoo.com.sg', '${hashedPassword3}', 'admin');
+            VALUES ('potatofarm123', 'hi@gmail.com', '${hashedPassword1}', 'member'),  
+                   ('Damian Ang', 'hello@yahoo.com.sg', '${hashedPassword2}', 'member'),
+                   ('easystrikes', 'haha@yahoo.com.sg', '${hashedPassword3}', 'admin');
         `);
 
         // Insert data into Post table
         await sql.query(`
             INSERT INTO Post(postDateTime, postTitle, postText, postEdited, adminEdit, accId)
-            VALUES ('2024-05-25 16:56:00', 'Welcome to Post 1', 'Post 1 contents', 0, 0, 1),  
-                   ('2024-05-27 12:03:46', 'Welcome to Post 2', 'Post 2 contents', 0, 0, 2),
-                   ('2024-05-27 12:03:46', 'Welcome to Post 3', 'Post 3 contents', 0, 0, 1),
-                   ('2024-05-28 20:00:00', 'Welcome to Post 4', 'Post 4 contents', 0, 0, 3);
+            VALUES ('2024-05-25 16:56:00', 'Singapore''s Food Security: Current Challenges and Solutions', 'Singapore''s food security has been a topic of significant discussion recently. With our reliance on imports for over 90% of our food, what are the key challenges we face in ensuring a stable food supply? Are there any innovative solutions or policies that have been proposed to address these issues?', 0, 0, 1),  
+                   ('2024-05-27 12:03:46', 'Impact of Climate Change on Singapore''s Food Supply', 'Climate change is affecting global agriculture, and Singapore is no exception. How might changing weather patterns and rising temperatures impact our food supply? What steps can we take to adapt to these changes and ensure a stable food supply?', 0, 0, 2),
+                   ('2024-05-27 12:03:46', 'Technological Innovations in Food Security: What''s Next for Singapore?', 'Technology is playing an increasingly important role in food security. From AI and data analytics to biotechnology, what are some of the most promising technological innovations that could impact Singapore’s food security? How can we leverage these technologies to strengthen our food supply chain?', 0, 0, 1),
+                   ('2024-05-28 20:00:00', 'Government Policies and Their Role in Ensuring Food Security', 'Government policies play a crucial role in shaping food security strategies. What are some of the key policies that have been implemented in Singapore to address food security? Are there any areas where policy improvements are needed?', 0, 0, 3);
         `);
 
         // Insert data into Reply table
         await sql.query(`
             INSERT INTO Reply(replyDateTime, replyText, replyEdited, adminEdit, accId, replyTo)
-            VALUES ('2024-05-25 17:43:00', 'This is Reply 1', 0, 0, 2, 1),  
-                   ('2024-05-26 13:12:19', 'This is Reply 2', 0, 0, 1, 1),
-                   ('2024-05-23 12:54:34', 'This is Reply 3', 0, 0, 3, 2),
-                   ('2024-05-27 18:43:23', 'This is Reply 4', 0, 0, 2, 2);
+            VALUES ('2024-05-25 17:43:00', 'The major challenge is our heavy dependence on food imports, which makes us vulnerable to global supply chain disruptions. One solution that has been proposed is increasing local food production through vertical farming and aquaculture. These methods could help reduce our reliance on imports and enhance food security.', 0, 0, 2, 1),  
+                   ('2024-05-26 13:12:19', 'I agree with the focus on local production, but we should also consider improving our food stockpiling strategies. Ensuring that we have adequate reserves could help mitigate the impact of sudden supply chain issues.', 0, 0, 1, 1),
+                   ('2024-05-26 16:32:43', 'Another approach could be to diversify our import sources. By not relying too heavily on any single country or region, we can reduce the risk of supply disruptions. Additionally, investing in technology to improve the efficiency of food distribution could be beneficial.', 0, 0, 3, 1),
+                   ('2024-05-27 18:54:34', 'Climate change can lead to unpredictable weather patterns, which can affect both local and global food production. For Singapore, investing in climate-resilient agricultural technologies, such as climate-controlled greenhouses, could be a key strategy to ensure a steady supply of fresh produce.', 0, 0, 3, 2),
+                   ('2024-05-28 11:23:56', 'AI and data analytics can enhance our ability to predict and manage food supply and demand. By analyzing data on weather patterns, market trends, and supply chain logistics, we can make more informed decisions and improve food distribution efficiency.', 0, 0, 3, 3),
+                   ('2024-05-28 18:43:23', 'Biotechnology offers potential solutions such as genetically modified crops that can withstand harsh conditions or pests. Investing in research and development in this area could significantly benefit our food security.', 0, 0, 2, 3);
         `);
 
         // Insert data into QuizQuestions and AnswerChoices tables (example shown earlier)
