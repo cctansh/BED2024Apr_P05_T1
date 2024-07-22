@@ -13,7 +13,10 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
     <div class="container-fluid">
-      <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
+      <a class="navbar-brand" href="#">
+        <img src="img/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+        OurFoodSG
+      </a>  
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -37,10 +40,10 @@
   </nav>
 
   <div class="pad-nav">
-    <form id="change-email" novalidate>
+    <form id="change-email-form" novalidate>
         <div class="inputs">
             <div class="form-group">
-                <label for="newEmail" class="form-label">New Password</label>
+                <label for="newEmail" class="form-label">New Email</label>
                 <input type="email" id="newEmail" class="form-control"
                     placeholder="Enter new email address...">
             </div>
@@ -52,21 +55,10 @@
         </div>
         <button id="change-email-button" type="submit" class="btn btn-danger">Change Email</button>
         <div id="changeEmailError"></div>
-        <button id="cancel-button" type="button" class="btn btn-outline-danger">Cancel</button>
+        <button id="cancel-button" type="button" class="btn btn-secondary">Cancel</button>
     </form>
   </div>
 
-  <footer>
-    <div class="company-info">
-      <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
-      <span>&copy; 2024, Star Jewelry Inc.</span>
-    </div>
-    <div class="socmed">
-      <a href="index.html">fb</a>
-      <a href="index.html">fb</a>
-      <a href="index.html">fb</a>
-    </div>
-  </footer>
   <script src="js/bootstrap/bootstrap.bundle.js"></script>
   <script src="js/changeemailscript.js"></script>
 </body>

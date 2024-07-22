@@ -6,7 +6,7 @@ const loginAccRole = sessionStorage.getItem('loginAccRole');
 const rToken = getCookie('rToken');
 
 if (token && !isTokenExpired(token)) {
-    loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.innerHTML = `Profile`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else if (rToken) {
     refreshToken(rToken);
@@ -22,7 +22,7 @@ function getUrlParams() {
 
 const accId = getUrlParams();
 
-document.getElementById('change-email').addEventListener('submit', async function (e) {
+document.getElementById('change-email-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     const changeEmailData = {
         accEmail: document.getElementById('newEmail').value

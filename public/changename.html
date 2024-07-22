@@ -13,7 +13,10 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
     <div class="container-fluid">
-      <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
+      <a class="navbar-brand" href="#">
+        <img src="img/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+        OurFoodSG
+      </a>  
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -37,36 +40,25 @@
   </nav>
 
   <div class="pad-nav">
-    <form id="change-name">
+    <form id="change-name-form">
         <div class="inputs">
             <div class="form-group">
-                <label for="newName" class="form-label">New Password</label>
+                <label for="newName" class="form-label">New Display Name</label>
                 <input type="text" id="newName" class="form-control"
                     placeholder="Enter new display name...">
             </div>
             <div class="form-group">
-                <label for="newNameConfirm" class="form-label">Re-enter New Name</label>
+                <label for="newNameConfirm" class="form-label">Re-enter New Display Name</label>
                 <input type="text" id="newNameConfirm" class="form-control"
                     placeholder="Re-enter new name...">
             </div>
         </div>
         <button id="change-name-button" type="submit" class="btn btn-danger">Change Name</button>
         <div id="changeNameError"></div>
-        <button id="cancel-button" type="button" class="btn btn-outline-danger">Cancel</button>
+        <button id="cancel-button" type="button" class="btn btn-secondary">Cancel</button>
     </form>
   </div>
 
-  <footer>
-    <div class="company-info">
-      <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
-      <span>&copy; 2024, Star Jewelry Inc.</span>
-    </div>
-    <div class="socmed">
-      <a href="index.html">fb</a>
-      <a href="index.html">fb</a>
-      <a href="index.html">fb</a>
-    </div>
-  </footer>
   <script src="js/bootstrap/bootstrap.bundle.js"></script>
   <script src="js/changenamescript.js"></script>
 </body>

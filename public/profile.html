@@ -13,7 +13,10 @@
 <body>
   <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
     <div class="container-fluid">
-      <!-- <img class="brand" src="img/icon.png" alt="Icon"> -->
+      <a class="navbar-brand" href="#">
+        <img src="img/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+        OurFoodSG
+      </a>  
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -39,18 +42,24 @@
 
   <div class="pad-nav">
     <div id="profile-head">
-      <h1 id="profile-name"></h1>
-      <div id="admin" class="hide">Admin</div>
+      <div class="line">
+        <h1 id="profile-name"></h1>
+        <div id="admin" class="hide">Admin</div>
+      </div>
+      <div id="settings" class="dropdown">
+        <button class="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          Settings
+        </button>
+        <ul class="dropdown-menu">
+          <li><a id="change-name" class="dropdown-item" href="#">Change Display Name</a></li>
+          <li><a id="change-email" class="dropdown-item" href="#">Change Email</a></li>
+          <li><a id="change-password" class="dropdown-item" href="#">Change Password</a></li>
+          <li><a id="delete-acc" class="dropdown-item" href="#">Delete Account</a></li>
+          <li><a id="logout" class="dropdown-item" href="#">Logout</a></li>
+        </ul>
+      </div>
     </div>
-    <div id="profile" class="profile-info">
-      <div id="email-info"></div>
-      <button id="change-name" type="button" class="btn btn-danger">Change Display Name</button>
-      <button id="change-email" type="button" class="btn btn-danger">Change Email</button>
-      <button id="change-password" type="button" class="btn btn-danger">Change Password</button>
-
-      <button id="logout" type="button" class="btn btn-danger">Logout</button>
-      <button id="delete-acc" type="button" class="btn btn-danger">Delete Account</button>
-    </div>
+    
     <div id="adminView" class="profile-info hide">
       <h5>Any misuse of admin powers will result in an immediate ban.</h5>
       <div class="horizontal-flex">
