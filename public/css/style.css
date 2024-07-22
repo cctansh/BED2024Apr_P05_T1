@@ -65,14 +65,17 @@ footer div {
 /* nav bar */
 
 .navbar {
-    border-bottom: 8px solid #dc3545;
     /* Red border underneath the navbar */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    cursor: default;
 }
 
 .navbar-nav {
     flex-grow: 1;
     /* Allows nav items to use up remaining space */
-    justify-content: space-between;
     /* Spacing between nav items */
     padding-left: 10px;
     padding-right: 10px;
@@ -81,9 +84,8 @@ footer div {
 .navbar .nav-link {
     /* styles the page link text */
     font-size: 18px;
-    font-weight: 600;
     color: #686868;
-    margin-bottom: -10px;
+    margin-bottom: -6px;
 }
 
 .navbar .nav-item .active {
@@ -251,6 +253,14 @@ footer div {
     color: #dc3545;
 }
 
+.account-link {
+    color: #686868;
+    text-decoration: none; 
+}
+.account-link:hover {
+    color: #dc3545;
+}
+
 .datetime {
     text-align: right;
 }
@@ -334,10 +344,25 @@ form .btn {
 
 .tab-content,
 .tab-pane,
-.form-group,
+.form-group{
+    width: 100%;
+}
+
 .inputs,
 form input {
     width: 100%;
+}
+
+#login,
+#register,
+#change-password-form,
+#change-email-form,
+#change-name-form {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 50%;
+    margin-top: 0px;
+    margin-bottom: 20px;
 }
 
 /* Change the default color of the nav-pills */
@@ -393,9 +418,20 @@ h5 {
 
 #profile-head {
     display: flex;
-    gap: 1rem;
     align-items: center;
     height: fit-content;
+    justify-content: space-between;
+}
+
+.line {
+    display: flex;
+    align-items: center;
+    height: fit-content;
+    gap: 1rem;
+}
+
+.dropdown-item:active {
+    background-color: #a72f3b;
 }
 
 #admin {
@@ -588,7 +624,7 @@ li {
     
 }
 
-.horizontal-flex {
+.horizontal-flex1 {
     display: flex;
     justify-content: flex-end;
     position: absolute;
@@ -598,7 +634,7 @@ li {
     
 }
 
-.horizontal-flex .btn {
+.horizontal-flex1 .btn {
     background-color: #dc3545; /* Red color for buttons */
     color: white;
     border: none;
@@ -611,7 +647,7 @@ li {
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.horizontal-flex .btn:hover {
+.horizontal-flex1 .btn:hover {
     background-color: #5b0707; /* Darker red for hover effect */
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
 }
@@ -695,4 +731,32 @@ button.btn-primary.mb-3 i {
 
 form {
     margin-top: 20px;
+}
+
+.answer-item {
+    margin-bottom: 10px;
+}
+
+.answer-text {
+    font-size: 16px;
+    margin: 0;
+}
+
+.answer-correct {
+    font-weight: bold;
+    color: green;
+}
+
+.input-group-append .form-check-input {
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+}
+
+.input-group-append .ansbtn {
+    margin-left: 0.5rem;
+}
+
+.wider-textbox {
+    flex: 1;
+    min-width: 9000px; /* You can adjust the width as needed */
 }

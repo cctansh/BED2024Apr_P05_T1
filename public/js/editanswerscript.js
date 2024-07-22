@@ -6,7 +6,7 @@ const loginAccRole = sessionStorage.getItem('loginAccRole'); // Retrieve logged-
 const rToken = getCookie('rToken');
 
 if (token && !isTokenExpired(token)) {
-    loginProfileLink.innerHTML = `Profile&ensp;<i class="bi bi-person-fill"></i>`;
+    loginProfileLink.innerHTML = `Profile`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else if (rToken) {
     refreshToken(rToken);
@@ -90,6 +90,7 @@ async function refreshToken(rToken) {
     }
 }
 
+
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('DOM fully loaded and parsed');
     await loadQuestionAndAnswers();
@@ -100,33 +101,81 @@ async function loadQuestionAndAnswers() {
     const token = sessionStorage.getItem('token');
 
     try {
-        const response = await fetch(`/quiz/questions/${questionId}`, {
+        const questionResponse = await fetch(`/quiz/questions/${questionId}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
 
-        if (!response.ok) {
+        if (!questionResponse.ok) {
             throw new Error('Failed to fetch question data');
         }
 
-        const data = await response.json();
-        console.log('Fetched question data:', data);
+        const questionData = await questionResponse.json();
+        console.log('Fetched question data:', questionData);
 
-        document.getElementById('questionText').innerText = data.question;
+        document.getElementById('questionText').innerText = questionData.question;
 
-        const answersContainer = document.getElementById('answersContainer');
+        const answersResponse = await fetch(`/quiz/answers/${questionId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!answersResponse.ok) {
+            throw new Error('Failed to fetch answers data');
+        }
+
+        const answersData = await answersResponse.json();
+        console.log('Fetched answers data:', answersData);
+
+        const answersContainer = document.getElementById('editAnswersContainer');
         answersContainer.innerHTML = '';
 
-        data.answers.forEach(answer => {
-            addAnswer(answer.text, answer.isCorrect);
+        answersData.forEach(answer => {
+            if (answer.answer_text !== null) {
+                addAnswer(answer.answer_text, answer.is_correct);
+            }
         });
     } catch (error) {
-        console.error('Error fetching question data:', error);
+        console.error('Error fetching question or answers data:', error);
     }
 }
 
-const answersContainer = document.getElementById('answersContainer');
+function addAnswer(text = '', isCorrect = false) {
+    const answerGroup = document.createElement('div');
+    answerGroup.classList.add('answer-group', 'mb-3', 'input-group');
+
+    const answerText = document.createElement('input');
+    answerText.type = 'text';
+    answerText.classList.add('form-control', 'answer-text', 'wider-textbox');
+    answerText.value = text;
+    answerText.placeholder = `Answer ${document.querySelectorAll('.answer-group').length + 1}`;
+
+    const answerCorrect = document.createElement('input');
+    answerCorrect.type = 'checkbox';
+    answerCorrect.classList.add('form-check-input', 'answer-correct');
+    answerCorrect.checked = isCorrect;
+
+    const deleteButton = document.createElement('button');
+    deleteButton.type = 'button';
+    deleteButton.classList.add('btn', 'btn-danger', 'ms-2');
+    deleteButton.innerHTML = '<i class="bi bi-trash"></i>';
+    deleteButton.addEventListener('click', () => {
+        answerGroup.remove();
+    });
+
+    const inputGroupAppend = document.createElement('div');
+    inputGroupAppend.classList.add('input-group-append');
+    inputGroupAppend.appendChild(answerCorrect);
+    inputGroupAppend.appendChild(deleteButton);
+
+    answerGroup.appendChild(answerText);
+    answerGroup.appendChild(inputGroupAppend);
+    document.getElementById('editAnswersContainer').appendChild(answerGroup);
+}
+
+
 const addAnswerButton = document.getElementById('add-answer');
 const editAnswersForm = document.getElementById('edit-answers-form');
 
@@ -171,36 +220,6 @@ editAnswersForm.addEventListener('submit', async (e) => {
     }
 });
 
-function addAnswer(text = '', isCorrect = false) {
-    const answerGroup = document.createElement('div');
-    answerGroup.classList.add('answer-group', 'mb-3', 'input-group');
-
-    const answerText = document.createElement('input');
-    answerText.type = 'text';
-    answerText.classList.add('form-control', 'answer-text');
-    answerText.value = text;
-    answerText.placeholder = `Answer ${document.querySelectorAll('.answer-group').length + 1}`;
-
-    const answerCorrect = document.createElement('input');
-    answerCorrect.type = 'checkbox';
-    answerCorrect.classList.add('form-check-input', 'answer-correct');
-    answerCorrect.checked = isCorrect;
-
-    const deleteButton = document.createElement('button');
-    deleteButton.type = 'button';
-    deleteButton.classList.add('btn', 'btn-danger', 'ms-2');
-    deleteButton.innerHTML = '<i class="bi bi-trash"></i>';
-    deleteButton.addEventListener('click', () => {
-        answersContainer.removeChild(answerGroup);
-    });
-
-    const inputGroupAppend = document.createElement('div');
-    inputGroupAppend.classList.add('input-group-append');
-    inputGroupAppend.appendChild(answerCorrect);
-    inputGroupAppend.appendChild(deleteButton);
-
-    answerGroup.appendChild(answerText);
-    answerGroup.appendChild(inputGroupAppend);
-    answersContainer.appendChild(answerGroup);
-}
-
+window.goBack = function () {
+    window.history.back();
+};

@@ -93,7 +93,7 @@ CREATE TABLE AnswerChoices (
     answer_text TEXT,
     is_correct BIT,
     explanation TEXT,
-    FOREIGN KEY (question_id) REFERENCES QuizQuestions(id)
+    CONSTRAINT FK_AnswerChoices_QuestionId FOREIGN KEY (question_id) REFERENCES QuizQuestions(id)
 );
 
 
@@ -175,10 +175,10 @@ VALUES
     (5, 'Restricting the use of fertilizers', 0, NULL);
 
 -- select statements for testing
-SELECT * FROM Account;
-SELECT * FROM Post;
-SELECT * FROM Reply;
-SELECT * FROM QuizQuestions;
-SELECT * FROM AnswerChoices;
+  SELECT * FROM Account;
+  SELECT * FROM Post;
+  SELECT * FROM Reply;
+  SELECT * FROM QuizQuestions;
+  SELECT * FROM AnswerChoices;
 
 */
