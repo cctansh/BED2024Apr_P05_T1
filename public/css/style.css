@@ -69,6 +69,10 @@ footer div {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.navbar-brand {
+    cursor: default;
+}
+
 .navbar-nav {
     flex-grow: 1;
     /* Allows nav items to use up remaining space */
