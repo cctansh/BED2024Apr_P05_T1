@@ -6,7 +6,7 @@ const Post = require("../models/post.js");
 jest.mock("../models/Post"); // Replace with the actual path to your Post model
 
 // Retrieve all posts
-describe("postController.getAllBooks", () => {
+describe("postController.getAllPosts", () => {
   beforeEach(() => {
     jest.clearAllMocks(); // Clear mock calls before each test
   });
@@ -182,45 +182,246 @@ describe("postController.updatePost", () => {
       jest.clearAllMocks(); // Clear mock calls before each test
     });
   
-    it("should fetch the reply count for a specific post and return a JSON response", async () => {
+    it("should update a specific post and return a JSON response", async () => {
         const mockPostId = 1;
-        const mockReplyCount = 5;
+        const mockAccId = 123;
+        const mockAccRole = "member";
+        const mockPost = {
+            id: mockPostId,
+            accId: mockAccId,
+            postTitle: "Original Title",
+            postText: "Original Content"
+        };
+        const mockUpdatedData = {
+            postTitle: "Updated Title",
+            postText: "Updated Content"
+        };
+        const mockUpdatedPost = {
+            ...mockPost,
+            ...mockUpdatedData,
+            adminEdit: 0
+        }
   
       // Mock the Post.getAllPosts function to return the mock data
-      Post.getReplyCount.mockResolvedValue(mockReplyCount);
+      Post.getPostById.mockResolvedValue(mockPost);
+
+      Post.updatePost.mockResolvedValue(mockUpdatedPost);
   
       const req = {
-        params: { id: mockPostId.toString() }
+        params: { id: mockPostId.toString() },
+        body: mockUpdatedData,
+        user: { accId: mockAccId, accRole: mockAccRole }
       };
       const res = {
         json: jest.fn(), // Mock the res.json function
         status: jest.fn().mockReturnThis()
       };
   
-      await postController.getReplyCount(req, res);
+      await postController.updatePost(req, res);
   
-      expect(Post.getReplyCount).toHaveBeenCalledTimes(1); // Check if getAllPosts was called
-      expect(Post.getReplyCount).toHaveBeenCalledWith(mockPostId);
-      expect(res.json).toHaveBeenCalledWith({ replyCount: mockReplyCount }); // Check the response body
+      expect(Post.getPostById).toHaveBeenCalledWith(mockPostId); // Check if getAllPosts was called
+      expect(Post.updatePost).toHaveBeenCalledWith(mockPostId, { ...mockUpdatedData, adminEdit: 0 });
+      expect(res.json).toHaveBeenCalledWith(mockUpdatedPost); // Check the response body
     });
   
+    it("should return 404 if post not found", async () => {
+        const mockPostId = 999;
+        const mockAccId = 123;
+        const mockAccRole = "member";
+
+        Post.getPostById.mockResolvedValue(null);
+
+        const req = {
+            params: { id: mockPostId.toString() },
+            body: {},
+            user: { accId: mockAccId, accRole: mockAccRole }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn()
+        };
+
+        await postController.updatePost(req, res);
+
+        expect(Post.getPostById).toHaveBeenCalledWith(mockPostId);
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.send).toHaveBeenCalledWith("Post not found");
+    });
+
+    it("should return 403 if user is not authorized", async () => {
+        const mockPostId = 1;
+        const mockPost = {
+            id: mockPostId,
+            accId: 456,
+            postTitle: "Original Title",
+            postText: "Original Content"
+        };
+        const mockAccId = 123;
+        const mockAccRole = "member";
+
+        Post.getPostById.mockResolvedValue(mockPost);
+
+        const req = {
+            params: { id: mockPostId.toString() },
+            body: {},
+            user: { accId: mockAccId, accRole: mockAccRole }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        await postController.updatePost(req, res);
+
+        expect(Post.getPostById).toHaveBeenCalledWith(mockPostId);
+        expect(res.status).toHaveBeenCalledWith(403);
+        expect(res.json).toHaveBeenCalledWith({ message: "You are not authorized to update this post" });
+    })
+
     it("should handle errors and return a 500 status with error message", async () => {
       const mockPostId = 1;
+      const mockAccId = 123;
+      const mockAccRole = "member";
       const errorMessage = "Database error";
-      Post.getReplyCount.mockRejectedValue(new Error(errorMessage)); // Simulate an error
+
+      Post.getPostById.mockResolvedValue({ id: mockPostId, accId: mockAccId })
+
+      Post.updatePost.mockRejectedValue(new Error(errorMessage)); // Simulate an error
 
       const req = {
-        params: { id: mockPostId.toString() }
+        params: { id: mockPostId.toString() },
+        body: {},
+        user: { accId: mockAccId, accRole: mockAccRole }
       };
       const res = {
         status: jest.fn().mockReturnThis(),
-        json: jest.fn(),
+        send: jest.fn(),
       };
   
-      await postController.getReplyCount(req, res);
+      await postController.updatePost(req, res);
   
-      expect(Post.getReplyCount).toHaveBeenCalledWith(mockPostId);
+      expect(Post.getPostById).toHaveBeenCalledWith(mockPostId);
+      expect(Post.updatePost).toHaveBeenCalledWith(mockPostId, expect.any(Object));
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ error: 'Server error' });
+      expect(res.send).toHaveBeenCalledWith("Error updating post");
+    }); 
+});
+
+// Delete a specific post
+describe("postController.deletePost", () => {
+    beforeEach(() => {
+      jest.clearAllMocks(); // Clear mock calls before each test
+    });
+  
+    it("should delete a specific post and return a 204 status", async () => {
+        const mockPostId = 1;
+        const mockAccId = 123;
+        const mockAccRole = "member";
+        const mockPost = {
+            id: mockPostId,
+            accId: mockAccId,
+            postTitle: "Original Title",
+            postText: "Original Content"
+        };
+  
+      // Mock the Post.getAllPosts function to return the mock data
+      Post.getPostById.mockResolvedValue(mockPost);
+
+      Post.deletePost.mockResolvedValue(true);
+  
+      const req = {
+        params: { id: mockPostId.toString() },
+        user: { accId: mockAccId, accRole: mockAccRole }
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        send: jest.fn()
+      };
+  
+      await postController.deletePost(req, res);
+  
+      expect(Post.getPostById).toHaveBeenCalledWith(mockPostId); // Check if getAllPosts was called
+      expect(Post.deletePost).toHaveBeenCalledWith(mockPostId);
+      expect(res.status).toHaveBeenCalledWith(204);
+      expect(res.send).toHaveBeenCalledTimes(1); // Check the response body
+    });
+  
+    it("should return 404 if post not found", async () => {
+        const mockPostId = 999;
+        const mockAccId = 123;
+        const mockAccRole = "member";
+
+        Post.getPostById.mockResolvedValue(null);
+
+        const req = {
+            params: { id: mockPostId.toString() },
+            user: { accId: mockAccId, accRole: mockAccRole }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            send: jest.fn()
+        };
+
+        await postController.deletePost(req, res);
+
+        expect(Post.getPostById).toHaveBeenCalledWith(mockPostId);
+        expect(res.status).toHaveBeenCalledWith(404);
+        expect(res.send).toHaveBeenCalledWith("Post not found");
+    });
+
+    it("should return 403 if user is not authorized", async () => {
+        const mockPostId = 1;
+        const mockPost = {
+            id: mockPostId,
+            accId: 456,
+            postTitle: "Original Title",
+            postText: "Original Content"
+        };
+        const mockAccId = 123;
+        const mockAccRole = "member";
+
+        Post.getPostById.mockResolvedValue(mockPost);
+
+        const req = {
+            params: { id: mockPostId.toString() },
+            user: { accId: mockAccId, accRole: mockAccRole }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        await postController.deletePost(req, res);
+
+        expect(Post.getPostById).toHaveBeenCalledWith(mockPostId);
+        expect(res.status).toHaveBeenCalledWith(403);
+        expect(res.json).toHaveBeenCalledWith({ message: "You are not authorized to delete this post" });
+    })
+
+    it("should handle errors and return a 500 status with error message", async () => {
+      const mockPostId = 1;
+      const mockAccId = 123;
+      const mockAccRole = "member";
+      const errorMessage = "Database error";
+
+      Post.getPostById.mockResolvedValue({ id: mockPostId, accId: mockAccId })
+
+      Post.deletePost.mockRejectedValue(new Error(errorMessage)); // Simulate an error
+
+      const req = {
+        params: { id: mockPostId.toString() },
+        user: { accId: mockAccId, accRole: mockAccRole }
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        send: jest.fn(),
+      };
+  
+      await postController.deletePost(req, res);
+  
+      expect(Post.getPostById).toHaveBeenCalledWith(mockPostId);
+      expect(Post.deletePost).toHaveBeenCalledWith(mockPostId);
+      expect(res.status).toHaveBeenCalledWith(500);
+      expect(res.send).toHaveBeenCalledWith("Error deleting post");
     }); 
 });
