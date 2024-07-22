@@ -46,19 +46,19 @@ async function fetchPost(postId) {
         if (postEditStatus == false) {
             // If post has not been edited
             postHeader.innerHTML = `
-                <div class="account">${await fetchAccountName(post.accId)}</div>
+                <div class="account"><a class="account-link" href="/profile.html?id=${post.accId}">${await fetchAccountName(post.accId)}</a></div>
                 <div class="datetime"><i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}</div>
             `
         } else if ((post.adminEdit == true && loginAccId != post.accId) || (post.adminEdit == true && loginAccId == post.accId)) {
             // If post has been edited by admin and user is logged in (does not matter if user accId same as accId of post owner)
             postHeader.innerHTML = `
-                <div class="account">${await fetchAccountName(post.accId)}</div>
+                <div class="account"><a class="account-link" href="/profile.html?id=${post.accId}">${await fetchAccountName(post.accId)}</a></div>
                 <div class="datetime"><i class="bi bi-chat-dots-fill"></i>  ${replyCount} | <i class="bi bi-pencil-fill"></i>&nbsp<i>Edited by admin at ${formatDate(postDate)}</i></div>
             `
         } else if (post.adminEdit == false && postEditStatus == true) {
             // If the post is edited by the post owner
             postHeader.innerHTML = `
-                <div class="account">${await fetchAccountName(post.accId)}</div>
+                <div class="account"><a class="account-link" href="/profile.html?id=${post.accId}">${await fetchAccountName(post.accId)}</a></div>
                 <div class="datetime"><i class="bi bi-chat-dots-fill"></i>  ${replyCount} | <i class="bi bi-pencil-fill"></i>&nbsp<i>Edited at ${formatDate(postDate)}</i></div>
             `
         }

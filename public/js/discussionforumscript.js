@@ -82,6 +82,12 @@ async function fetchPosts() {
 
         // Append post item to post container
         postContainer.appendChild(postItem);
+
+        const accountButton = postItem.querySelector('.account');
+        accountButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        window.location.href = `/profile.html?id=${post.accId}`;
+    });
     };
 }
 

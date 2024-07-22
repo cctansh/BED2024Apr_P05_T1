@@ -253,6 +253,14 @@ footer div {
     color: #dc3545;
 }
 
+.account-link {
+    color: #686868;
+    text-decoration: none; 
+}
+.account-link:hover {
+    color: #dc3545;
+}
+
 .datetime {
     text-align: right;
 }
