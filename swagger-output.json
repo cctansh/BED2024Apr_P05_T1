@@ -277,7 +277,7 @@
     },
     "/accounts/role/{id}": {
       "put": {
-        "description": "Retrieve a spefcific account's role (by its accId)",
+        "description": "Update a specific account's role (by its accId)",
         "parameters": [
           {
             "name": "id",
@@ -322,6 +322,54 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/token": {
+      "post": {
+        "description": "Get a new access token from refresh token",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "tags": ["account"],
+        "responses": {
+          "200": {
+            "description": "successful"
+          },
+          "404": {
+            "description": "Invalid refresh token"
+          },
+          "500": {
+            "description": "Error generating token"
+          }
+        }
+      }
+    },
+    "/logout": {
+      "delete": {
+        "description": "Log out of an account",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "tags": ["account"],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Unsuccessful"
+          },
+          "500": {
+            "description": "Error logging out"
           }
         }
       }

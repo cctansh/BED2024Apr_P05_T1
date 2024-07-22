@@ -22,7 +22,7 @@ function getUrlParams() {
 
 const accId = getUrlParams();
 
-document.getElementById('change-name').addEventListener('submit', async function (e) {
+document.getElementById('change-name-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     const changeNameData = {
         accName: document.getElementById('newName').value

@@ -16,7 +16,7 @@
             <a class="navbar-brand" href="#">
                 <img src="img/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
                 OurFoodSG
-              </a>  
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -43,16 +43,24 @@
     </nav>
 
 
-    <div id="adminView1" class="profile-info hide">
-        <div class="horizontal-flex1">
-            <button id="edit-button" type="button" class="btn btn-danger">&ensp;<i
-                class="bi bi-pencil-fill"></i></button>
-            <button id="cross-button" type="button" class="btn btn-danger"><i class="bi bi-x-lg"></i></button>
-        </div>
     </div>
     <div class="app">
 
-        <h1>QUIZ TIME</h1>
+        <div class="quiz-header">
+            <h1>QUIZ TIME</h1>
+            <hr>
+            <div id="adminView1" class="hide" >
+                <div class="horizontal-flex1">
+                    <button id="edit-button" type="button" class="btn btn-primary">
+                        <i class="bi bi-pencil-fill"></i>&ensp;Edit
+                    </button>
+                    <button id="cross-button" type="button" class="btn btn-primary">
+                        <i class="bi bi-x-lg"></i>&ensp;Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="quiz">
             <h2 id="question">Question goes here</h2>
             <div id="answer-buttons"></div>
@@ -62,7 +70,6 @@
             </div>
         </div>
     </div>
-
 
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
     <script src="js/quizquestion.js"></script>

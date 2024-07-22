@@ -22,7 +22,7 @@ function getUrlParams() {
 
 const accId = getUrlParams();
 
-document.getElementById('change-password').addEventListener('submit', async function (e) {
+document.getElementById('change-password-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     const changePasswordData = {
         accPassword: document.getElementById('newPassword').value

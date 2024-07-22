@@ -22,7 +22,7 @@ function getUrlParams() {
 
 const accId = getUrlParams();
 
-document.getElementById('change-email').addEventListener('submit', async function (e) {
+document.getElementById('change-email-form').addEventListener('submit', async function (e) {
     e.preventDefault();
     const changeEmailData = {
         accEmail: document.getElementById('newEmail').value

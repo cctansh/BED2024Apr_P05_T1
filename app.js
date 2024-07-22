@@ -14,7 +14,6 @@ const validateAccount = require("./middlewares/validateAccount")
 const validatePost = require("./middlewares/validatePost")
 const validateReply = require("./middlewares/validateReply")
 const authenticate = require("./middlewares/authenticate")
-const seed = require("./seed");
 const seedDatabase = require("./seed");
 
 const app = express(); // Create an instance of express
