@@ -130,6 +130,7 @@ async function fetchReply(obj) {
     const replyBox = document.createElement("div");
     replyBox.classList.add("reply-box");
 
+    
     const connector = document.createElement("div");
     connector.classList.add("connector");
     connector.innerHTML = `

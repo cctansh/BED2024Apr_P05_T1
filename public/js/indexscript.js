@@ -3,17 +3,25 @@ const loginProfileLink = document.getElementById('login-profile-link');
 const loginAccId = sessionStorage.getItem('loginAccId');
 const loginAccRole = sessionStorage.getItem('loginAccRole');
 
+const signupBtn = document.getElementById('signup-btn');
+
 const rToken = getCookie('rToken');
 
 if (token && !isTokenExpired(token)) {
     loginProfileLink.innerHTML = `Profile`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
+    signupBtn.onclick = function () {
+        location.href = `profile.html?id=${loginAccId}`;
+    };
 } else if (rToken) {
     refreshToken(rToken);
 } else {
     sessionStorage.clear()
     loginProfileLink.innerHTML = `Login`;
     loginProfileLink.setAttribute("href", 'loginreg.html')
+    signupBtn.onclick = function () {
+        location.href = `loginreg.html`;
+    };
 }
 
 function isTokenExpired(token) {
