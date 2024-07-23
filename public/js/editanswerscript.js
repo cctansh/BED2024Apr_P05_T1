@@ -1,16 +1,21 @@
+document.addEventListener('DOMContentLoaded', async function () {
+    console.log('DOM fully loaded and parsed');
+    await loadQuestionAndAnswers();
+});
+
 function goBack() {
     window.history.back();
 }
 
-const token = sessionStorage.getItem('token'); // Retrieve token from session storage
-const loginProfileLink = document.getElementById('login-profile-link'); // Retrieve profile link element
-const loginAccId = sessionStorage.getItem('loginAccId'); // Retrieve logged-in account ID from session storage
-const loginAccRole = sessionStorage.getItem('loginAccRole'); // Retrieve logged-in account role from session storage
+const token = sessionStorage.getItem('token');
+const loginProfileLink = document.getElementById('login-profile-link');
+const loginAccId = sessionStorage.getItem('loginAccId');
+const loginAccRole = sessionStorage.getItem('loginAccRole');
 const rToken = getCookie('rToken');
 
 if (token && !isTokenExpired(token)) {
     loginProfileLink.innerHTML = `Profile`;
-    loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
+    loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`);
 } else if (rToken) {
     refreshToken(rToken);
 } else {
@@ -19,9 +24,9 @@ if (token && !isTokenExpired(token)) {
 }
 
 function isTokenExpired(token) {
-    const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
-    const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
-    return Date.now() > expiry; // Check if the current time is past the expiry time
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const expiry = payload.exp * 1000;
+    return Date.now() > expiry;
 }
 
 function parseJwt(token) {
@@ -93,11 +98,6 @@ async function refreshToken(rToken) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', async function() {
-    console.log('DOM fully loaded and parsed');
-    await loadQuestionAndAnswers();
-});
-
 async function loadQuestionAndAnswers() {
     const questionId = new URLSearchParams(window.location.search).get('id') || '1';
     const token = sessionStorage.getItem('token');
@@ -135,22 +135,20 @@ async function loadQuestionAndAnswers() {
         answersContainer.innerHTML = '';
 
         answersData.forEach(answer => {
-            if (answer.answer_text !== null) {
-                addAnswer(answer.answer_text, answer.is_correct);
-            }
+            addAnswer(answer.answer_text, answer.is_correct, answer.id);
         });
     } catch (error) {
         console.error('Error fetching question or answers data:', error);
     }
 }
 
-function addAnswer(text = '', isCorrect = false) {
+function addAnswer(text = '', isCorrect = false, answerId = null) {
     const answerGroup = document.createElement('div');
     answerGroup.classList.add('answer-group', 'mb-3', 'input-group');
 
     const answerText = document.createElement('input');
     answerText.type = 'text';
-    answerText.classList.add('form-control', 'answer-text', 'wider-textbox');
+    answerText.classList.add('form-control', 'answer-text');
     answerText.value = text;
     answerText.placeholder = `Answer ${document.querySelectorAll('.answer-group').length + 1}`;
 
@@ -158,13 +156,22 @@ function addAnswer(text = '', isCorrect = false) {
     answerCorrect.type = 'checkbox';
     answerCorrect.classList.add('form-check-input', 'answer-correct');
     answerCorrect.checked = isCorrect;
+    answerCorrect.addEventListener('change', () => {
+        document.querySelectorAll('.answer-correct').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        answerCorrect.checked = true;
+    });
 
     const deleteButton = document.createElement('button');
     deleteButton.type = 'button';
     deleteButton.classList.add('btn', 'btn-danger', 'ms-2');
     deleteButton.innerHTML = '<i class="bi bi-trash"></i>';
-    deleteButton.addEventListener('click', () => {
-        answerGroup.remove();
+    deleteButton.addEventListener('click', async () => {
+        const confirmed = confirm('Are you sure you want to delete this answer?');
+        if (confirmed) {
+            await deleteAnswer(answerId); // Pass the correct answer ID
+        }
     });
 
     const inputGroupAppend = document.createElement('div');
@@ -175,6 +182,8 @@ function addAnswer(text = '', isCorrect = false) {
     answerGroup.appendChild(answerText);
     answerGroup.appendChild(inputGroupAppend);
     document.getElementById('editAnswersContainer').appendChild(answerGroup);
+
+    answerGroup.dataset.answerId = answerId; // Save the answer ID in the dataset for later use
 }
 
 const addAnswerButton = document.getElementById('add-answer');
@@ -190,33 +199,84 @@ editAnswersForm.addEventListener('submit', async (e) => {
     const token = sessionStorage.getItem('token');
     const answers = Array.from(document.querySelectorAll('.answer-group')).map(group => {
         return {
-            text: group.querySelector('input[type="text"]').value,
-            isCorrect: group.querySelector('input[type="checkbox"]').checked
+            id: group.dataset.answerId, // Include the answer ID
+            answer_text: group.querySelector('input[type="text"]').value,
+            is_correct: group.querySelector('input[type="checkbox"]').checked ? 1 : 0
         };
     });
 
-    if (!answers.some(answer => answer.isCorrect)) {
+    console.log(answers);
+
+    if (!answers.some(answer => answer.is_correct)) {
         alert('There must be at least one correct answer.');
         return;
     }
 
+    if (answers.filter(answer => answer.is_correct).length > 1) {
+        alert('Only one answer can be marked as correct.');
+        return;
+    }
+
     try {
-        const response = await fetch(`/quiz/answers/${questionId}/`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ answers })
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save changes');
-        }
-
+        (async () => {
+            for (const answer of answers) {
+                try {
+                    const response = await fetch(`/quiz/answers/${answer.id}/`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ id: answer.id, answer_text: answer.answer_text, is_correct: answer.is_correct, explanation: null })
+                    });
+        
+                    if (!response.ok) {
+                        throw new Error('Failed to save changes');
+                    }
+        
+                    const responseData = await response.json();
+                    console.log('Response:', responseData);
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        })();
+        
         alert('Answers updated successfully!');
         window.location.reload();
     } catch (error) {
         console.error('Error saving changes:', error);
     }
 });
+
+async function deleteAnswer(answerId) {
+    if (!answerId) {
+        // If the answerId is null, it's a new answer that hasn't been saved yet, just remove it from the DOM
+        return document.querySelector(`[data-answer-id="${answerId}"]`).remove();
+    }
+
+    const token = sessionStorage.getItem('token');
+    try {
+        const response = await fetch(`/quiz/answers/${answerId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                alert('Answer not found.');
+            } else {
+                throw new Error('Failed to delete answer');
+            }
+        } else {
+            alert('Answer deleted successfully!');
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error('Error deleting answer:', error);
+        alert('Error deleting answer');
+    }
+}
