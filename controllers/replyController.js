@@ -131,7 +131,7 @@ const getRepliesByPost = async (req, res) => {
   const replyId = parseInt(req.params.id);
   try {
     const replies = await Reply.getRepliesByPost(replyId);
-    if (!replies) {
+    if (!replies || replies.length === 0) {
       return res.status(404).send("Replies not found");
     }
     res.json(replies);

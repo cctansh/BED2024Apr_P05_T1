@@ -147,12 +147,7 @@ class Reply {
     const connection = await sql.connect(dbConfig);
 
     try {
-      const sqlQuery = `
-            SELECT p.postId, p.postDateTime, p.postTitle, p.postText, p.postEdited, p.adminEdit, p.accId
-            FROM Reply r
-            LEFT JOIN Post p ON r.replyTo = p.postId
-            WHERE r.replyId = @id;
-          `;
+      const sqlQuery = `SELECT p.postId, p.postDateTime, p.postTitle, p.postText, p.postEdited, p.adminEdit, p.accId FROM Reply r LEFT JOIN Post p ON r.replyTo = p.postId WHERE r.replyId = @id;`;
 
       const request = connection.request();
       request.input("id", id);
