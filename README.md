@@ -5,7 +5,7 @@ Go to /api-docs for in-depth documentation of available routes/input output
 To setup:
 - run sqlquery.sql in an sql server app
 - see .env for database user details
-- npm install bcryptjs body-parser dotenv express joi jsonwebtoken mssql swagger-autogen swagger-ui-express nodemon
+- npm install bcryptjs body-parser dotenv express joi jsonwebtoken mssql swagger-autogen swagger-ui-express --save-dev-jest --save-dev-nodemon
 - run with "node app.js" or "npm run devStart"
 - bootstrap files have not been included. download from links below and add them to the tree
     - bootstrap CSS and icon folders go under public/css, bootstrap js folder goes under public/js

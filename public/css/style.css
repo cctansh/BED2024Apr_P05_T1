@@ -753,11 +753,7 @@ form {
     margin-left: 0.5rem;
 }
 
-.wider-textbox {
-    flex: 1;
-    min-width: 9000px;
-    /* You can adjust the width as needed */
-}
+
 #edit-answers-form1 {
     display: flex;
     justify-content: center;
