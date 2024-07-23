@@ -113,10 +113,21 @@ async function fetchPost(obj) {
     dateTimeElement.classList.add("datetime");
 
     const postDate = new Date(obj.dateTime);
-    if (obj.edited === 0) {
-        dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}`;
+    if (obj.edited == 0) {
+        // If post has not been edited
+        dateTimeElement.innerHTML = `
+            <i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}
+        `
+    } else if (obj.adminEdited == 1 && loginAccId != obj.accId) {
+        // If post has been edited by admin 
+        dateTimeElement.innerHTML = `
+            <i class="bi bi-chat-dots-fill"></i>  ${replyCount} | <i class="bi bi-pencil-fill"></i>&nbsp<i>Edited by admin at ${formatDate(postDate)}</i>
+        `
     } else {
-        dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | Edited at ${formatDate(postDate)}`;
+        // If the post is edited by the post owner
+        dateTimeElement.innerHTML = `
+            </i>  ${replyCount} | <i class="bi bi-pencil-fill"></i>&nbsp<i>Edited at ${formatDate(postDate)}</div>
+        `
     }
 
     // Create an element for the post title
@@ -137,11 +148,11 @@ async function fetchPost(obj) {
     postItem.appendChild(textElement);
 
     // If the user is logged in and is the post owner or an admin, show edit and delete buttons
-    if (token && ((loginAccId === obj.accId) || (loginAccRole === "admin"))) {
+    if (token && ((loginAccId == obj.accId) || (loginAccRole == "admin"))) {
         postItem.innerHTML += `
         <div class="edit-bar">
-            <button class="btn edit-reply"><i class="bi bi-pencil-fill"></i></button>
-            <button class="btn delete-reply"><i class="bi bi-trash3-fill"></i></button>
+            <button class="btn edit-post"><i class="bi bi-pencil-fill"></i></button>
+            <button class="btn delete-post"><i class="bi bi-trash3-fill"></i></button>
         </div>
         `;
     }
@@ -155,6 +166,29 @@ async function fetchPost(obj) {
         e.stopPropagation();
         window.location.href = `/profile.html?id=${obj.accId}`;
     });
+
+    if (token && ((loginAccId == obj.accId) || (loginAccRole == "admin"))) {
+        const deletePostButton = postItem.querySelector('.delete-post');
+        deletePostButton.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const confirmed = confirm("Are you sure you want to delete this post?");
+            if (confirmed) {
+                try {
+                    await deletePost(obj.id);
+                    window.location.href = `/profile.html?id=${obj.accId}`;
+                } catch (error) {
+                    console.error("Failed to delete post:", error);
+                    alert('Failed to delete post.');
+                }
+            }
+        });
+
+        const editPost = postItem.querySelector('.edit-post');
+        editPost.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            window.location.href = `/editpost.html?id=${obj.id}`;
+        });
+    }
 }
 
 // Asynchronously fetch and display reply data
@@ -191,9 +225,9 @@ async function fetchReply(obj) {
     const replyDate = new Date(obj.dateTime);
     const dateTimeElement = document.createElement("div");
     dateTimeElement.classList.add("datetime");
-    if (obj.edited === 0) {
+    if (obj.edited == 0) {
         dateTimeElement.textContent = formatDate(replyDate);
-    } else if (obj.adminEdited === 1) {
+    } else if (obj.adminEdited == 1 && loginAccId != obj.accId) {
         dateTimeElement.textContent = `Edited by admin at ${formatDate(replyDate)}`;
     } else {
         dateTimeElement.textContent = `Edited at ${formatDate(replyDate)}`;
@@ -216,7 +250,7 @@ async function fetchReply(obj) {
     replyItem.appendChild(textElement);
 
     // If the user is logged in and is the reply owner or an admin, show edit and delete buttons
-    if (token && ((loginAccId === obj.accId) || (loginAccRole === "admin"))) {
+    if (token && ((loginAccId == obj.accId) || (loginAccRole == "admin"))) {
         replyItem.innerHTML += `
         <div class="edit-bar">
             <button class="btn edit-reply"><i class="bi bi-pencil-fill"></i></button>
@@ -239,7 +273,7 @@ async function fetchReply(obj) {
     });
 
     // Add event listeners for edit and delete buttons if they are present
-    if (token && ((loginAccId === obj.accId) || (loginAccRole === "admin"))) {
+    if (token && ((loginAccId == obj.accId) || (loginAccRole == "admin"))) {
         const deleteReplyButton = replyItem.querySelector('.delete-reply');
         deleteReplyButton.addEventListener('click', async (e) => {
             e.stopPropagation();
@@ -297,9 +331,20 @@ async function fetchRepliedPost(replyId) {
     // Format the date and time of the post
     const postDate = new Date(post.postDateTime);
     if (post.postEdited == 0) {
-        dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}`;
+        // If post has not been edited
+        dateTimeElement.innerHTML = `
+            <i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formatDate(postDate)}
+        `
+    } else if (post.adminEdit == 1 && loginAccId != post.accId) {
+        // If post has been edited by admin 
+        dateTimeElement.innerHTML = `
+            <i class="bi bi-chat-dots-fill"></i>  ${replyCount} | <i class="bi bi-pencil-fill"></i>&nbsp<i>Edited by admin at ${formatDate(postDate)}</i>
+        `
     } else {
-        dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | Edited at ${formatDate(postDate)}`;
+        // If the post is edited by the post owner
+        dateTimeElement.innerHTML = `
+            </i>  ${replyCount} | <i class="bi bi-pencil-fill"></i>&nbsp<i>Edited at ${formatDate(postDate)}</div>
+        `
     }
 
     // Create an element for the post title
@@ -324,8 +369,8 @@ async function fetchRepliedPost(replyId) {
     if (token && ((loginAccId == post.accId) || (loginAccRole == "admin"))) {
         postItem.innerHTML += `
         <div class="edit-bar">
-            <button class="btn edit-reply"><i class="bi bi-pencil-fill"></i></button>
-            <button class="btn delete-reply"><i class="bi bi-trash3-fill"></i></button>
+            <button class="btn edit-post"><i class="bi bi-pencil-fill"></i></button>
+            <button class="btn delete-post"><i class="bi bi-trash3-fill"></i></button>
         </div>
         `;
     }
@@ -339,6 +384,29 @@ async function fetchRepliedPost(replyId) {
         e.stopPropagation();
         window.location.href = `/profile.html?id=${post.accId}`;
     });
+
+    if (token && ((loginAccId == post.accId) || (loginAccRole == "admin"))) {
+        const deletePostButton = postItem.querySelector('.delete-post');
+        deletePostButton.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const confirmed = confirm("Are you sure you want to delete this post?");
+            if (confirmed) {
+                try {
+                    await deletePost(post.postId);
+                    window.location.href = `/profile.html?id=${post.accId}`;
+                } catch (error) {
+                    console.error("Failed to delete post:", error);
+                    alert('Failed to delete post.');
+                }
+            }
+        });
+
+        const editPost = postItem.querySelector('.edit-post');
+        editPost.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            window.location.href = `/editpost.html?id=${post.postId}`;
+        });
+    }
 }
 
 // Function to format a date object into a readable string
@@ -377,6 +445,24 @@ async function deleteReply(replyId) {
     });
     if (!response.ok) {
         alert('Failed to delete reply.');
+    }
+}
+
+// Async function to delete a post by postId
+async function deletePost(postId) {
+    // Fetch and delete the post if user is authorized (token matched)
+    const response = await fetch(`/posts/${postId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    if (!response.ok) {
+        // If cannot delete post, alert user that post deletion failed
+        alert('Failed to delete post.');
+    } else {
+        // Redirect to main discussion forum page
+        window.location.href = '/discussionforum.html';
     }
 }
 
@@ -536,8 +622,8 @@ setAdminIndicatorAndView(profileId);
 
 // Hide settings if the logged-in user is not the profile owner
 if (loginAccId != profileId) {
-  document.getElementById('settings').classList.add('hide');  
-} 
+    document.getElementById('settings').classList.add('hide');
+}
 
 // Fetch posts and replies for the profile
 fetchPostsAndReplies(profileId);
@@ -570,7 +656,7 @@ function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
+    for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
         while (c.charAt(0) == ' ') {
             c = c.substring(1);
@@ -611,13 +697,13 @@ async function refreshToken(rToken) {
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('loginAccId', loginAccId);
         sessionStorage.setItem('loginAccRole', loginAccRole);
-        
+
         location.reload(); // Reload the page after refreshing the token
     } catch {
         console.log("Error refreshing token");
         alert('Login timed out.');
         sessionStorage.clear();
-        deleteCookie('rToken');   
+        deleteCookie('rToken');
         location.reload(); // Reload the page on error
     }
 }
