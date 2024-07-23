@@ -8,12 +8,12 @@ const rToken = getCookie('rToken');
 // Get the original post ID from the URL parameters
 const postId = getUrlParams();
 
-if (token && !isTokenExpired(token)) {
+if (token && !isTokenExpired(token)) { // if logged in
     loginProfileLink.innerHTML = `Profile`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
-} else if (rToken) {
+} else if (rToken) { // if there is refresh token
     refreshToken(rToken);
-} else {
+} else { // not logged in
     sessionStorage.clear()
     window.location.href = `/discussionpost.html?id=${postId}`;
 }
@@ -114,6 +114,7 @@ function isTokenExpired(token) {
     return Date.now() > expiry; // Check if the current time is past the expiry time
 }
 
+// parse JWT token
 function parseJwt(token) {
     try {
         const base64Url = token.split('.')[1];
@@ -129,28 +130,30 @@ function parseJwt(token) {
     }
 }
 
+// cookie functions
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
     }
     return "";
-  }
-
-  function deleteCookie(cname) {
+}
+function deleteCookie(cname) {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  }
+}
 
+// get a new access token from refresh token
 async function refreshToken(rToken) {
     try {
+        // post call
         const response = await fetch('/token', {
             method: 'POST',
             headers: {
@@ -164,21 +167,27 @@ async function refreshToken(rToken) {
 
         const result = await response.json();
 
+        // get token data
         const token = result.token;
         const decodedToken = parseJwt(token);
         const loginAccId = decodedToken.accId;
         const loginAccRole = decodedToken.accRole;
 
+        // store
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('loginAccId', loginAccId);
         sessionStorage.setItem('loginAccRole', loginAccRole);
-        
+
+        // refresh page
         location.reload();
     } catch {
+        // if error or token is invalid
         console.log("error")
         alert('Login timed out.');
+        // clear storage and remove rToken from cookies
         sessionStorage.clear();
-        deleteCookie('rToken');   
+        deleteCookie('rToken');
+        // redirect to discussion post
         window.location.href = `/discussionpost.html?id=${postId}`;
     }
 }

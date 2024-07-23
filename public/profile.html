@@ -11,6 +11,7 @@
 </head>
 
 <body>
+  <!-- nav bar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
@@ -41,11 +42,14 @@
   </nav>
 
   <div class="pad-nav">
+      <!-- profile name and settings -->
     <div id="profile-head">
+        <!-- name -->
       <div class="line">
         <h1 id="profile-name"></h1>
         <div id="admin" class="hide">Admin</div>
       </div>
+        <!-- settings dropdown -->
       <div id="settings" class="dropdown">
         <button class="btn btn-danger dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           Settings
@@ -59,7 +63,8 @@
         </ul>
       </div>
     </div>
-    
+
+      <!-- admin only view -->
     <div id="adminView" class="profile-info hide">
       <h5>Any misuse of admin powers will result in an immediate ban.</h5>
       <div class="horizontal-flex">
@@ -67,6 +72,8 @@
         <button id="delete-acc-admin" type="button" class="btn btn-danger">Delete Account</button>
       </div>
     </div>
+
+      <!-- post and replies -->
     <h2 class="postreplyhead">Posts / Replies:</h2>
     <div id="postreply">
 

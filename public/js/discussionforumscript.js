@@ -3,14 +3,18 @@ const token = sessionStorage.getItem('token');
 const loginProfileLink = document.getElementById('login-profile-link');
 const loginAccId = sessionStorage.getItem('loginAccId');
 const loginAccRole = sessionStorage.getItem('loginAccRole');
-const rToken = getCookie('rToken');
+const rToken = getCookie('rToken'); // refresh token
 
+// Check if the token exists and is not expired
 if (token && !isTokenExpired(token)) {
+    // If the token is valid, set the profile link
     loginProfileLink.innerHTML = `Profile`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else if (rToken) {
+    // If the token is expired but a refresh token exists, refresh the token
     refreshToken(rToken);
 } else {
+    // If no valid token or refresh token exists, clear session storage and redirect to the index page
     sessionStorage.clear()
     loginProfileLink.innerHTML = `Login`;
     loginProfileLink.setAttribute("href", 'loginreg.html')
@@ -63,7 +67,7 @@ async function fetchPosts() {
         } else {
             dateTimeElement.innerHTML = `<i class="bi bi-chat-dots-fill"></i>  ${replyCount} | ${formattedDate}, ${formattedTime}`;
         }
-        
+
         // Create a div that contains text and title
         const textElement = document.createElement("div");
         textElement.classList.add("text");
@@ -85,9 +89,9 @@ async function fetchPosts() {
 
         const accountButton = postItem.querySelector('.account');
         accountButton.addEventListener('click', (e) => {
-        e.stopPropagation();
-        window.location.href = `/profile.html?id=${post.accId}`;
-    });
+            e.stopPropagation();
+            window.location.href = `/profile.html?id=${post.accId}`;
+        });
     };
 }
 
@@ -133,6 +137,7 @@ function isTokenExpired(token) {
     return Date.now() > expiry; // Check if the current time is past the expiry time
 }
 
+// Function to parse JWT token
 function parseJwt(token) {
     try {
         const base64Url = token.split('.')[1];
@@ -148,28 +153,32 @@ function parseJwt(token) {
     }
 }
 
+// Function to get a cookie by name
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
     let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
     }
     return "";
-  }
+}
 
-  function deleteCookie(cname) {
+// Function to delete a cookie
+function deleteCookie(cname) {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  }
+}
 
-  async function refreshToken(rToken) {
+// Function to refresh the authentication token
+async function refreshToken(rToken) {
     try {
+        // Send POST request to refresh token
         const response = await fetch('/token', {
             method: 'POST',
             headers: {
@@ -183,6 +192,7 @@ function getCookie(cname) {
 
         const result = await response.json();
 
+        // Parse new token and update session storage
         const token = result.token;
         const decodedToken = parseJwt(token);
         const loginAccId = decodedToken.accId;
@@ -191,13 +201,15 @@ function getCookie(cname) {
         sessionStorage.setItem('token', token);
         sessionStorage.setItem('loginAccId', loginAccId);
         sessionStorage.setItem('loginAccRole', loginAccRole);
-        
+
+        // Reload the page
         location.reload();
     } catch {
         console.log("error")
         alert('Login timed out.');
+        // Clear session and cookies, reload
         sessionStorage.clear();
-        deleteCookie('rToken');   
+        deleteCookie('rToken');
         location.reload();
     }
 }

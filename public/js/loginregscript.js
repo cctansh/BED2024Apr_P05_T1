@@ -1,26 +1,35 @@
+// Wait for the DOM to be fully loaded before executing the script
 document.addEventListener('DOMContentLoaded', function () {
+    // Retrieve authentication token and user ID from session storage
     const token = sessionStorage.getItem('token');
     const loginAccId = sessionStorage.getItem('loginAccId');
     const rToken = getCookie('rToken');
 
+    // Check token validity and handle accordingly
     if (token && !isTokenExpired(token)) {
+        // If token is valid, redirect to profile page
         window.location.href = `profile.html?id=${loginAccId}`;
-        console.log("Logged in")
+        console.log("Logged in");
     } else if (rToken) {
+        // If refresh token exists, attempt to refresh the token
         refreshToken(rToken);
     } else if (token && isTokenExpired(token)){
+        // If token is expired, clear session and cookies
         sessionStorage.clear();
         deleteCookie('rToken');
         location.reload();
     }
 
+    // Add event listener for login form submission
     document.getElementById('login').addEventListener('submit', async function (e) {
         e.preventDefault();
+        // Gather login data from form
         const loginData = {
             accEmail: document.getElementById('loginEmail').value,
             accPassword: document.getElementById('loginPassword').value
         };
         try {
+            // Send POST request to login endpoint
             const response = await fetch('/accounts/login', {
                 method: 'POST',
                 headers: {
@@ -35,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const result = await response.json();
             alert('Login successful');
 
+            // Parse token and store relevant information in session storage
             const token = result.token;
             const decodedToken = parseJwt(token);
             const loginAccId = decodedToken.accId;
@@ -47,18 +57,20 @@ document.addEventListener('DOMContentLoaded', function () {
             sessionStorage.setItem('loginAccRole', loginAccRole);
             setCookie('rToken', refreshToken, 7);
 
+            // Redirect to home page
             window.location.href = 'index.html';
         } catch (err) {
-            // Display error messages
+            // Display error message
             const errorField = document.getElementById('loginError');
             errorField.textContent = ''; // Clear previous error messages
-
             errorField.textContent = 'Login failed: Invalid e-mail or password';
         }
     });
 
+    // Add event listener for registration form submission
     document.getElementById('register').addEventListener('submit', async function (e) {
         e.preventDefault();
+        // Gather registration data from form
         const registerData = {
             accName: document.getElementById('registerName').value,
             accEmail: document.getElementById('registerEmail').value,
@@ -70,12 +82,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const errorField = document.getElementById('registerError');
         errorField.textContent = ''; // Clear previous error messages
 
+        // Check if passwords match
         if (registerData.accPassword !== confirmPassword) {
             errorField.textContent = 'Registration failed: Passwords do not match';
             return;
         }
 
         try {
+            // Send POST request to register endpoint
             const response = await fetch('/accounts', {
                 method: 'POST',
                 headers: {
@@ -90,14 +104,16 @@ document.addEventListener('DOMContentLoaded', function () {
             const result = await response.json();
             alert('Registration successful. Returning to login page.');
 
+            // Redirect to login page
             window.location.href = 'loginreg.html';
         } catch (err) {
-            // Display error messages
+            // Display error message
             errorField.textContent = 'Registration failed: ' + err.message;
         }
     });
 });
 
+// Function to parse JWT token
 function parseJwt(token) {
     try {
         const base64Url = token.split('.')[1];
@@ -113,12 +129,14 @@ function parseJwt(token) {
     }
 }
 
+// Function to check if token is expired
 function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
     const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
     return Date.now() > expiry; // Check if the current time is past the expiry time
 }
 
+// Function to set a cookie
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
     d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -126,6 +144,7 @@ function setCookie(cname, cvalue, exdays) {
     document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
+// Function to get a cookie by name
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -140,14 +159,17 @@ function getCookie(cname) {
       }
     }
     return "";
-  }
+}
 
-  function deleteCookie(cname) {
+// Function to delete a cookie
+function deleteCookie(cname) {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-  }
+}
 
-  async function refreshToken(rToken) {
+// Function to refresh the authentication token
+async function refreshToken(rToken) {
     try {
+        // Send POST request to refresh token
         const response = await fetch('/token', {
             method: 'POST',
             headers: {
@@ -161,6 +183,7 @@ function getCookie(cname) {
 
         const result = await response.json();
 
+        // Parse new token and update session storage
         const token = result.token;
         const decodedToken = parseJwt(token);
         const loginAccId = decodedToken.accId;
@@ -170,10 +193,12 @@ function getCookie(cname) {
         sessionStorage.setItem('loginAccId', loginAccId);
         sessionStorage.setItem('loginAccRole', loginAccRole);
         
+        // Reload the page
         location.reload();
     } catch {
-        console.log("error")
+        console.log("error");
         alert('Login timed out.');
+        // Clear session and cookies, then reload the page
         sessionStorage.clear();
         deleteCookie('rToken');   
         location.reload();
