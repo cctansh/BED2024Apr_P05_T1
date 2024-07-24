@@ -1,8 +1,10 @@
 // post.test.js
+// Import the Post model and necessary dependencies
 const Post = require("../models/post.js");
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 
+// Mock mssql module
 jest.mock("mssql");
 
 describe("Post.getAllPosts", () => {
@@ -11,6 +13,7 @@ describe("Post.getAllPosts", () => {
     });
 
     it("should retrieve all posts from the database", async () => {
+        // Define mock posts data
         const mockPosts = [
             { postId: 1, postDateTime: "2024-05-25 16:56:00", postTitle: "Post 1", postText: "Content 1", postEdited: "0", adminEdit: "0", accId: 1 },
             { postId: 2, postDateTime: "2024-05-26 16:56:00", postTitle: "Post 2", postText: "Content 2", postEdited: "0", adminEdit: "0", accId: 2 }
@@ -22,8 +25,9 @@ describe("Post.getAllPosts", () => {
             query: jest.fn().mockResolvedValue({ recordset: mockPosts }),
             close: jest.fn()
         };
-
-        sql.connect.mockResolvedValue(mockConnection); // Mock the connection
+        
+        // Mock the SQL connection to resolve with mockConnection
+        sql.connect.mockResolvedValue(mockConnection);
 
         const posts = await Post.getAllPosts(); // Call the method under test
 
@@ -42,11 +46,12 @@ describe("Post.getAllPosts", () => {
     it("should handle errors when retrieving posts", async () => {
         // Simulate an error during the database query
         sql.connect.mockResolvedValue({
-            request: jest.fn().mockReturnThis(),
-            query: jest.fn().mockRejectedValue(new Error("Database error")),
-            close: jest.fn()
+            request: jest.fn().mockReturnThis(), // Mock for chaining
+            query: jest.fn().mockRejectedValue(new Error("Database error")), // Mock query to reject with an error
+            close: jest.fn() // Mock for closing the connection
         });
 
+        // Expect the method to throw an error
         await expect(Post.getAllPosts()).rejects.toThrow("Database error"); // Expect the method to throw an error
     });
 });
@@ -57,6 +62,7 @@ describe("Post.getPostById", () => {
     });
 
     it("should retrieve a specific post by ID", async () => {
+        // Mock data for a post
         const mockPostId = 1;
         const mockPostData = {
             postId: mockPostId,
@@ -157,11 +163,6 @@ describe("Post.getReplyCount", () => {
         mockConnection.query.mockRejectedValue(new Error(errorMessage));
 
         await expect(Post.getReplyCount(postId)).rejects.toThrow(errorMessage); // Expect the method to throw an error
-
-        // Since the connection.close() is not called in the catch block of your method,
-        // we cannot expect it to have been called in this test.
-        // If you want to ensure it is called, you would need to modify the method.
-        // expect(mockConnection.close).toHaveBeenCalled(); // Uncomment this if the method is modified to close the connection on error
     });
 });
 
