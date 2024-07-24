@@ -65,7 +65,8 @@ confirmReply.addEventListener('click', async () => {
             const response = await fetch('/posts', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify(newPostData)
             });
