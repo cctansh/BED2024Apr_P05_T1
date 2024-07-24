@@ -1,15 +1,17 @@
 // account.test.js
+// Import required modules
 const Account = require("../models/account.js");
 const sql = require("mssql");
 const dbConfig = require("../dbConfig");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+// Mock mssql, bcryptjs, and jsonwebtoken modules
 jest.mock("mssql");
 jest.mock("bcryptjs");
 jest.mock("jsonwebtoken");
 
-// get all accounts
+// Test suite to get all accounts
 describe("Account.getAllAccounts", () => {
     beforeEach(() => {
       jest.clearAllMocks();
@@ -47,7 +49,7 @@ describe("Account.getAllAccounts", () => {
     });
 });
 
-// get account by accid
+// Test suite to get account by accId
 describe("Account.getAccountById", () => {
     beforeEach(() => {
       jest.clearAllMocks();
@@ -103,7 +105,7 @@ describe("Account.getAccountById", () => {
     });
 });
 
-// create account
+// Test suite to create account
 describe("Account.createAccount", () => {
     beforeEach(() => {
       jest.clearAllMocks();
@@ -167,7 +169,7 @@ describe("Account.createAccount", () => {
     });
 });
 
-// update account
+// Test suite to update account
 describe("Account.updateAccount", () => {
     beforeEach(() => {
       jest.clearAllMocks();
@@ -228,7 +230,7 @@ describe("Account.updateAccount", () => {
     });
 });
 
-// update account role
+// Test suite to update account role
 describe("Account.updateAccountRole", () => {
     beforeEach(() => {
       jest.clearAllMocks();
@@ -281,7 +283,7 @@ describe("Account.updateAccountRole", () => {
     });
 });
 
-// delete account
+// Test suite to delete account
 describe("Account.deleteAccount", () => {
     const mockId = 1; // Example account ID
 
@@ -357,7 +359,7 @@ describe("Account.deleteAccount", () => {
     });
 });
 
-// login account
+// Test suite to login account
 describe("Account.loginAccount", () => {
     beforeEach(() => {
       jest.clearAllMocks();
@@ -456,27 +458,9 @@ describe("Account.loginAccount", () => {
       expect(bcrypt.compare).toHaveBeenCalledWith(loginAccountData.accPassword, mockAccount.accPassword);
       expect(result).toBeNull();
     });
-  
-    /*
-    it("should handle errors and return null", async () => {
-      const loginAccountData = {
-        accEmail: "user@example.com",
-        accPassword: "password123"
-      };
-  
-      // Mock the database connection to throw an error
-      sql.connect.mockRejectedValue(new Error("Database connection error"));
-  
-      const result = await Account.loginAccount(loginAccountData);
-  
-      // Assertions
-      expect(sql.connect).toHaveBeenCalledWith(dbConfig);
-      expect(result).toBeNull();
-    });
-    */
 });
 
-// generate access token
+// Test suite to generate access token
 describe('Account.generateAccessToken', () => {
     afterEach(() => {
         jest.clearAllMocks();
@@ -506,7 +490,7 @@ describe('Account.generateAccessToken', () => {
     });
 });
 
-// generate refresh access token
+// Test suite to generate refresh access token
 describe("Account.refreshAccessToken", () => {
     const mockRefreshToken = "mockRefreshToken";
     const mockDecodedToken = { accId: 1, accRole: "member" };
@@ -598,7 +582,7 @@ describe("Account.refreshAccessToken", () => {
     });
 });
 
-// logout
+// Test suite for logout
 describe("Account.logout", () => {
     const mockRefreshToken = "mockRefreshToken";
 
@@ -677,31 +661,9 @@ describe("Account.logout", () => {
         // Assertions
         expect(result).toBeNull(); // Expect null since the refresh token does not match
     });
-
-    /*
-    it("should return false if an error occurs", async () => {
-        // Declare a mock connection variable
-        let mockConnection;
-
-        // Mock the sql.connect method to return a connection object
-        sql.connect.mockImplementation(() => {
-            mockConnection = {
-                close: jest.fn(), // Ensure close is a function
-            };
-            throw new Error("Database connection error"); // Simulate an error during connection
-        });
-
-        // Call the logout method
-        const result = await Account.logout(mockRefreshToken);
-
-        // Assertions
-        expect(result).toBe(false); // Expect false since there was an error
-        expect(mockConnection).toBeUndefined(); // Ensure connection is undefined since it failed to connect
-    });
-    */
 });
 
-// get posts and replies by account
+// Test suite to get posts and replies by account
 describe("Account.getPostsAndRepliesByAccount", () => {
     const mockId = 1; // Example account ID
 
@@ -802,7 +764,7 @@ describe("Account.getPostsAndRepliesByAccount", () => {
     });
 });
 
-// get account by email
+// Test suite to get account by email
 describe("Account.getAccountByEmail", () => {
     const mockEmail = "user@example.com";
 
@@ -869,7 +831,7 @@ describe("Account.getAccountByEmail", () => {
     });
 });
 
-// get account by name
+// Test suite to get account by name
 describe("Account.getAccountByName", () => {
     const mockName = "User One";
 
