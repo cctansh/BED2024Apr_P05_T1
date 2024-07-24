@@ -135,16 +135,19 @@ async function loadQuestionAndAnswers() {
         answersContainer.innerHTML = '';
 
         answersData.forEach(answer => {
-            addAnswer(answer.answer_text, answer.is_correct, answer.id);
+            addAnswer(answer.answer_text, answer.is_correct, answer.id, answer.explanation);
         });
     } catch (error) {
         console.error('Error fetching question or answers data:', error);
     }
 }
 
-function addAnswer(text = '', isCorrect = false, answerId = null) {
+function addAnswer(text = '', isCorrect = false, answerId = null, explanation = '') {
     const answerGroup = document.createElement('div');
     answerGroup.classList.add('answer-group', 'mb-3', 'input-group');
+
+    const tempId = answerId || 'new-' + Math.random().toString(36).substr(2, 9);
+    answerGroup.dataset.answerId = tempId;
 
     const answerText = document.createElement('input');
     answerText.type = 'text';
@@ -161,6 +164,7 @@ function addAnswer(text = '', isCorrect = false, answerId = null) {
             checkbox.checked = false;
         });
         answerCorrect.checked = true;
+        showExplanation(answerGroup, explanation);
     });
 
     const deleteButton = document.createElement('button');
@@ -170,7 +174,7 @@ function addAnswer(text = '', isCorrect = false, answerId = null) {
     deleteButton.addEventListener('click', async () => {
         const confirmed = confirm('Are you sure you want to delete this answer?');
         if (confirmed) {
-            await deleteAnswer(answerId); // Pass the correct answer ID
+            await deleteAnswer(tempId);
         }
     });
 
@@ -181,10 +185,30 @@ function addAnswer(text = '', isCorrect = false, answerId = null) {
 
     answerGroup.appendChild(answerText);
     answerGroup.appendChild(inputGroupAppend);
-    document.getElementById('editAnswersContainer').appendChild(answerGroup);
+    
+    const explanationText = document.createElement('input');
+    explanationText.type = 'text';
+    explanationText.classList.add('form-control', 'answer-explanation');
+    explanationText.value = explanation;
+    explanationText.placeholder = 'Explanation for the correct answer';
+    explanationText.style.display = isCorrect ? 'block' : 'none';
 
-    answerGroup.dataset.answerId = answerId; // Save the answer ID in the dataset for later use
+    answerGroup.appendChild(explanationText);
+
+    document.getElementById('editAnswersContainer').appendChild(answerGroup);
 }
+
+function showExplanation(answerGroup, explanation = '') {
+    document.querySelectorAll('.answer-explanation').forEach(input => {
+        input.style.display = 'none';
+    });
+    const explanationInput = answerGroup.querySelector('.answer-explanation');
+    if (explanationInput) {
+        explanationInput.style.display = 'block';
+        explanationInput.value = explanation;
+    }
+}
+
 
 const addAnswerButton = document.getElementById('add-answer');
 const editAnswersForm = document.getElementById('edit-answers-form1');
@@ -201,7 +225,8 @@ editAnswersForm.addEventListener('submit', async (e) => {
         return {
             id: group.dataset.answerId, // Include the answer ID
             answer_text: group.querySelector('input[type="text"]').value,
-            is_correct: group.querySelector('input[type="checkbox"]').checked ? 1 : 0
+            is_correct: group.querySelector('input[type="checkbox"]').checked ? 1 : 0,
+            explanation: group.querySelector('.answer-explanation').value || null
         };
     });
 
@@ -218,34 +243,45 @@ editAnswersForm.addEventListener('submit', async (e) => {
     }
 
     try {
-        (async () => {
-            for (const answer of answers) {
-                try {
-                    const response = await fetch(`/quiz/answers/${answer.id}/`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ id: answer.id, answer_text: answer.answer_text, is_correct: answer.is_correct, explanation: null })
-                    });
-        
-                    if (!response.ok) {
-                        throw new Error('Failed to save changes');
-                    }
-        
-                    const responseData = await response.json();
-                    console.log('Response:', responseData);
-                } catch (error) {
-                    console.error('Error:', error);
+        for (const answer of answers) {
+            let method = answer.id.startsWith('new-') ? 'POST' : 'PUT';
+            let url = answer.id.startsWith('new-') ? `/quiz/answers/` : `/quiz/answers/${answer.id}/`;
+
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    question_id: questionId,
+                    answer_text: answer.answer_text,
+                    is_correct: answer.is_correct,
+                    explanation: answer.explanation
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save changes');
+            }
+
+            const responseData = await response.json();
+            console.log('Response:', responseData);
+
+            // Update the dataset answer ID for new answers
+            if (method === 'POST') {
+                const answerGroup = document.querySelector(`[data-answer-id="${answer.id}"]`);
+                if (answerGroup) {
+                    answerGroup.dataset.answerId = responseData.id;
                 }
             }
-        })();
-        
+        }
+
         alert('Answers updated successfully!');
         window.location.reload();
     } catch (error) {
         console.error('Error saving changes:', error);
+        alert('Error saving changes:', error);
     }
 });
 
