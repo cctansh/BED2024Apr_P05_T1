@@ -14,6 +14,7 @@ const validateAccount = require("./middlewares/validateAccount")
 const validatePost = require("./middlewares/validatePost")
 const validateReply = require("./middlewares/validateReply")
 const authenticate = require("./middlewares/authenticate")
+const validateAnswer = require("./middlewares/validateAnswer")
 const seedDatabase = require("./seed");
 
 const app = express(); // Create an instance of express
@@ -74,8 +75,8 @@ app.delete("/quiz/questions/:id", quizController.deleteQuizQuestionById);
 // Quiz answer routes
 app.get("/quiz/answers/:id", answerController.getAnswersByQuestion);
 app.get("/quiz/answer/:id", answerController.getAnswerById);
-app.post("/quiz/answers", answerController.createAnswer);
-app.put("/quiz/answers/:id", answerController.updateAnswer);
+app.post("/quiz/answers", validateAnswer.validateCreateAnswer, answerController.createAnswer);
+app.put("/quiz/answers/:id", validateAnswer.validateUpdateAnswer, answerController.updateAnswer);
 app.delete("/quiz/answers/:id", answerController.deleteAnswer);
 
 // Serve the Swagger UI at a specific route

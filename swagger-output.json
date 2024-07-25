@@ -969,7 +969,7 @@
         }
       },
       "put": {
-        "description": "",
+        "description": "update answers by answer id",
         "parameters": [
           {
             "name": "id",
@@ -992,7 +992,7 @@
         }
       },
       "delete": {
-        "description": "",
+        "description": "delete answers by answer id",
         "parameters": [
           {
             "name": "id",
@@ -1017,7 +1017,7 @@
     },
     "/quiz/answer/{id}": {
       "get": {
-        "description": "",
+        "description": "get answers by answer id",
         "parameters": [
           {
             "name": "id",
@@ -1042,7 +1042,15 @@
     },
     "/quiz/answers": {
       "post": {
-        "description": "",
+        "description": "create new answer by answer id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "tags": ["quiz answer"],
         "responses": {
           "201": {
