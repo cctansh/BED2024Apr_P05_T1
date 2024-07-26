@@ -124,11 +124,209 @@ function populateQuestionsTable(questions) {
             <td>${index + 1}</td>
             <td onclick="viewQuestion(${question.id})">${question.question}</td>
             <td><button class="btn btn-primary" onclick="editQuestion(${question.id})"><i class="bi bi-pencil-fill"></i></button></td>
-            <td><button class="btn btn-danger" onclick="deleteQuestion(${question.id})"><i class="bi bi-trash3"></i></button></td>
+            <td><button class="btn btn-danger delete-question"><i class="bi bi-trash3"></i></button></td>
         `;
         tableBody.appendChild(row);
+
+        const deleteQuestionButton = row.querySelector('.delete-question');
+            deleteQuestionButton.addEventListener('click', async () => {
+                // If click delete reply button, ask user if they confirm want to delete the question
+                const confirmed = confirm("Are you sure you want to delete this question?");
+                if (confirmed) {
+                    try {
+                        // If confirmed, delete the reply
+                        await deleteQuestion(question.id);
+                    } catch (error) {
+                        // If failed to delete reply, log the error in console and alert user that reply deletion failed
+                        console.error("Failed to delete question:", error);
+                        alert('Failed to delete question.');
+                    }
+                }
+            });
+
     });
 }
+
+
+// delete the question
+async function deleteQuestion(questionId) {
+    console.log(questionId);
+    if(!questionId) {
+        // question id not found
+        return document.querySelector(`[data-answer-id="${questionId}"]`).remove();
+    }
+
+    try {
+        const response = await fetch(`/quiz/questions/${questionId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                alert('Question not found.');
+            } else {
+                throw new Error('Failed to delete Question');
+            }
+        } else {
+            alert('Question deleted successfully!');
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error('Error deleting question:', error);
+        alert('Error deleting question');
+    }
+} 
+
+
+/* add a new question
+function addQuestion(text = ''){
+    const questionText = document.createElement('input');
+    questionText.type = 'text';
+    questionText.classList.add('form-control', 'question-text');
+    questionText.value = text;
+    questionText.placeholder = `Question ${document.querySelectorAll('.question-group').length + 1}`;
+
+}*/
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const addQuestionButton = document.getElementById('add-question');
+    const editQuestionForm = document.getElementById('edit-question-form1');
+    const questionsTableBody = document.getElementById('questions-tbody');
+
+    // Redirect to a new page for adding a question
+    addQuestionButton.addEventListener('click', () => {
+        window.location.href = 'addQuestionScreen.html'; // Replace with the actual URL of your add question page
+    });
+
+    // Fetch and display existing questions
+    async function fetchQuestions() {
+        const token = sessionStorage.getItem('token');
+        try {
+            const response = await fetch('/quiz/questions', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch questions');
+            }
+
+            const questions = await response.json();
+            displayQuestions(questions);
+        } catch (error) {
+            console.error('Error fetching questions:', error);
+            alert('Error fetching questions');
+        }
+    }
+
+    // Handle form submission for editing existing questions
+    editQuestionForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const quizId = new URLSearchParams(window.location.search).get('quizId') || '1';
+        const token = sessionStorage.getItem('token');
+        const questions = Array.from(document.querySelectorAll('.question-group')).map(group => {
+            return {
+                id: group.dataset.questionId,
+                question_text: group.querySelector('input[type="text"]').value,
+                explanation: group.querySelector('.question-explanation').value || null
+            };
+        });
+
+        console.log(questions);
+
+        // Validation: Ensure there is at least one question
+        if (questions.length === 0) {
+            alert('There must be at least one question.');
+            return;
+        }
+
+        try {
+            for (const question of questions) {
+                let method = question.id.startsWith('new-') ? 'POST' : 'PUT';
+                let url = question.id.startsWith('new-') ? `/quiz/questions/` : `/quiz/questions/${question.id}/`;
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        quiz_id: quizId, // Ensure this field is correct
+                        question_text: question.question_text,
+                        explanation: question.explanation
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json(); // Get the error message from the server
+                    throw new Error(`Failed to save changes: ${errorData.message}`);
+                }
+
+                const responseData = await response.json();
+                console.log('Response:', responseData);
+
+                // Update the dataset question ID for new questions
+                if (method === 'POST') {
+                    const questionGroup = document.querySelector(`[data-question-id="${question.id}"]`);
+                    if (questionGroup) {
+                        questionGroup.dataset.questionId = responseData.id;
+                    }
+                }
+            }
+
+            alert('Questions updated successfully!');
+            window.location.reload();
+        } catch (error) {
+            console.error('Error saving changes:', error);
+            alert(`Error saving changes: ${error.message}`);
+        }
+    });
+
+    // Initial fetch of questions
+    fetchQuestions();
+});
+
+
+
+
+
+// update the question
+async function updateQuestion(questionId, questionData) {
+    const token = sessionStorage.getItem('token');
+    try {
+        const response = await fetch(`/quiz/questions/${questionId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(questionData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update question');
+        } else {
+            alert('Question updated successfully!');
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error('Error updating question:', error);
+        alert('Error updating question');
+    }
+}
+
+
+
+
 
 window.viewQuestion = function (id) {
     window.location.href = `/quizquestion.html?id=${id}`;
@@ -136,23 +334,6 @@ window.viewQuestion = function (id) {
 
 window.editQuestion = function (id) {
     window.location.href = `/editanswer.html?id=${id}`;
-};
-
-window.deleteQuestion = async function (id) {
-    try {
-        const response = await fetch(`/quiz/questions/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        if (!response.ok) {
-            throw new Error('Failed to delete question');
-        }
-        loadQuestions(); // Reload questions after deletion
-    } catch (error) {
-        console.error('Error deleting question:', error);
-    }
 };
 
 window.goBack = function () {

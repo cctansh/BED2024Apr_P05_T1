@@ -89,30 +89,6 @@ const deleteReply = async (req, res) => {
   }
 };
 
-const searchRepliesByAccount = async(req, res) => {
-  const searchTerm = req.query.searchTerm; 
-
-  try {
-    const replies = await Reply.searchRepliesByAccount(searchTerm);
-    res.json(replies);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error searching replies" });
-  }
-}
-
-const searchRepliesByText = async(req, res) => {
-  const searchTerm = req.query.searchTerm; 
-
-  try {
-    const replies = await Reply.searchRepliesByText(searchTerm);
-    res.json(replies);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error searching replies" });
-  }
-}
-
 const getRepliedPost = async (req, res) => {
   const replyId = parseInt(req.params.id);
   try {
@@ -147,8 +123,6 @@ module.exports = {
   createReply,
   updateReply,
   deleteReply,
-  searchRepliesByAccount,
-  searchRepliesByText,
   getRepliedPost,
   getRepliesByPost
 };

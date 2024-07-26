@@ -258,7 +258,7 @@ async function deletePost(postId) {
     }
 }
 
-// Asu=ync function to delete a reply by replyId
+// Async function to delete a reply by replyId
 async function deleteReply(replyId) {
     // Fetch and delete the reply if user is authorized (token matched)
     const response = await fetch(`/replies/${replyId}`, {

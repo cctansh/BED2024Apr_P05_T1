@@ -54,8 +54,6 @@ app.delete("/posts/:id", authenticate.verifyJWT, postController.deletePost);
 app.get("/posts/:id/replyCount", postController.getReplyCount); // route to get reply count for a post (used in frontend js)
 
 // Reply routes
-app.get("/replies/search/account", replyController.searchRepliesByAccount); // consider adding search function
-app.get("/replies/search/text", replyController.searchRepliesByText); // consider adding search function
 app.get("/replies", replyController.getAllReplies);
 app.get("/replies/:id", replyController.getReplyById);
 app.get("/replies/by-post/:id", replyController.getRepliesByPost);
@@ -70,7 +68,7 @@ app.get("/quiz/questions", quizController.getAllQuizQuestions);
 app.get("/quiz/questions/:id", quizController.getQuizQuestionById);
 app.post("/quiz/questions", quizController.createQuizQuestion);
 app.put("/quiz/questions/:id", quizController.updateQuizQuestion);
-app.delete("/quiz/questions/:id", quizController.deleteQuizQuestionById);
+app.delete("/quiz/questions/:id", quizController.deleteQuizQuestion);
 
 // Quiz answer routes
 app.get("/quiz/answers/:id", answerController.getAnswersByQuestion);
