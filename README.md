@@ -39,11 +39,3 @@ BED/
         #html files go here
     #app.js, dbConfig.js, package.json, sql files, etc go here
 ```
-
-### credits
-Discussion forum posts and replies generated with chatGPT
-- prompt: "create 4 posts for a mock discussion forum on singapore's food security
-posts should include a post title and post text
-create 2-4 replies for each post"
-
-index.html based on gignite generation
