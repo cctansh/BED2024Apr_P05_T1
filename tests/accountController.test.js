@@ -1,12 +1,14 @@
 // accountController.test.js
+// Import required modules
 const accountController = require("../controllers/accountController.js");
 const Account = require("../models/account.js");
 const bcrypt = require("bcryptjs");
 
-// Mock the Post model
-jest.mock("../models/Account"); // Replace with the actual path to your Post model
+// Mock the Account and bryptjs models
+jest.mock("../models/Account");
 jest.mock("bcryptjs");
 
+// Test suite to get all accounts
 describe("accountController.getAllAccounts", () => {
     beforeEach(() => {
       jest.clearAllMocks();
@@ -49,7 +51,7 @@ describe("accountController.getAllAccounts", () => {
     }); 
 });
 
-// retrieve account by accid
+// Test suite to get account by accId
 describe("accountController.getAccountById", () => {
     let req, res;
   
@@ -118,7 +120,7 @@ describe("accountController.getAccountById", () => {
     });
 });
 
-// create account
+// Test suite to create account
 describe("accountController.createAccount", () => {
     let req, res;
   
@@ -128,7 +130,6 @@ describe("accountController.createAccount", () => {
         body: {
           accEmail: "test@example.com",
           accName: "TestUser",
-          // Add other required fields here
         }
       };
       res = {
@@ -191,7 +192,7 @@ describe("accountController.createAccount", () => {
     });
 });
 
-// update account
+// Test suite to update account
 describe("accountController.updateAccount", () => {
     let req, res;
   
@@ -202,7 +203,6 @@ describe("accountController.updateAccount", () => {
         body: {
           accEmail: "updated@example.com",
           accName: "UpdatedUser",
-          // Add other fields as needed
         },
         user: {
           accId: 1 // Assuming the user is authenticated and their ID is available
@@ -220,14 +220,12 @@ describe("accountController.updateAccount", () => {
         accId: 1,
         accEmail: "test@example.com",
         accName: "TestUser",
-        // Add other fields as needed
       };
   
       const mockUpdatedAccount = {
         accId: 1,
         accEmail: "updated@example.com",
         accName: "UpdatedUser",
-        // Add other fields as needed
       };
   
       Account.getAccountById.mockResolvedValue(mockAccount);
@@ -255,7 +253,6 @@ describe("accountController.updateAccount", () => {
         accId: 2,
         accEmail: "test@example.com",
         accName: "TestUser",
-        // Add other fields as needed
       };
   
       Account.getAccountById.mockResolvedValue(mockAccount);
@@ -279,7 +276,7 @@ describe("accountController.updateAccount", () => {
     });
 });
 
-// update account role
+// Test suite to update account role
 describe("accountController.updateAccountRole", () => {
     let req, res;
   
@@ -305,13 +302,11 @@ describe("accountController.updateAccountRole", () => {
       const mockAccount = {
         accId: 1,
         accRole: "member",
-        // Add other fields as needed
       };
   
       const mockUpdatedAccount = {
         accId: 1,
         accRole: "admin",
-        // Add other fields as needed
       };
   
       Account.getAccountById.mockResolvedValue(mockAccount);
@@ -335,12 +330,11 @@ describe("accountController.updateAccountRole", () => {
     });
   
     it("should return 403 if user is not authorized to update account roles", async () => {
-      req.user.accRole = "member"; // Change the user role to non-admin
+      req.user.accRole = "member"; // Change the user role to member
   
       const mockAccount = {
         accId: 1,
         accRole: "member",
-        // Add other fields as needed
       };
   
       Account.getAccountById.mockResolvedValue(mockAccount);
@@ -364,7 +358,7 @@ describe("accountController.updateAccountRole", () => {
     });
 });
 
-// delete account
+// test suite to delete account
 describe("accountController.deleteAccount", () => {
     let req, res;
   
@@ -389,7 +383,6 @@ describe("accountController.deleteAccount", () => {
         accId: 1,
         accEmail: "test@example.com",
         accName: "TestUser",
-        // Add other fields as needed
       };
   
       Account.getAccountById.mockResolvedValue(mockAccount);
@@ -418,10 +411,9 @@ describe("accountController.deleteAccount", () => {
         accId: 2,
         accEmail: "test@example.com",
         accName: "TestUser",
-        // Add other fields as needed
       };
   
-      req.user.accRole = "member"; // Change the user role to non-admin
+      req.user.accRole = "member"; // Change the user role to member
       Account.getAccountById.mockResolvedValue(mockAccount);
   
       await accountController.deleteAccount(req, res);
@@ -443,7 +435,7 @@ describe("accountController.deleteAccount", () => {
     });
 });
 
-// login account
+// Test suite to login account
 describe("accountController.loginAccount", () => {
     let req, res;
   
@@ -503,7 +495,7 @@ describe("accountController.loginAccount", () => {
     });
 });
 
-// refresh access token
+// Test suite to generate refresh access token
 describe("accountController.refreshAccessToken", () => {
     let req, res;
   
@@ -558,7 +550,7 @@ describe("accountController.refreshAccessToken", () => {
     });
 });
 
-// logout
+// Test suite for logout
 describe("accountController.logout", () => {
     let req, res;
   
@@ -607,7 +599,7 @@ describe("accountController.logout", () => {
     });
 });
 
-// get posts and replies by account
+// Test suite to get posts and replies by account
 describe("accountController.getPostsAndRepliesByAccount", () => {
     let req, res;
   
@@ -649,7 +641,7 @@ describe("accountController.getPostsAndRepliesByAccount", () => {
     });
 });
 
-// check password
+// Test suite to check password
 describe("accountController.checkPassword", () => {
     let req, res;
   

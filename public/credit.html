@@ -1,16 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Home</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Credit</title>
+  <!-- Bootstrap CSS -->
   <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
-  <link href="css/style.css" rel="stylesheet">
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
+  <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
@@ -21,10 +25,12 @@
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
+      <!-- Navbar Links -->
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            <a class="nav-link" aria-current="page" href="index.html">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="discussionforum.html">Discussion</a>
@@ -36,34 +42,16 @@
             <a class="nav-link" id="login-profile-link" href="loginreg.html">Login&ensp;<i class="bi bi-person-fill"></i></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" id="go-credit" href="credit.html">Credit&ensp;</a>
+            <a class="nav-link active" href="credit.html">Credit&ensp;</a>
           </li>
       </div>
     </div>
   </nav>
 
-  <div class="pad-nav">
-    <form id="change-name-form">
-        <div class="inputs">
-            <div class="form-group">
-                <label for="newName" class="form-label">New Display Name</label>
-                <input type="text" id="newName" class="form-control"
-                    placeholder="Enter new display name...">
-            </div>
-            <div class="form-group">
-                <label for="newNameConfirm" class="form-label">Re-enter New Display Name</label>
-                <input type="text" id="newNameConfirm" class="form-control"
-                    placeholder="Re-enter new name...">
-            </div>
-        </div>
-        <button id="change-name-button" type="submit" class="btn btn-danger">Change Name</button>
-        <div id="changeNameError"></div>
-        <button id="cancel-button" type="button" class="btn btn-secondary">Cancel</button>
-    </form>
-  </div>
-
-  <script src="js/bootstrap/bootstrap.bundle.js"></script>
-  <script src="js/changenamescript.js"></script>
+    <!-- Bootstrap Bundle (includes Popper) -->
+    <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    <!-- Custom Script for credit.html -->
+    <script src="js/credit.js"></script>
 </body>
 
 </html>

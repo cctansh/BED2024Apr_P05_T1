@@ -57,7 +57,6 @@ const validateUpdatePost = (req, res, next) => {
   const schema = Joi.object({
     postTitle: Joi.string().min(1).max(8000).required(), // postTitle must be a string, minimum 1 maximum 8000 characters and is required
     postText: Joi.string().min(1).max(8000).required(), // postText must be a string, minimum 1 maximum 8000 characters and is required
-    //adminEdit: Joi.number().integer().min(0).max(1).required() // accId must be a number (integer, no decimals) and is required
   });
 
   // Validate the request body against the defined schema above
