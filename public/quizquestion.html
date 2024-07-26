@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +8,6 @@
     <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container-fluid">
@@ -65,113 +63,13 @@
             <h2 id="question">Question goes here</h2>
             <img id="question-image" src="" alt="Question image" style="width: 100%; height: auto; border-radius: 0.5rem;">
             <div id="answer-buttons" class="btn-group"></div>
-            <button id="next-btn" class="next-button" onclick="nextQuestion()">Next</button>
+            <button id="next-btn" class="next-button">Next</button>
             <div id="explanation" class="hidden">
                 <p id="explanation-text"></p>
             </div>
         </div>
     </div>
 
-    <script src="js/bootstrap/bootstrap.bundle.js"></script>
-    <script>
-        const quizQuestions = [
-            {
-                question: "What is the capital of France?",
-                image: "https://via.placeholder.com/600x400?text=Paris",
-                answers: [
-                    { text: "Paris", correct: true },
-                    { text: "London", correct: false },
-                    { text: "Rome", correct: false },
-                    { text: "Berlin", correct: false }
-                ]
-            },
-            {
-                question: "Who painted the Mona Lisa?",
-                image: "https://via.placeholder.com/600x400?text=Mona+Lisa",
-                answers: [
-                    { text: "Leonardo da Vinci", correct: true },
-                    { text: "Pablo Picasso", correct: false },
-                    { text: "Vincent van Gogh", correct: false },
-                    { text: "Claude Monet", correct: false }
-                ]
-            },
-            {
-                question: "What is the currency of Japan?",
-                image: "https://via.placeholder.com/600x400?text=Yen",
-                answers: [
-                    { text: "Yuan", correct: false },
-                    { text: "Yen", correct: true },
-                    { text: "Won", correct: false },
-                    { text: "Yenom", correct: false }
-                ]
-            },
-            {
-                question: "What is the tallest mountain in the world?",
-                image: "https://via.placeholder.com/600x400?text=Everest",
-                answers: [
-                    { text: "K2", correct: false },
-                    { text: "Mount Everest", correct: true },
-                    { text: "Makalu", correct: false },
-                    { text: "Lhotse", correct: false }
-                ]
-            },
-            {
-                question: "Which planet is known as the Red Planet?",
-                image: "https://via.placeholder.com/600x400?text=Mars",
-                answers: [
-                    { text: "Earth", correct: false },
-                    { text: "Mars", correct: true },
-                    { text: "Jupiter", correct: false },
-                    { text: "Saturn", correct: false }
-                ]
-            }
-        ];
-
-        let currentQuestionIndex = 0;
-
-        function startQuiz() {
-            showQuestion(quizQuestions[currentQuestionIndex]);
-        }
-
-        function showQuestion(question) {
-            const questionElement = document.getElementById('question');
-            const questionImageElement = document.getElementById('question-image');
-            const answerButtonsElement = document.getElementById('answer-buttons');
-            const nextButton = document.getElementById('next-btn');
-
-            questionElement.innerText = question.question;
-            questionImageElement.src = question.image;
-            answerButtonsElement.innerHTML = '';
-
-            question.answers.forEach(answer => {
-                const button = document.createElement('button');
-                button.innerText = answer.text;
-                button.classList.add('btn', 'btn-primary', 'm-2');
-                button.onclick = () => selectAnswer(answer.correct);
-                answerButtonsElement.appendChild(button);
-            });
-
-            nextButton.disabled = true;
-        }
-
-        function selectAnswer(correct) {
-            const nextButton = document.getElementById('next-btn');
-            nextButton.disabled = false;
-            // Additional logic to handle correct/incorrect answers can be added here
-        }
-
-        function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < quizQuestions.length) {
-                showQuestion(quizQuestions[currentQuestionIndex]);
-            } else {
-                alert('Quiz completed!');
-                // Logic to handle the end of the quiz
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', startQuiz);
-    </script>
+    <script src="quizquestion.js"></script>
 </body>
-
 </html>
