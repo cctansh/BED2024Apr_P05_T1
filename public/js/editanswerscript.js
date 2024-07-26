@@ -246,7 +246,7 @@ editAnswersForm.addEventListener('submit', async (e) => {
         for (const answer of answers) {
             let method = answer.id.startsWith('new-') ? 'POST' : 'PUT';
             let url = answer.id.startsWith('new-') ? `/quiz/answers/` : `/quiz/answers/${answer.id}/`;
-
+    
             const response = await fetch(url, {
                 method: method,
                 headers: {
@@ -254,20 +254,21 @@ editAnswersForm.addEventListener('submit', async (e) => {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    question_id: questionId,
+                    question_id: questionId, // Ensure this field is correct
                     answer_text: answer.answer_text,
                     is_correct: answer.is_correct,
                     explanation: answer.explanation
                 })
             });
-
+    
             if (!response.ok) {
-                throw new Error('Failed to save changes');
+                const errorData = await response.json(); // Get the error message from the server
+                throw new Error(`Failed to save changes: ${errorData.message}`);
             }
-
+    
             const responseData = await response.json();
             console.log('Response:', responseData);
-
+    
             // Update the dataset answer ID for new answers
             if (method === 'POST') {
                 const answerGroup = document.querySelector(`[data-answer-id="${answer.id}"]`);
@@ -276,12 +277,12 @@ editAnswersForm.addEventListener('submit', async (e) => {
                 }
             }
         }
-
+    
         alert('Answers updated successfully!');
         window.location.reload();
     } catch (error) {
         console.error('Error saving changes:', error);
-        alert('Error saving changes:', error);
+        alert('Error saving changes:', error.message); // Show specific error message
     }
 });
 

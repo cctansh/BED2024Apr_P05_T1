@@ -194,14 +194,14 @@ const checkPassword = async (req, res) => {
     if (account.accId != req.user.accId) {
       return res.status(403).json({ message: "You are not authorized to check this password" });
     }
-
+    
     const passwordMatch = await bcrypt.compare(password, account.accPassword);
     if (!passwordMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials", check: false });
     }
 
     // Passwords match
-    return res.status(200).json({ message: "Password match" });
+    return res.status(200).json({ message: "Password match", check: true });
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving account");
