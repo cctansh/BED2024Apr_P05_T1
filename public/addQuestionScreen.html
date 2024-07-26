@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home</title>
+  <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="img/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
+        OurFoodSG
+      </a>  
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="discussionforum.html">Discussion</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="quizquestion.html">Quiz</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="login-profile-link" href="loginreg.html">Login&ensp;<i class="bi bi-person-fill"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="go-credit" href="credit.html">Credit&ensp;</a>
+          </li>
+      </div>
+    </div>
+  </nav>
+
+    <main style="padding-top: 64px; padding-left: 16px; padding-right: 16px;">
+      <div style="max-width: 768px; margin: 0 auto; padding-top: 64px; display: flex; flex-direction: column; gap: 24px;">
+        <div>
+          <label for="question" style="font-weight: bold;">Question</label>
+          <input id="question" type="text" style="margin-top: 4px; width: 100%; padding: 8px; border: 1px solid #d1d1d1; border-radius: 4px;" placeholder="Enter the question..." />
+        </div>
+        <div>
+          <p style="font-weight: 500; margin-bottom: 8px;">Answer Choices</p>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="radio" value="option-one" id="option-one" name="answer" checked />
+              <label for="option-one">Option One</label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="radio" value="option-two" id="option-two" name="answer" />
+              <label for="option-two">Option Two</label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="radio" value="option-three" id="option-three" name="answer" />
+              <label for="option-three">Option Three</label>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="radio" value="option-four" id="option-four" name="answer" />
+              <label for="option-four">Option Four</label>
+            </div>
+          </div>
+        </div>
+        <button
+          style="background: #1f1f1f; color: #fff; width: 100%; padding: 12px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); font-size: 16px; font-weight: 600;">
+          Done
+        </button>
+      </div>
+    </main>
+  </body>
+</html>
+
+</body>
+</html>
