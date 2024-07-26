@@ -42,6 +42,7 @@ document.getElementById('change-password-form').addEventListener('submit', async
     const errorField = document.getElementById('changePasswordError');
     errorField.textContent = ''; // Clear previous error messages
 
+
     // Check if old password matches
     const oldPasswordMatch = await fetch(`/accounts/check`, {
         method: 'POST',
@@ -52,11 +53,13 @@ document.getElementById('change-password-form').addEventListener('submit', async
         body: JSON.stringify({ id: accId, password: oldPassword})
     });
 
+    const oldPasswordResult = await oldPasswordMatch.json();
+
     // Validate input fields
     if (!changePasswordData.accPassword || !oldPassword || !confirmPassword) {
         errorField.textContent = 'Change password failed: All fields must be filled.';
         return;
-    } else if (!oldPasswordMatch) {
+    } else if (!oldPasswordResult.check) {
         errorField.textContent = 'Change password failed: Old password does not match';
         return;
     } else if (changePasswordData.accPassword !== confirmPassword) {
