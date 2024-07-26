@@ -31,23 +31,36 @@ class QuizQuestion {
   }
 
   static async deleteQuizQuestion(id) {
-    let connection;
+    const connection = await sql.connect(dbConfig);
     try {
-      connection = await sql.connect(dbConfig);
+      const transaction = new sql.Transaction(connection); // Start new transaction
+      await transaction.begin(); // Begin transaction
 
-      const sqlQuery = `DELETE FROM QuizQuestions WHERE id = @id`;
+      // Delete answers first
+      // SQL query to delete answers associated with the post
+      const deleteAnswersQuery = `
+          DELETE FROM AnswerChoices
+          WHERE question_id = @id;
+      `;
+      await transaction.request().input("id", id).query(deleteAnswersQuery); // Execute query to delete Answers
 
-      const request = connection.request();
-      request.input("id", sql.Int, id);
-      const result = await request.query(sqlQuery);
+      // Then delete the Question
+      // SQL query to delete question itself
+      const deleteQuestionQuery = `
+          DELETE FROM QuizQuestions
+          WHERE id = @id;
+      `;
+      const result = await transaction.request().input("id", id).query(deleteQuestionQuery); // Execute query to delete question
 
-      return result.rowsAffected[0] > 0; // Return true if a row was deleted, otherwise false
-    } catch (error) {
-      console.error("Error deleting quiz question:", error);
-      throw error;
-    } finally {
-      if (connection) connection.close();
-    }
+      await transaction.commit(); // Commit the transaction
+      connection.close(); // Close DB connection
+      console.log("hi")
+      return result.rowsAffected[0] > 0; // Return true if at least one row was affected (post deleted)
+  } catch (error) {
+      // If failed to delete question, log the error in console and alert user that question deletion failed
+      console.error("Failed to delete question:", error);
+      alert('Failed to delete question.');
+  }
   }
 
   static async getQuizQuestionById(id) {

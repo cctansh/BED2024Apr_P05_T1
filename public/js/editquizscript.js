@@ -124,11 +124,125 @@ function populateQuestionsTable(questions) {
             <td>${index + 1}</td>
             <td onclick="viewQuestion(${question.id})">${question.question}</td>
             <td><button class="btn btn-primary" onclick="editQuestion(${question.id})"><i class="bi bi-pencil-fill"></i></button></td>
-            <td><button class="btn btn-danger" onclick="deleteQuestion(${question.id})"><i class="bi bi-trash3"></i></button></td>
+            <td><button class="btn btn-danger delete-question"><i class="bi bi-trash3"></i></button></td>
         `;
         tableBody.appendChild(row);
+
+        const deleteQuestionButton = row.querySelector('.delete-question');
+            deleteQuestionButton.addEventListener('click', async () => {
+                // If click delete reply button, ask user if they confirm want to delete the question
+                const confirmed = confirm("Are you sure you want to delete this question?");
+                if (confirmed) {
+                    try {
+                        // If confirmed, delete the reply
+                        await deleteQuestion(question.id);
+                    } catch (error) {
+                        // If failed to delete reply, log the error in console and alert user that reply deletion failed
+                        console.error("Failed to delete question:", error);
+                        alert('Failed to delete question.');
+                    }
+                }
+            });
+
     });
 }
+
+
+// delete the question
+async function deleteQuestion(questionId) {
+    console.log(questionId);
+    if(!questionId) {
+        // question id not found
+        return document.querySelector(`[data-answer-id="${questionId}"]`).remove();
+    }
+
+    try {
+        const response = await fetch(`/quiz/questions/${questionId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            if (response.status === 404) {
+                alert('Question not found.');
+            } else {
+                throw new Error('Failed to delete Question');
+            }
+        } else {
+            alert('Question deleted successfully!');
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error('Error deleting question:', error);
+        alert('Error deleting question');
+    }
+} 
+
+
+/* add a new question
+function addQuestion(text = ''){
+    const questionText = document.createElement('input');
+    questionText.type = 'text';
+    questionText.classList.add('form-control', 'question-text');
+    questionText.value = text;
+    questionText.placeholder = `Question ${document.querySelectorAll('.question-group').length + 1}`;
+
+}*/
+
+async function createQuizQuestion(newQuestion) {
+    const token = sessionStorage.getItem('token');
+    try {
+        const response = await fetch('/quiz/questions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newQuestion)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to add question');
+        } else {
+            alert('Question added successfully!');
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error('Error adding question:', error);
+        alert('Error adding question');
+    }
+}
+
+// update the question
+async function updateQuestion(questionId, questionData) {
+    const token = sessionStorage.getItem('token');
+    try {
+        const response = await fetch(`/quiz/questions/${questionId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(questionData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update question');
+        } else {
+            alert('Question updated successfully!');
+            window.location.reload();
+        }
+    } catch (error) {
+        console.error('Error updating question:', error);
+        alert('Error updating question');
+    }
+}
+
+
+
+
 
 window.viewQuestion = function (id) {
     window.location.href = `/quizquestion.html?id=${id}`;
@@ -136,23 +250,6 @@ window.viewQuestion = function (id) {
 
 window.editQuestion = function (id) {
     window.location.href = `/editanswer.html?id=${id}`;
-};
-
-window.deleteQuestion = async function (id) {
-    try {
-        const response = await fetch(`/quiz/questions/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        if (!response.ok) {
-            throw new Error('Failed to delete question');
-        }
-        loadQuestions(); // Reload questions after deletion
-    } catch (error) {
-        console.error('Error deleting question:', error);
-    }
 };
 
 window.goBack = function () {

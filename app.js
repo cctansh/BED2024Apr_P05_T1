@@ -70,7 +70,7 @@ app.get("/quiz/questions", quizController.getAllQuizQuestions);
 app.get("/quiz/questions/:id", quizController.getQuizQuestionById);
 app.post("/quiz/questions", quizController.createQuizQuestion);
 app.put("/quiz/questions/:id", quizController.updateQuizQuestion);
-app.delete("/quiz/questions/:id", quizController.deleteQuizQuestionById);
+app.delete("/quiz/questions/:id", quizController.deleteQuizQuestion);
 
 // Quiz answer routes
 app.get("/quiz/answers/:id", answerController.getAnswersByQuestion);
