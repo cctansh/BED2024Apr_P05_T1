@@ -643,93 +643,93 @@ describe("accountController.getPostsAndRepliesByAccount", () => {
 
 // Test suite to check password
 describe("accountController.checkPassword", () => {
-    let req, res;
-  
-    beforeEach(() => {
-      jest.clearAllMocks();
-      req = {
-        body: {
-          id: 1,
-          password: "password123"
-        },
-        user: {
-          accId: 1 // Assuming the user is authenticated and their ID is available
-        }
-      };
-      res = {
-        json: jest.fn(),
-        status: jest.fn().mockReturnThis(),
-        send: jest.fn()
-      };
-    });
-  
-    it("should return 404 if account is not found", async () => {
-      Account.getAccountById.mockResolvedValue(null); // Mock account not found
-  
-      await accountController.checkPassword(req, res);
-  
-      expect(Account.getAccountById).toHaveBeenCalledWith(1);
-      expect(res.status).toHaveBeenCalledWith(404);
-      expect(res.json).toHaveBeenCalledWith({ message: "Account not found" });
-    });
-  
-    it("should return 403 if user is not authorized to check the password", async () => {
-      const mockAccount = {
-        accId: 2, // Different account ID
-        accPassword: "hashedPassword"
-      };
-  
-      Account.getAccountById.mockResolvedValue(mockAccount);
-  
-      await accountController.checkPassword(req, res);
-  
-      expect(Account.getAccountById).toHaveBeenCalledWith(1);
-      expect(res.status).toHaveBeenCalledWith(403);
-      expect(res.json).toHaveBeenCalledWith({ message: "You are not authorized to check this password" });
-    });
-  
-    it("should return 401 if password does not match", async () => {
-      const mockAccount = {
-        accId: 1,
-        accPassword: "hashedPassword"
-      };
-  
-      Account.getAccountById.mockResolvedValue(mockAccount);
-      bcrypt.compare.mockResolvedValue(false); // Mock password mismatch
-  
-      await accountController.checkPassword(req, res);
-  
-      expect(Account.getAccountById).toHaveBeenCalledWith(1);
-      expect(bcrypt.compare).toHaveBeenCalledWith(req.body.password, mockAccount.accPassword);
-      expect(res.status).toHaveBeenCalledWith(401);
-      expect(res.json).toHaveBeenCalledWith({ message: "Invalid credentials" });
-    });
-  
-    it("should return 200 if password matches", async () => {
-      const mockAccount = {
-        accId: 1,
-        accPassword: "hashedPassword"
-      };
-  
-      Account.getAccountById.mockResolvedValue(mockAccount);
-      bcrypt.compare.mockResolvedValue(true); // Mock password match
-  
-      await accountController.checkPassword(req, res);
-  
-      expect(Account.getAccountById).toHaveBeenCalledWith(1);
-      expect(bcrypt.compare).toHaveBeenCalledWith(req.body.password, mockAccount.accPassword);
-      expect(res.status).toHaveBeenCalledWith(200);
-      expect(res.json).toHaveBeenCalledWith({ message: "Password match" });
-    });
-  
-    it("should handle errors and return 500 status", async () => {
-      const errorMessage = "Database error";
-      Account.getAccountById.mockRejectedValue(new Error(errorMessage)); // Mock an error
-  
-      await accountController.checkPassword(req, res);
-  
-      expect(Account.getAccountById).toHaveBeenCalledWith(1);
-      expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.send).toHaveBeenCalledWith("Error retrieving account");
-    });
+  let req, res;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    req = {
+      body: {
+        id: 1,
+        password: "password123"
+      },
+      user: {
+        accId: 1 // Assuming the user is authenticated and their ID is available
+      }
+    };
+    res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    };
+  });
+
+  it("should return 404 if account is not found", async () => {
+    Account.getAccountById.mockResolvedValue(null); // Mock account not found
+
+    await accountController.checkPassword(req, res);
+
+    expect(Account.getAccountById).toHaveBeenCalledWith(1);
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ message: "Account not found" });
+  });
+
+  it("should return 403 if user is not authorized to check the password", async () => {
+    const mockAccount = {
+      accId: 2, // Different account ID
+      accPassword: "hashedPassword"
+    };
+
+    Account.getAccountById.mockResolvedValue(mockAccount);
+
+    await accountController.checkPassword(req, res);
+
+    expect(Account.getAccountById).toHaveBeenCalledWith(1);
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.json).toHaveBeenCalledWith({ message: "You are not authorized to check this password" });
+  });
+
+  it("should return 401 if password does not match", async () => {
+    const mockAccount = {
+      accId: 1,
+      accPassword: "hashedPassword"
+    };
+
+    Account.getAccountById.mockResolvedValue(mockAccount);
+    bcrypt.compare.mockResolvedValue(false); // Mock password mismatch
+
+    await accountController.checkPassword(req, res);
+
+    expect(Account.getAccountById).toHaveBeenCalledWith(1);
+    expect(bcrypt.compare).toHaveBeenCalledWith(req.body.password, mockAccount.accPassword);
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({ message: "Invalid credentials", check: false });
+  });
+
+  it("should return 200 if password matches", async () => {
+    const mockAccount = {
+      accId: 1,
+      accPassword: "hashedPassword"
+    };
+
+    Account.getAccountById.mockResolvedValue(mockAccount);
+    bcrypt.compare.mockResolvedValue(true); // Mock password match
+
+    await accountController.checkPassword(req, res);
+
+    expect(Account.getAccountById).toHaveBeenCalledWith(1);
+    expect(bcrypt.compare).toHaveBeenCalledWith(req.body.password, mockAccount.accPassword);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ message: "Password match", check: true });
+  });
+
+  it("should handle errors and return 500 status", async () => {
+    const errorMessage = "Database error";
+    Account.getAccountById.mockRejectedValue(new Error(errorMessage)); // Mock an error
+
+    await accountController.checkPassword(req, res);
+
+    expect(Account.getAccountById).toHaveBeenCalledWith(1);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.send).toHaveBeenCalledWith("Error retrieving account");
+  });
 });
