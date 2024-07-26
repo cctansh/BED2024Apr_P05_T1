@@ -555,48 +555,6 @@
         }
       }
     },
-    "/replies/search/account": {
-      "get": {
-        "description": "Search for a reply based on its associated accId",
-        "parameters": [
-          {
-            "name": "searchTerm",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "tags": ["reply"],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/replies/search/text": {
-      "get": {
-        "description": "Search for a reply based on the text entered",
-        "parameters": [
-          {
-            "name": "searchTerm",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "tags": ["reply"],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/replies": {
       "get": {
         "description": "Retrieve all replies",
