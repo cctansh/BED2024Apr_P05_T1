@@ -106,7 +106,7 @@ class QuizQuestion {
 
       const result = await request.query(sqlQuery);
 
-      return result.recordset[0].id; // Return the ID of the newly created quiz question
+      return result.recordset[0]; // Return the ID of the newly created quiz question
     } catch (error) {
       console.error("Error creating quiz question:", error);
       throw error;

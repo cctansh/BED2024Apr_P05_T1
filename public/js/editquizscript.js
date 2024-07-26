@@ -191,29 +191,113 @@ function addQuestion(text = ''){
 
 }*/
 
-async function createQuizQuestion(newQuestion) {
-    const token = sessionStorage.getItem('token');
-    try {
-        const response = await fetch('/quiz/questions', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newQuestion)
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const addQuestionButton = document.getElementById('add-question');
+    const editQuestionForm = document.getElementById('edit-question-form1');
+    const questionsTableBody = document.getElementById('questions-tbody');
+
+    // Redirect to a new page for adding a question
+    addQuestionButton.addEventListener('click', () => {
+        window.location.href = 'addQuestionScreen.html'; // Replace with the actual URL of your add question page
+    });
+
+    // Fetch and display existing questions
+    async function fetchQuestions() {
+        const token = sessionStorage.getItem('token');
+        try {
+            const response = await fetch('/quiz/questions', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch questions');
+            }
+
+            const questions = await response.json();
+            displayQuestions(questions);
+        } catch (error) {
+            console.error('Error fetching questions:', error);
+            alert('Error fetching questions');
+        }
+    }
+
+    // Handle form submission for editing existing questions
+    editQuestionForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const quizId = new URLSearchParams(window.location.search).get('quizId') || '1';
+        const token = sessionStorage.getItem('token');
+        const questions = Array.from(document.querySelectorAll('.question-group')).map(group => {
+            return {
+                id: group.dataset.questionId,
+                question_text: group.querySelector('input[type="text"]').value,
+                explanation: group.querySelector('.question-explanation').value || null
+            };
         });
 
-        if (!response.ok) {
-            throw new Error('Failed to add question');
-        } else {
-            alert('Question added successfully!');
-            window.location.reload();
+        console.log(questions);
+
+        // Validation: Ensure there is at least one question
+        if (questions.length === 0) {
+            alert('There must be at least one question.');
+            return;
         }
-    } catch (error) {
-        console.error('Error adding question:', error);
-        alert('Error adding question');
-    }
-}
+
+        try {
+            for (const question of questions) {
+                let method = question.id.startsWith('new-') ? 'POST' : 'PUT';
+                let url = question.id.startsWith('new-') ? `/quiz/questions/` : `/quiz/questions/${question.id}/`;
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        quiz_id: quizId, // Ensure this field is correct
+                        question_text: question.question_text,
+                        explanation: question.explanation
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json(); // Get the error message from the server
+                    throw new Error(`Failed to save changes: ${errorData.message}`);
+                }
+
+                const responseData = await response.json();
+                console.log('Response:', responseData);
+
+                // Update the dataset question ID for new questions
+                if (method === 'POST') {
+                    const questionGroup = document.querySelector(`[data-question-id="${question.id}"]`);
+                    if (questionGroup) {
+                        questionGroup.dataset.questionId = responseData.id;
+                    }
+                }
+            }
+
+            alert('Questions updated successfully!');
+            window.location.reload();
+        } catch (error) {
+            console.error('Error saving changes:', error);
+            alert(`Error saving changes: ${error.message}`);
+        }
+    });
+
+    // Initial fetch of questions
+    fetchQuestions();
+});
+
+
+
+
 
 // update the question
 async function updateQuestion(questionId, questionData) {
