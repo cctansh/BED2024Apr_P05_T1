@@ -48,6 +48,10 @@ const updateAnswer = async (req, res) => {
   const newAnswerData = req.body; // Extract updated answer data from request body
 
   try {
+    const answer = await AnswerChoice.getAnswerById(answerId);
+    if (!answer) {
+      return res.status(404).send("Answer not found");
+    }
     const updatedAnswer = await AnswerChoice.updateAnswer(answerId, newAnswerData); // Update answer choice using model method
     if (!updatedAnswer) {
       return res.status(404).send("Answer not found"); // Send 404 if answer not found
@@ -64,6 +68,11 @@ const deleteAnswer = async (req, res) => {
   const answerId = parseInt(req.params.id); // Extract answer ID from request parameters
 
   try {
+    const answer = await AnswerChoice.getAnswerById(answerId);
+    if (!answer) {
+      return res.status(404).send("Answer not found");
+    }
+    
     const success = await AnswerChoice.deleteAnswer(answerId); // Delete answer choice using model method
     if (!success) {
       return res.status(404).send("Answer not found"); // Send 404 if answer not found
