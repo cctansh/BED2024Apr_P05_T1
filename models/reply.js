@@ -100,49 +100,6 @@ class Reply {
     return result.rowsAffected > 0;
   }
 
-  static async searchRepliesByAccount(searchTerm) {
-    const connection = await sql.connect(dbConfig);
-
-    try {
-      const query = `
-            SELECT r.replyId, r.replyDateTime, r.replyText, r.replyEdited, r.adminEdit, r.accId, r.replyTo
-            FROM Reply r
-            LEFT JOIN Account a ON r.accId = a.accId
-            WHERE a.accName LIKE '%${searchTerm}%'
-          `;
-
-      const result = await connection.request().query(query);
-      return result.recordset.map(
-        (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.replyEdited, row.adminEdit, row.accId, row.replyTo)
-      );
-    } catch (error) {
-      throw new Error("Error searching replies");
-    } finally {
-      await connection.close();
-    }
-  }
-
-  static async searchRepliesByText(searchTerm) {
-    const connection = await sql.connect(dbConfig);
-
-    try {
-      const query = `
-            SELECT *
-            FROM Reply
-            WHERE replyText LIKE '%${searchTerm}%'
-          `;
-
-      const result = await connection.request().query(query);
-      return result.recordset.map(
-        (row) => new Reply(row.replyId, row.replyDateTime, row.replyText, row.replyEdited, row.accId, row.replyTo)
-      );
-    } catch (error) {
-      throw new Error("Error searching replies");
-    } finally {
-      await connection.close();
-    }
-  }
-
   static async getRepliedPost(id) {
     const connection = await sql.connect(dbConfig);
 

@@ -54,8 +54,6 @@ app.delete("/posts/:id", authenticate.verifyJWT, postController.deletePost);
 app.get("/posts/:id/replyCount", postController.getReplyCount); // route to get reply count for a post (used in frontend js)
 
 // Reply routes
-app.get("/replies/search/account", replyController.searchRepliesByAccount); // consider adding search function
-app.get("/replies/search/text", replyController.searchRepliesByText); // consider adding search function
 app.get("/replies", replyController.getAllReplies);
 app.get("/replies/:id", replyController.getReplyById);
 app.get("/replies/by-post/:id", replyController.getRepliesByPost);
