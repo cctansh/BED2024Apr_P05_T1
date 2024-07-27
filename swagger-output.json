@@ -904,7 +904,7 @@
     },
     "/quiz/answers/{id}": {
       "get": {
-        "description": "get answers by question id",
+        "description": "Get answers by question id",
         "parameters": [
           {
             "name": "id",
@@ -927,13 +927,42 @@
         }
       },
       "put": {
-        "description": "update answers by answer id",
+        "description": "Update answers by answer id",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "question_id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "answer_text": {
+                  "type": "string",
+                  "example": "Updated Answer"
+                },
+                "is_correct": {
+                  "type": "integer",
+                  "format": "int32",
+                  "example": 1,
+                  "enum": [0, 1]
+                },
+                "explanation": {
+                  "type": "string",
+                  "example": "updated explanation"
+                }
+              },
+              "required": ["question_id", "answer_text", "is_correct", "explanation"]
+            }
           }
         ],
         "tags": ["quiz answer"],
@@ -950,7 +979,7 @@
         }
       },
       "delete": {
-        "description": "delete answers by answer id",
+        "description": "Delete answers by answer id",
         "parameters": [
           {
             "name": "id",
@@ -975,7 +1004,7 @@
     },
     "/quiz/answer/{id}": {
       "get": {
-        "description": "get answers by answer id",
+        "description": "Get answers by answer id",
         "parameters": [
           {
             "name": "id",
@@ -1000,13 +1029,36 @@
     },
     "/quiz/answers": {
       "post": {
-        "description": "create new answer by answer id",
+        "description": "Create new answer",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "object",
+              "properties": {
+                "question_id": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "answer_text": {
+                  "type": "string",
+                  "example": "Sample answer"
+                },
+                "is_correct": {
+                  "type": "integer",
+                  "format": "int32",
+                  "example": 1,
+                  "enum": [0, 1]
+                },
+                "explanation": {
+                  "type": "string",
+                  "example": "This is the correct answer because..."
+                }
+              },
+              "required": ["question_id", "answer_text", "is_correct", "explanation"]
+            }
           }
         ],
         "tags": ["quiz answer"],
@@ -1022,3 +1074,4 @@
     }
   }
 }
+      

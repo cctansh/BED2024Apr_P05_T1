@@ -41,16 +41,16 @@ confirmReply.addEventListener('click', async () => {
             return;
         }
 
-        if (!postTitleText.length > 200) {
-            alert("Post title should be within 200 characters.");
+        if (postTitleText.length > 255) {
+            alert("Post title should be within 255 characters.");
         }
 
         if (!postContentText) {
             alert("Post content cannot be empty.");
         }
 
-        if (!postContentText.length > 10000) {
-            alert("Post content should be within 10000 characters.");
+        if (postContentText.length > 8000) {
+            alert("Post content should be within 8000 characters.");
         }
 
         // Data object for new post in JSON format

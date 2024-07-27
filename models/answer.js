@@ -1,158 +1,121 @@
-const sql = require("mssql");
-const dbConfig = require("../dbConfig");
+const sql = require("mssql"); // Import the mssql library for SQL Server database operations
+const dbConfig = require("../dbConfig"); // Import database configuration
 
+// Define the AnswerChoice class to interact with the AnswerChoices table
 class AnswerChoice {
   constructor(id, question_id, answer_text, is_correct, explanation) {
-    this.id = id;
-    this.question_id = question_id;
-    this.answer_text = answer_text;
-    this.is_correct = is_correct;
-    this.explanation = explanation;
+    this.id = id; // Answer choice ID
+    this.question_id = question_id; // Associated question ID
+    this.answer_text = answer_text; // Text of the answer choice
+    this.is_correct = is_correct; // Flag indicating if the answer is correct (1 for true, 0 for false)
+    this.explanation = explanation; // Explanation for the answer choice
   }
 
-  // Retrieves all answer choices associated with a specific question
+  // Static method to get all answer choices for a specific question
   static async getAnswersByQuestion(questionId) {
-    // Connect to the database
-    const connection = await sql.connect(dbConfig);
+    const connection = await sql.connect(dbConfig); // Establish a database connection
 
     try {
-      // SQL query to select all answer choices for a given question
-      const sqlQuery = `SELECT * FROM AnswerChoices WHERE question_id = @questionId`;
-
-      const request = connection.request();
-      request.input("questionId", questionId);
-      const result = await request.query(sqlQuery);
-
-      // Close the database connection
-      connection.close();
-
-      // Map the result to AnswerChoice objects and return
-      return result.recordset.map(
-        (row) => new AnswerChoice(row.id, row.question_id, row.answer_text, row.is_correct, row.explanation)
-      );
+      const sqlQuery = `SELECT * FROM AnswerChoices WHERE question_id = @questionId`; // SQL query to fetch answers by question ID
+      const request = connection.request(); // Create a request object
+      request.input("questionId", sql.Int, questionId); // Add input parameter for question ID
+      const result = await request.query(sqlQuery); // Execute the query
+      // Map the result to AnswerChoice instances
+      return result.recordset.map(row => new AnswerChoice(row.id, row.question_id, row.answer_text, row.is_correct, row.explanation));
     } catch (error) {
-      // Throw a new error if fetching answers fails
-      throw new Error("Error fetching answers");
+      throw new Error("Error fetching answers"); // Throw an error if query fails
     } finally {
-      // Ensure the database connection is closed in case of an error
-      await connection.close();
+      connection.close(); // Close the database connection
     }
   }
 
-  // Retrieves a single answer choice by its unique id
+  // Static method to get a single answer choice by its ID
   static async getAnswerById(answerId) {
-    // Connect to the database
-    const connection = await sql.connect(dbConfig);
+    const connection = await sql.connect(dbConfig); // Establish a database connection
 
     try {
-      // SQL query to select an answer choice by its id
-      const sqlQuery = `
-        SELECT *
-        FROM AnswerChoices
-        WHERE id = @answerId
-      `;
-      const request = connection.request();
-      request.input("answerId", answerId);
-      const result = await request.query(sqlQuery);
-
-      // If no answer choice is found, return null
-      if (!result.recordset.length) return null;
-
-      // Return a new AnswerChoice object with the fetched data
-      const answerData = result.recordset[0];
-      return new AnswerChoice(
-        answerData.id,
-        answerData.question_id,
-        answerData.answer_text,
-        answerData.is_correct,
-        answerData.explanation
-      );
+      const sqlQuery = `SELECT * FROM AnswerChoices WHERE id = @answerId`; // SQL query to fetch an answer by ID
+      const request = connection.request(); // Create a request object
+      request.input("answerId", sql.Int, answerId); // Add input parameter for answer ID
+      const result = await request.query(sqlQuery); // Execute the query
+      if (!result.recordset.length) return null; // Return null if no result found
+      const answerData = result.recordset[0]; // Get the answer data from the result set
+      // Return an instance of AnswerChoice
+      return new AnswerChoice(answerData.id, answerData.question_id, answerData.answer_text, answerData.is_correct, answerData.explanation);
     } catch (error) {
-      // Log and re-throw any errors that occur
-      console.error(`Error fetching answer with ID ${answerId}:`, error);
-      throw error;
+      throw error; // Re-throw any errors encountered
     } finally {
-      // Ensure the database connection is closed
-      connection.close();
+      connection.close(); // Close the database connection
     }
   }
 
-  // Creates a new answer choice in the database
+  // Static method to create a new answer choice
   static async createAnswer(newAnswerData) {
-    // Connect to the database
-    const connection = await sql.connect(dbConfig);
-
-    // SQL query to insert a new answer choice and retrieve the new ID
-    const sqlQuery = `
-      INSERT INTO AnswerChoices (question_id, answer_text, is_correct, explanation)
-      VALUES (@question_id, @answer_text, @is_correct, @explanation);
-      SELECT SCOPE_IDENTITY() AS id;
-    `;
-    const request = connection.request();
-    request.input("question_id", newAnswerData.question_id);
-    request.input("answer_text", newAnswerData.answer_text);
-    request.input("is_correct", newAnswerData.is_correct);
-    request.input("explanation", newAnswerData.explanation);
-
-    // Execute the query and retrieve the new answer choice ID
-    const result = await request.query(sqlQuery);
-    connection.close();
-
-    // Return the newly created AnswerChoice object by calling getAnswerById with the new ID
-    return this.getAnswerById(result.recordset[0].id);
-  }
-
-  // Updates an existing answer choice in the database
-  static async updateAnswer(id, newAnswerData) {
-    // Connect to the database
-    const connection = await sql.connect(dbConfig);
-
-    // SQL query to update the answer choice with the given id
-    const sqlQuery = `
-      UPDATE AnswerChoices
-      SET answer_text = @answer_text, is_correct = @is_correct, explanation = @explanation
-      WHERE id = @id
-    `;
-    const request = connection.request();
-    request.input("id", id);
-    request.input("answer_text", newAnswerData.answer_text || null);
-    request.input("is_correct", newAnswerData.is_correct);
-    request.input("explanation", newAnswerData.explanation || null);
-
-    // Execute the query to update the answer choice
-    await request.query(sqlQuery);
-
-    // Return the updated AnswerChoice object by calling getAnswerById with the id
-    return this.getAnswerById(id);
-  }
-
-  // Deletes an answer choice from the database
-  static async deleteAnswer(id) {
-    // Connect to the database
-    const connection = await sql.connect(dbConfig);
+    const connection = await sql.connect(dbConfig); // Establish a database connection
 
     try {
-      // SQL query to delete the answer choice with the given id
       const sqlQuery = `
-        DELETE FROM AnswerChoices
-        WHERE id = @id
-      `;
-      const request = connection.request();
-      request.input("id", id);
-      const result = await request.query(sqlQuery);
-
-      // Return true if the answer choice was successfully deleted, otherwise false
-      return result.rowsAffected > 0;
+        INSERT INTO AnswerChoices (question_id, answer_text, is_correct, explanation)
+        VALUES (@question_id, @answer_text, @is_correct, @explanation);
+        SELECT SCOPE_IDENTITY() AS id;
+      `; // SQL query to insert a new answer choice and return its ID
+      const request = connection.request(); // Create a request object
+      request.input("question_id", sql.Int, newAnswerData.question_id); // Add input parameters for new answer data
+      request.input("answer_text", sql.NVarChar, newAnswerData.answer_text);
+      request.input("is_correct", sql.Bit, newAnswerData.is_correct);
+      request.input("explanation", sql.NVarChar, newAnswerData.explanation);
+      const result = await request.query(sqlQuery); // Execute the query
+      // Fetch and return the newly created answer choice using its ID
+      return await this.getAnswerById(result.recordset[0].id);
     } catch (error) {
-      // Log and re-throw any errors that occur
-      console.error(`Error deleting answer with ID ${id}:`, error);
-      throw error;
+      throw error; // Re-throw any errors encountered
     } finally {
-      // Ensure the database connection is closed
-      connection.close();
+      connection.close(); // Close the database connection
+    }
+  }
+
+  // Static method to update an existing answer choice
+  static async updateAnswer(answerId, updatedAnswerData) {
+    const connection = await sql.connect(dbConfig); // Establish a database connection
+
+    try {
+      const sqlQuery = `
+        UPDATE AnswerChoices
+        SET answer_text = @answer_text, is_correct = @is_correct, explanation = @explanation
+        WHERE id = @id
+      `; // SQL query to update an existing answer choice
+      const request = connection.request(); // Create a request object
+      request.input("id", sql.Int, answerId); // Add input parameters for updated answer data
+      request.input("answer_text", sql.NVarChar, updatedAnswerData.answer_text);
+      request.input("is_correct", sql.Bit, updatedAnswerData.is_correct);
+      request.input("explanation", sql.NVarChar, updatedAnswerData.explanation);
+      await request.query(sqlQuery); // Execute the update query
+      // Fetch and return the updated answer choice
+      return await this.getAnswerById(answerId);
+    } catch (error) {
+      throw error; // Re-throw any errors encountered
+    } finally {
+      connection.close(); // Close the database connection
+    }
+  }
+
+  // Static method to delete an answer choice
+  static async deleteAnswer(answerId) {
+    const connection = await sql.connect(dbConfig); // Establish a database connection
+
+    try {
+      const sqlQuery = `DELETE FROM AnswerChoices WHERE id = @id`; // SQL query to delete an answer choice by ID
+      const request = connection.request(); // Create a request object
+      request.input("id", sql.Int, answerId); // Add input parameter for answer ID
+      const result = await request.query(sqlQuery); // Execute the delete query
+      // Return true if any rows were affected (deleted), otherwise false
+      return result.rowsAffected[0] > 0;
+    } catch (error) {
+      throw error; // Re-throw any errors encountered
+    } finally {
+      connection.close(); // Close the database connection
     }
   }
 }
 
-// Export the AnswerChoice class to be used in other parts of the application
-module.exports = AnswerChoice;
+module.exports = AnswerChoice; // Export the AnswerChoice class for use in other modules

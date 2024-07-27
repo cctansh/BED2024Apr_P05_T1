@@ -6,7 +6,7 @@ const Joi = require("joi");
 // Middleware to validate post before creating and storing it in DB
 const validateCreatePost = async (req, res, next) => {
   const schema = Joi.object({
-    postTitle: Joi.string().min(1).max(8000).required(), // postTitle must be a string, minimum 1 maximum 8000 characters and is required
+    postTitle: Joi.string().min(1).max(255).required(), // postTitle must be a string, minimum 1 maximum 255 characters and is required
     postText: Joi.string().min(1).max(8000).required(), // postText must be a string, minimum 1 maximum 8000 characters and is required
     accId: Joi.number().integer().required() // accId must be a number (integer, no decimals) and is required
   });
@@ -55,7 +55,7 @@ const validateCreatePost = async (req, res, next) => {
 // Middleware to validate post before updating and storing it in DB
 const validateUpdatePost = (req, res, next) => {
   const schema = Joi.object({
-    postTitle: Joi.string().min(1).max(8000).required(), // postTitle must be a string, minimum 1 maximum 8000 characters and is required
+    postTitle: Joi.string().min(1).max(255).required(), // postTitle must be a string, minimum 1 maximum 255 characters and is required
     postText: Joi.string().min(1).max(8000).required(), // postText must be a string, minimum 1 maximum 8000 characters and is required
   });
 

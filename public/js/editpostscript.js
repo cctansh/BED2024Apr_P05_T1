@@ -62,8 +62,8 @@ async function fetchPost(postId) {
                 return;
             }
     
-            if (!postTitleText.length > 200) {
-                alert("Post title should be within 200 characters.");
+            if (postTitleText.length > 255) {
+                alert("Post title should be within 255 characters.");
                 return;
             }
     
@@ -72,22 +72,15 @@ async function fetchPost(postId) {
                 return;
             }
     
-            if (!postContentText.length > 10000) {
-                alert("Post content should be within 10000 characters.");
+            if (postContentText.length > 8000) {
+                alert("Post content should be within 8000 characters.");
                 return;
             }
-
-            // Determine admin edit status
-            //let adminEdit = 0;
-            //if (loginAccRole == 'admin') {
-            //    adminEdit = 1;
-            //}
 
             // Construct updated post data object
             const newPostData = {
                 postTitle: postTitleText,
                 postText: postContentText,
-                //adminEdit: adminEdit
             };
 
             try {
