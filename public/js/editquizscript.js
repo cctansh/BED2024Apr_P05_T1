@@ -181,37 +181,40 @@ async function deleteQuestion(questionId) {
 } 
 
 
-/* add a new question
-function addQuestion(text = ''){
-    const questionText = document.createElement('input');
-    questionText.type = 'text';
-    questionText.classList.add('form-control', 'question-text');
-    questionText.value = text;
-    questionText.placeholder = `Question ${document.querySelectorAll('.question-group').length + 1}`;
-
-}*/
+// UNTIL HERE THE CODE IS PERFECT!! PLEASE DO NOT TOUCH ANYTHING ABOVE
 
 
+
+// Edit question goes below
 
 document.addEventListener('DOMContentLoaded', () => {
     const addQuestionButton = document.getElementById('add-question');
-    const editQuestionForm = document.getElementById('edit-question-form1');
+    const editQuestionForm = document.getElementById('edit-question-form');
     const questionsTableBody = document.getElementById('questions-tbody');
 
     // Redirect to a new page for adding a question
     addQuestionButton.addEventListener('click', () => {
-        window.location.href = 'addQuestionScreen.html'; // Replace with the actual URL of your add question page
+        const newQuestionRow = document.createElement('tr');
+        newQuestionRow.classList.add('question-group');
+        newQuestionRow.dataset.questionId = `new-${Date.now()}`;
+        newQuestionRow.innerHTML = `
+            <td>
+                <input type="text" placeholder="Enter new question" class="form-control" />
+            </td>
+            <td>
+                <button type="button" class="btn btn-primary save-question">Save</button>
+            </td>
+        `;
+        questionsTableBody.appendChild(newQuestionRow);
     });
 
     // Fetch and display existing questions
     async function fetchQuestions() {
-        const token = sessionStorage.getItem('token');
         try {
             const response = await fetch('/quiz/questions', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
                 }
             });
 
@@ -227,6 +230,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Function to display questions in the table
+    function displayQuestions(questions) {
+        questionsTableBody.innerHTML = ''; // Clear existing content
+        questions.forEach(question => {
+            const row = document.createElement('tr');
+            row.classList.add('question-group');
+            row.dataset.questionId = question.id;
+
+            row.innerHTML = `
+                <td>
+                    <input type="text" value="${question.question}" class="form-control" />
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary save-question">Save</button>
+                </td>
+            `;
+
+            questionsTableBody.appendChild(row);
+        });
+    }
+
     // Handle form submission for editing existing questions
     editQuestionForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -235,8 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const questions = Array.from(document.querySelectorAll('.question-group')).map(group => {
             return {
                 id: group.dataset.questionId,
-                question_text: group.querySelector('input[type="text"]').value,
-                explanation: group.querySelector('.question-explanation').value || null
+                question: group.querySelector('input[type="text"]').value
             };
         });
 
@@ -261,14 +284,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({
                         quiz_id: quizId, // Ensure this field is correct
-                        question_text: question.question_text,
-                        explanation: question.explanation
+                        question: question.question
                     })
                 });
 
                 if (!response.ok) {
-                    const errorData = await response.json(); // Get the error message from the server
-                    throw new Error(`Failed to save changes: ${errorData.message}`);
+                    const errorData = await response.text(); // Get the error message from the server as text
+                    throw new Error(`Failed to save changes: ${errorData}`);
                 }
 
                 const responseData = await response.json();
@@ -298,36 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-// update the question
-async function updateQuestion(questionId, questionData) {
-    const token = sessionStorage.getItem('token');
-    try {
-        const response = await fetch(`/quiz/questions/${questionId}`, {
-            method: 'PUT',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(questionData)
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to update question');
-        } else {
-            alert('Question updated successfully!');
-            window.location.reload();
-        }
-    } catch (error) {
-        console.error('Error updating question:', error);
-        alert('Error updating question');
-    }
-}
-
-
-
-
-
 window.viewQuestion = function (id) {
     window.location.href = `/quizquestion.html?id=${id}`;
 };
@@ -343,3 +335,22 @@ window.goBack = function () {
 document.addEventListener('DOMContentLoaded', async function () {
     await loadQuestions();
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const editQuestionButton = document.getElementById('edit-question');
+
+    // Redirect to the addQuestionScreen.html page when the button is clicked
+    editQuestionButton.addEventListener('click', () => {
+        window.location.href = 'addQuestionScreen.html'; // Adjust the URL as needed
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const goBackButton = document.getElementById('add-question');
+
+    // Redirect to editquiz.html when the button is clicked
+    goBackButton.addEventListener('click', () => {
+        window.location.href = 'editquiz.html'; // Adjust the URL if necessary
+    });
+});
+
