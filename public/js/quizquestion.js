@@ -18,6 +18,7 @@ if (token && !isTokenExpired(token)) {
 
 // Select DOM elements for the quiz and admin view
 const questionElement = document.getElementById("question");
+const questionImage = document.getElementById('question-image');
 const answerButtons = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
 const editButton = document.getElementById("edit-button");
@@ -67,9 +68,12 @@ async function showQuestion() {
 
   // Check if there's an image for the current question
   if (currentQuestion.image_path) {
+    console.log("Image path:", currentQuestion.image_path); 
     const imageElement = document.createElement("img");
     imageElement.src = currentQuestion.image_path;
-    imageElement.classList.add("question-image");
+    imageElement.alt = "Question Image";
+    imageElement.style.maxWidth = "100%";
+    imageElement.style.height = "auto";
     questionElement.appendChild(imageElement);
   }
 

@@ -185,6 +185,7 @@ async function deleteQuestion(questionId) {
 
 
 
+
 // Edit question goes below
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -192,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const editQuestionForm = document.getElementById('edit-question-form');
     const questionsTableBody = document.getElementById('questions-tbody');
 
-    // Redirect to a new page for adding a question
+    // Add a new question row
     addQuestionButton.addEventListener('click', () => {
         const newQuestionRow = document.createElement('tr');
         newQuestionRow.classList.add('question-group');
@@ -214,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/quiz/questions', {
                 method: 'GET',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 }
             });
 
@@ -320,6 +321,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+// window functions
+
 window.viewQuestion = function (id) {
     window.location.href = `/quizquestion.html?id=${id}`;
 };
@@ -328,16 +331,13 @@ window.editQuestion = function (id) {
     window.location.href = `/editanswer.html?id=${id}`;
 };
 
-window.goBack = function () {
-    window.history.back();
-};
 
 document.addEventListener('DOMContentLoaded', async function () {
     await loadQuestions();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const editQuestionButton = document.getElementById('edit-question');
+    const editQuestionButton = document.getElementById('editing-question');
 
     // Redirect to the addQuestionScreen.html page when the button is clicked
     editQuestionButton.addEventListener('click', () => {
@@ -346,11 +346,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const goBackButton = document.getElementById('add-question');
+    const goBackButton = document.getElementById('go-back');
 
     // Redirect to editquiz.html when the button is clicked
     goBackButton.addEventListener('click', () => {
         window.location.href = 'editquiz.html'; // Adjust the URL if necessary
     });
 });
+
+function goBack() {
+    window.location.href = 'quizquestion.html';
+}
+
 

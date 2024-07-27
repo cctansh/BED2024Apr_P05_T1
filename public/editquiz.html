@@ -42,23 +42,28 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
+    <div class="container-fluid mt-5" style="padding-top: 64px; padding-left: 16px; padding-right: 16px; padding-bottom: 64px;">
         <button onclick="goBack()" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</button>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Question</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
-                </tr>
-            </thead>
-            <tbody id="questions-table-body">
-                <!-- Questions will be populated here -->
-            </tbody>
-        </table>
-        <button type="button" class="btn btn-secondary mt-2" id="edit-question">Edit Question</button>
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Question</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="questions-table-body">
+                        <!-- Questions will be populated here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary mt-2" id="editing-question">Edit Question</button>
     </div>
+    
 
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
     <script src="js/editquizscript.js"></script>
