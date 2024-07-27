@@ -1,29 +1,30 @@
 // Retrieve necessary elements
-const token = sessionStorage.getItem('token'); // Retrieve token from local storage
+const token = sessionStorage.getItem('token'); // Retrieve token from session storage
 const loginProfileLink = document.getElementById('login-profile-link'); // Retrieve profile link element
-const loginAccId = sessionStorage.getItem('loginAccId'); // Retrieve logged-in account ID from local storage
-const loginAccRole = sessionStorage.getItem('loginAccRole'); // Retrieve logged-in account role from local storage
-const rToken = getCookie('rToken');
+const loginAccId = sessionStorage.getItem('loginAccId'); // Retrieve logged-in account ID from session storage
+const loginAccRole = sessionStorage.getItem('loginAccRole'); // Retrieve logged-in account role from session storage
+const rToken = getCookie('rToken'); // Retrieve refresh token from cookies
 
+// Check if token exists and is not expired
 if (token && !isTokenExpired(token)) {
   loginProfileLink.innerHTML = `Profile`;
   loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else if (rToken) {
-  refreshToken(rToken);
+  refreshToken(rToken); // If token is expired but refresh token exists, refresh the token
 } else {
-  sessionStorage.clear()
+  sessionStorage.clear(); // Clear session storage if no valid tokens exist
   loginProfileLink.innerHTML = `Login`;
   loginProfileLink.setAttribute("href", 'loginreg.html')
 }
 
 // Select DOM elements for the quiz and admin view
-const questionElement = document.getElementById("question");
-const questionImage = document.getElementById('question-image');
-const answerButtons = document.getElementById("answer-buttons");
-const nextButton = document.getElementById("next-btn");
-const editButton = document.getElementById("edit-button");
-const crossButton = document.getElementById("cross-button");
-const adminView = document.getElementById("adminView1");
+const questionElement = document.getElementById("question"); // Retrieve question element
+const questionImage = document.getElementById('question-image'); // Retrieve question image element
+const answerButtons = document.getElementById("answer-buttons"); // Retrieve answer buttons container
+const nextButton = document.getElementById("next-btn"); // Retrieve next button
+const editButton = document.getElementById("edit-button"); // Retrieve edit button
+const crossButton = document.getElementById("cross-button"); // Retrieve cross button
+const adminView = document.getElementById("adminView1"); // Retrieve admin view element
 
 // Variables to track the current question index and user score
 let currentQuestionIndex = 0;
@@ -35,15 +36,15 @@ function startQuiz() {
   currentQuestionIndex = 0;
   score = 0;
   nextButton.innerHTML = "Next";
-  fetchQuestions();
+  fetchQuestions(); // Fetch questions from the server
 }
 
 // Fetch questions from the server
 async function fetchQuestions() {
   try {
     const response = await fetch('/quiz/questions');
-    questions = await response.json();
-    showQuestion();
+    questions = await response.json(); // Store questions in a variable
+    showQuestion(); // Show the first question
   } catch (error) {
     console.error('Error fetching questions:', error);
   }
@@ -53,7 +54,7 @@ async function fetchQuestions() {
 async function fetchAnswers(questionId) {
   try {
     const response = await fetch(`/quiz/answers/${questionId}`);
-    return await response.json();
+    return await response.json(); // Return the fetched answers
   } catch (error) {
     console.error('Error fetching answers:', error);
     return [];
@@ -140,9 +141,9 @@ function showScore() {
 function handleNextButton() {
   currentQuestionIndex++;
   if (currentQuestionIndex < questions.length) {
-    showQuestion();
+    showQuestion(); // Show the next question
   } else {
-    showScore();
+    showScore(); // Show the final score
   }
 }
 
@@ -161,12 +162,12 @@ startQuiz();
 // Function to set admin view if user is admin
 function setAdminView() {
   if (loginAccRole === 'admin') {
-    editButton.classList.remove('hide');
-    crossButton.classList.remove('hide');
-    adminView.classList.remove('hide');
+    editButton.classList.remove('hide'); // Show edit button for admin
+    crossButton.classList.remove('hide'); // Show cross button for admin
+    adminView.classList.remove('hide'); // Show admin view
   } else {
-    editButton.classList.add('hide');
-    crossButton.classList.add('hide');
+    editButton.classList.add('hide'); // Hide edit button for non-admin
+    crossButton.classList.add('hide'); // Hide cross button for non-admin
   }
 }
 
@@ -177,19 +178,21 @@ if (token && loginAccRole === "admin") {
 
 // Event listeners for the admin buttons
 editButton.addEventListener('click', () => {
-  window.location.href = 'editquiz.html';
+  window.location.href = 'editquiz.html'; // Redirect to edit quiz page
 });
 
 crossButton.addEventListener('click', () => {
-  window.location.href = 'index.html';
+  window.location.href = 'index.html'; // Redirect to homepage
 });
 
+// Function to check if the JWT token is expired
 function isTokenExpired(token) {
   const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
   const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
   return Date.now() > expiry; // Check if the current time is past the expiry time
 }
 
+// Function to parse JWT token
 function parseJwt(token) {
   try {
       const base64Url = token.split('.')[1];
@@ -205,11 +208,12 @@ function parseJwt(token) {
   }
 }
 
+// Function to get a cookie by name
 function getCookie(cname) {
   let name = cname + "=";
   let decodedCookie = decodeURIComponent(document.cookie);
   let ca = decodedCookie.split(';');
-  for(let i = 0; i <ca.length; i++) {
+  for(let i = 0; i < ca.length; i++) {
     let c = ca[i];
     while (c.charAt(0) == ' ') {
       c = c.substring(1);
@@ -221,10 +225,12 @@ function getCookie(cname) {
   return "";
 }
 
+// Function to delete a cookie by name
 function deleteCookie(cname) {
   document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
+// Function to refresh the JWT token using the refresh token
 async function refreshToken(rToken) {
   try {
       const response = await fetch('/token', {
@@ -249,12 +255,12 @@ async function refreshToken(rToken) {
       sessionStorage.setItem('loginAccId', loginAccId);
       sessionStorage.setItem('loginAccRole', loginAccRole);
       
-      location.reload();
+      location.reload(); // Reload the page after refreshing the token
   } catch {
       console.log("error")
       alert('Login timed out.');
       sessionStorage.clear();
       deleteCookie('rToken');   
-      location.reload();
+      location.reload(); // Reload the page on error
   }
 }

@@ -3,24 +3,27 @@ const token = sessionStorage.getItem('token'); // Retrieve token from session st
 const loginProfileLink = document.getElementById('login-profile-link'); // Retrieve profile link element
 const loginAccId = sessionStorage.getItem('loginAccId'); // Retrieve logged-in account ID from session storage
 const loginAccRole = sessionStorage.getItem('loginAccRole'); // Retrieve logged-in account role from session storage
-const rToken = getCookie('rToken');
+const rToken = getCookie('rToken'); // Retrieve refresh token from cookies
 
+// Check if token exists and is not expired
 if (token && !isTokenExpired(token)) {
     loginProfileLink.innerHTML = `Profile`;
     loginProfileLink.setAttribute("href", `profile.html?id=${loginAccId}`)
 } else if (rToken) {
-    refreshToken(rToken);
+    refreshToken(rToken); // If token is expired but refresh token exists, refresh the token
 } else {
-    sessionStorage.clear();
-    window.location.href = `/index.html`;
+    sessionStorage.clear(); // Clear session storage if no valid tokens exist
+    window.location.href = `/index.html`; // Redirect to index page
 }
 
+// Function to check if the JWT token is expired
 function isTokenExpired(token) {
     const payload = JSON.parse(atob(token.split('.')[1])); // Decode the token payload
     const expiry = payload.exp * 1000; // Convert expiry time to milliseconds
     return Date.now() > expiry; // Check if the current time is past the expiry time
 }
 
+// Function to parse JWT token
 function parseJwt(token) {
     try {
         const base64Url = token.split('.')[1];
@@ -36,6 +39,7 @@ function parseJwt(token) {
     }
 }
 
+// Function to get a cookie by name
 function getCookie(cname) {
     let name = cname + "=";
     let decodedCookie = decodeURIComponent(document.cookie);
@@ -52,10 +56,12 @@ function getCookie(cname) {
     return "";
 }
 
+// Function to delete a cookie by name
 function deleteCookie(cname) {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
+// Function to refresh the JWT token using the refresh token
 async function refreshToken(rToken) {
     try {
         const response = await fetch('/token', {
@@ -80,7 +86,7 @@ async function refreshToken(rToken) {
         sessionStorage.setItem('loginAccId', loginAccId);
         sessionStorage.setItem('loginAccRole', loginAccRole);
 
-        location.reload();
+        location.reload(); // Reload the page to apply the new token
     } catch {
         console.log("error");
         alert('Login timed out.');
@@ -90,6 +96,7 @@ async function refreshToken(rToken) {
     }
 }
 
+// Function to load questions from the server
 async function loadQuestions() {
     try {
         const response = await fetch('/quiz/questions', {
@@ -106,7 +113,7 @@ async function loadQuestions() {
         console.log("Questions: ", questions); // Log the questions received
 
         if (Array.isArray(questions)) {
-            populateQuestionsTable(questions);
+            populateQuestionsTable(questions); // Populate the table with questions
         } else {
             console.error('Unexpected response format:', questions);
         }
@@ -115,6 +122,7 @@ async function loadQuestions() {
     }
 }
 
+// Function to populate the questions table
 function populateQuestionsTable(questions) {
     const tableBody = document.getElementById('questions-table-body');
     tableBody.innerHTML = '';
@@ -134,10 +142,10 @@ function populateQuestionsTable(questions) {
                 const confirmed = confirm("Are you sure you want to delete this question?");
                 if (confirmed) {
                     try {
-                        // If confirmed, delete the reply
+                        // If confirmed, delete the question
                         await deleteQuestion(question.id);
                     } catch (error) {
-                        // If failed to delete reply, log the error in console and alert user that reply deletion failed
+                        // If failed to delete question, log the error in console and alert user that question deletion failed
                         console.error("Failed to delete question:", error);
                         alert('Failed to delete question.');
                     }
@@ -147,8 +155,7 @@ function populateQuestionsTable(questions) {
     });
 }
 
-
-// delete the question
+// Function to delete a question
 async function deleteQuestion(questionId) {
     console.log(questionId);
     if(!questionId) {
@@ -181,12 +188,7 @@ async function deleteQuestion(questionId) {
 } 
 
 
-// UNTIL HERE THE CODE IS PERFECT!! PLEASE DO NOT TOUCH ANYTHING ABOVE
-
-
-
-
-// Edit question goes below
+// Code to edit quiz questions
 
 document.addEventListener('DOMContentLoaded', () => {
     const addQuestionButton = document.getElementById('add-question');
@@ -224,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const questions = await response.json();
-            displayQuestions(questions);
+            displayQuestions(questions); // Display the fetched questions
         } catch (error) {
             console.error('Error fetching questions:', error);
             alert('Error fetching questions');
@@ -260,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const questions = Array.from(document.querySelectorAll('.question-group')).map(group => {
             return {
                 id: group.dataset.questionId,
-                question: group.querySelector('input[type="text"]').value
+                question: group.querySelector('input[type="text"]').value.trim()
             };
         });
 
@@ -270,6 +272,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (questions.length === 0) {
             alert('There must be at least one question.');
             return;
+        }
+
+        // Validation: Ensure each question has characters
+        for (const question of questions) {
+            if (!question.question) {
+                alert('All questions must contain characters.');
+                return;
+            }
         }
 
         try {
@@ -318,24 +328,24 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchQuestions();
 });
 
+// Define functions for viewing and editing questions
 
-
-
-// window functions
-
+// Redirect to quizquestion.html with the question ID
 window.viewQuestion = function (id) {
     window.location.href = `/quizquestion.html?id=${id}`;
 };
 
+// Redirect to editanswer.html with the question ID
 window.editQuestion = function (id) {
     window.location.href = `/editanswer.html?id=${id}`;
 };
 
-
+// Load questions when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', async function () {
     await loadQuestions();
 });
 
+// Redirect to addQuestionScreen.html when the edit button is clicked
 document.addEventListener('DOMContentLoaded', () => {
     const editQuestionButton = document.getElementById('editing-question');
 
@@ -345,6 +355,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Redirect to editquiz.html when the go back button is clicked
 document.addEventListener('DOMContentLoaded', () => {
     const goBackButton = document.getElementById('go-back');
 
@@ -354,8 +365,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+// Function to go back to the quiz question page
 function goBack() {
     window.location.href = 'quizquestion.html';
 }
-
 

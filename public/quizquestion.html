@@ -2,28 +2,33 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Forum</title>
-    <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8"> <!-- Specifies the character encoding for the document -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Ensures the page is responsive on mobile devices -->
+    <title>Forum</title> <!-- Title of the page displayed on the browser tab -->
+    <link href="css/bootstrap/bootstrap.css" rel="stylesheet"> <!-- Link to Bootstrap's CSS for styling -->
+    <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css"> <!-- Link to Bootstrap Icons for using icons -->
+    <link rel="stylesheet" href="css/style.css"> <!-- Link to custom CSS for additional styling -->
 </head>
 
 <body>
+    <!-- Navigation bar at the top of the page -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container-fluid">
+            <!-- Brand logo and name -->
             <a class="navbar-brand" href="#">
                 <img src="img/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
                 OurFoodSG
             </a>
+            <!-- Button to toggle the navigation menu on smaller screens -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            <!-- Collapsible navigation menu -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Navigation links -->
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="index.html">Home</a>
                     </li>
@@ -45,18 +50,22 @@
         </div>
     </nav>
 
-
-    </div>
+    <!-- Main content area for the quiz -->
     <div class="app">
 
+        <!-- Quiz header section -->
         <div class="quiz-header">
-            <h1>QUIZ TIME</h1>
-            <hr>
-            <div id="adminView1" class="hide" >
+            <h1>QUIZ TIME</h1> <!-- Main heading for the quiz -->
+            <hr> <!-- Horizontal line separating header from content -->
+
+            <!-- Admin view section for additional actions -->
+            <div id="adminView1" class="hide">
                 <div class="horizontal-flex1">
+                    <!-- Edit button for admins -->
                     <button id="edit-button" type="button" class="btn btn-primary">
                         <i class="bi bi-pencil-fill"></i>&ensp;Edit
                     </button>
+                    <!-- Close button for admins -->
                     <button id="cross-button" type="button" class="btn btn-primary">
                         <i class="bi bi-x-lg"></i>&ensp;Close
                     </button>
@@ -64,18 +73,24 @@
             </div>
         </div>
 
+        <!-- Quiz content area -->
         <div class="quiz">
+            <!-- Question display area -->
             <h2 id="question">Question goes here</h2>
+            <!-- Area for answer buttons -->
             <div id="answer-buttons"></div>
+            <!-- Button to move to the next question -->
             <button id="next-btn" onclick="nextQuestion()">Next</button>
+            <!-- Explanation section to show answer explanations -->
             <div id="explanation" class="hidden">
                 <p id="explanation-text"></p>
             </div>
         </div>
     </div>
 
-    <script src="js/bootstrap/bootstrap.bundle.js"></script>
-    <script src="js/quizquestion.js"></script>
+    <!-- JavaScript files for Bootstrap and custom functionality -->
+    <script src="js/bootstrap/bootstrap.bundle.js"></script> <!-- Bootstrap's JavaScript bundle for responsive components -->
+    <script src="js/quizquestion.js"></script> <!-- Custom JavaScript for quiz functionality -->
 </body>
 
 </html>

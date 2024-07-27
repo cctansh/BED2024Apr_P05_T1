@@ -1,27 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Questions</title>
+    <!-- Meta tags for character encoding and responsive design -->
+    <meta charset="UTF-8"> <!-- Character encoding for the document -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive viewport settings for mobile devices -->
+
+    <title>Quiz Questions</title> <!-- Title of the page displayed on the browser tab -->
+
+    <!-- Link to Bootstrap CSS for styling the page -->
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+
+    <!-- Link to Bootstrap Icons for using icons in the page -->
     <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+
+    <!-- Link to custom CSS for additional styling -->
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <!-- Navigation bar at the top of the page -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container-fluid">
+            <!-- Brand logo and name in the navigation bar -->
             <a class="navbar-brand" href="#">
                 <img src="img/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
                 OurFoodSG
-              </a>  
+            </a>  
+
+            <!-- Toggle button for collapsing the navbar on smaller screens -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Collapsible part of the navbar containing navigation links -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Navigation links -->
                     <li class="nav-item">
                         <a class="nav-link" aria-current="page" href="index.html">Home</a>
                     </li>
@@ -42,30 +57,38 @@
         </div>
     </nav>
 
+    <!-- Main content area -->
     <div class="container-fluid mt-5" style="padding-top: 64px; padding-left: 16px; padding-right: 16px; padding-bottom: 64px;">
+        <!-- Button to go back to the previous page -->
         <button onclick="goBack()" class="btn btn-primary mb-3"><i class="bi bi-arrow-left"></i> Back</button>
+
+        <!-- Table displaying quiz questions with options to edit or delete -->
         <div class="row">
             <div class="col-12">
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Question</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
+                            <th>#</th> <!-- Column for question number -->
+                            <th>Question</th> <!-- Column for question text -->
+                            <th>Edit</th> <!-- Column for edit action -->
+                            <th>Delete</th> <!-- Column for delete action -->
                         </tr>
                     </thead>
                     <tbody id="questions-table-body">
-                        <!-- Questions will be populated here -->
+                        <!-- Questions will be dynamically added here by JavaScript -->
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!-- Button to add or edit questions -->
         <button type="button" class="btn btn-secondary mt-2" id="editing-question">Edit Question</button>
     </div>
-    
 
+    <!-- Link to Bootstrap's JavaScript bundle for responsive components -->
     <script src="js/bootstrap/bootstrap.bundle.js"></script>
+    
+    <!-- Link to external JavaScript file for handling quiz editing functionality -->
     <script src="js/editquizscript.js"></script>
 </body>
 </html>

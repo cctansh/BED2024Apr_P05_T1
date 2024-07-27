@@ -1,28 +1,42 @@
 <!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Quiz Questions</title>
+    <!-- Meta tags for character encoding and viewport settings -->
+    <meta charset="utf-8"> <!-- Character encoding for the document -->
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Responsive viewport settings for mobile devices -->
+
+    <title>Quiz Questions</title> <!-- Title of the page displayed on the browser tab -->
+
+    <!-- Link to Bootstrap CSS for styling -->
     <link href="css/bootstrap/bootstrap.css" rel="stylesheet">
+
+    <!-- Link to Bootstrap Icons for using icons -->
     <link rel="stylesheet" href="css/bootstrap-icons/font/bootstrap-icons.css">
+
+    <!-- Link to custom CSS for additional styling -->
     <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
+    <!-- Navigation bar at the top of the page -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
         <div class="container-fluid">
+            <!-- Logo and brand name in the navigation bar -->
             <a class="navbar-brand" href="#">
                 <img src="img/logo.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
                 OurFoodSG
             </a>
+
+            <!-- Toggle button for collapsing the navbar on smaller screens -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            <!-- Collapsible part of the navbar containing navigation links -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Navigation links -->
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="index.html">Home</a>
                     </li>
@@ -43,9 +57,14 @@
         </div>
     </nav>
 
-    <main style="padding-top: 64px; padding-left: 16px; padding-right: 16px; padding-bottom: 64px;" >
+    <!-- Main content area -->
+    <main style="padding-top: 64px; padding-left: 16px; padding-right: 16px; padding-bottom: 64px;">
+        <!-- Container for the main content with centered alignment and padding -->
         <div style="max-width: 768px; margin: 0 auto; padding-top: 64px; display: flex; flex-direction: column; gap: 24px;">
+            <!-- Button to go back to the previous page -->
             <button id="go-back" class="btn btn-primary">Go Back</button>
+
+            <!-- Form for editing quiz questions -->
             <form id="edit-question-form">
                 <table class="table">
                     <thead>
@@ -55,15 +74,19 @@
                         </tr>
                     </thead>
                     <tbody id="questions-tbody">
-                        <!-- Questions will be dynamically added here -->
+                        <!-- Table body where questions will be dynamically added -->
                     </tbody>
                 </table>
+                <!-- Button to save all changes made to the questions -->
                 <button type="submit" class="btn btn-success">Save All Changes</button>
             </form>
-            <button id="add-question" class="btn btn-primary">Add Question</button> <!-- Button below the table -->
+
+            <!-- Button to add a new question -->
+            <button id="add-question" class="btn btn-primary">Add Question</button>
         </div>
     </main>
 
+    <!-- Link to external JavaScript file for quiz editing functionality -->
     <script src="js/editquizscript.js"></script>
 </body>
 </html>
